@@ -1,0 +1,77 @@
+﻿@using MSP.Core.Enum.UI
+
+@{
+    //success messages
+    var successMessages = new List<string>();
+    if (TempData[string.Format("ds.notifications.{0}", NotifyType.Success)] != null)
+    {
+        successMessages.AddRange(TempData[string.Format("ds.notifications.{0}", NotifyType.Success)] as IList<string>);
+    }
+    if (ViewData[string.Format("ds.notifications.{0}", NotifyType.Success)] != null)
+    {
+        successMessages.AddRange(ViewData[string.Format("ds.notifications.{0}", NotifyType.Success)] as IList<string>);
+    }
+
+
+    //error messages
+    var errorMessages = new List<string>();
+    if (TempData[string.Format("ds.notifications.{0}", NotifyType.Error)] != null)
+    {
+        errorMessages.AddRange(TempData[string.Format("ds.notifications.{0}", NotifyType.Error)] as IList<string>);
+    }
+    if (ViewData[string.Format("ds.notifications.{0}", NotifyType.Error)] != null)
+    {
+        errorMessages.AddRange(ViewData[string.Format("ds.notifications.{0}", NotifyType.Error)] as IList<string>);
+    }
+
+    //warning messages
+    var warningMessages = new List<string>();
+    if (TempData[string.Format("ds.notifications.{0}", NotifyType.Warning)] != null)
+    {
+        warningMessages.AddRange(TempData[string.Format("ds.notifications.{0}", NotifyType.Warning)] as IList<string>);
+    }
+    if (ViewData[string.Format("ds.notifications.{0}", NotifyType.Warning)] != null)
+    {
+        warningMessages.AddRange(ViewData[string.Format("ds.notifications.{0}", NotifyType.Warning)] as IList<string>);
+    }
+
+
+    //info messages
+    var infoMessages = new List<string>();
+    if (TempData[string.Format("ds.notifications.{0}", NotifyType.Info)] != null)
+    {
+        infoMessages.AddRange(TempData[string.Format("ds.notifications.{0}", NotifyType.Info)] as IList<string>);
+    }
+    if (ViewData[string.Format("ds.notifications.{0}", NotifyType.Info)] != null)
+    {
+        infoMessages.AddRange(ViewData[string.Format("ds.notifications.{0}", NotifyType.Info)] as IList<string>);
+    }
+}
+@foreach (var message in successMessages)
+{
+    <div class="alert alert-success fade in m-b-15">
+        <strong><i class="fa fa-info-circle"></i></strong> @message
+        <span class="close" data-dismiss="alert">×</span>
+    </div>
+}
+@foreach (var message in errorMessages)
+{
+    <div class="alert alert-danger fade in m-b-15">
+        <strong><i class="fa fa-exclamation-circle"></i></strong> @message
+        <span class="close" data-dismiss="alert">×</span>
+    </div>
+}
+@foreach (var message in warningMessages)
+{
+    <div class="alert alert-warning fade in m-b-15">
+        <strong><i class="fa fa-exclamation-triangle"></i></strong> @message
+        <span class="close" data-dismiss="alert">×</span>
+    </div>
+}
+@foreach (var message in infoMessages)
+{
+    <div class="alert alert-info fade in m-b-15">
+        <strong><i class="fa fa-exclamation-triangle"></i></strong> @message
+        <span class="close" data-dismiss="alert">×</span>
+    </div>
+}

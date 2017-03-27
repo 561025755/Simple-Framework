@@ -1,0 +1,51 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Domain;
+@using MSP.Core.Pagination;
+@using MSP.Core.Sorting;
+
+@model IPagination<Sys_User>
+
+
+@{
+    ViewBag.Title = "代理商用户列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    代理商用户列表 @*<small>点击 @Html.ActionLink("这里", "Create") 创建一个代理商用户</small>*@
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+               {
+                   column.For(c => c.Id).Named("#");
+                   column.For(c => c.UserName).Named("用户名称");
+                   column.For(c => c.Email).Named("邮箱地址");
+                   column.For(c => Html.Partial("BoolPartial", c.Active)).Named("状态").Sortable(false);
+                   column.For(c => Html.RowActionLink(c.Id, "Details", "", "Delete"));
+               }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model))
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>

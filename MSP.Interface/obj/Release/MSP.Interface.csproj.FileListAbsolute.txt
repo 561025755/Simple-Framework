@@ -1,0 +1,8 @@
+C:\工作\Msp项目\源码\MSP.Interface\bin\Release\MSP.Interface.dll
+C:\工作\Msp项目\源码\MSP.Interface\bin\Release\MSP.Interface.pdb
+C:\工作\Msp项目\源码\MSP.Interface\bin\Release\MSP.Core.dll
+C:\工作\Msp项目\源码\MSP.Interface\bin\Release\zbus_clr.dll
+C:\工作\Msp项目\源码\MSP.Interface\bin\Release\MSP.Core.pdb
+C:\工作\Msp项目\源码\MSP.Interface\obj\Release\MSP.Interface.csprojResolveAssemblyReference.cache
+C:\工作\Msp项目\源码\MSP.Interface\obj\Release\MSP.Interface.dll
+C:\工作\Msp项目\源码\MSP.Interface\obj\Release\MSP.Interface.pdb

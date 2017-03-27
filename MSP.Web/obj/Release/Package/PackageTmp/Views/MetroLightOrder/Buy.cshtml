@@ -1,0 +1,1121 @@
+﻿@using MSP.Models.Domain
+@model MetroOrderModel
+@{
+    ViewBag.Title = "预定点位";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    地铁站台灯箱订单 <small>点击 @Html.ActionLink("这里", "Index") 回到订单列表</small>
+}
+
+@section header{
+   @Styles.Render("~/Content/themes/sean/css/bwizard.min.css")
+@Styles.Render("~/Content/themes/sean/css/bootstrap-select.min.css")
+@Styles.Render("~/Content/themes/sean/css/datepicker3.css")
+
+@Styles.Render("~/Content/themes/sean/jquery-tag-it/css/jquery.tagit.css")
+<style>
+    .modal-content{
+        min-width:1000px;
+        max-width:100%;
+    
+    }
+    .modal-body{
+        min-width:800px;
+        max-width:100%;
+        min-height:800px;
+        max-height:100%;
+    }
+    .box-info{
+        background: lightblue;
+        border:solid gray;
+    }
+   
+    </style>
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+        </div>
+        <h4 class="panel-title">&nbsp;</h4>
+    </div>
+    <div class="panel-body">
+        <form action="MetroLightOrder/Confirm"  id="form1" method="post" name="form-wizard">
+            <div id="wizard">
+                <ol>
+                    <li>
+                       选择选位方式
+                        <small>选择灯箱选位方式、档期</small>
+                    </li>
+                    <li>
+                        配置订单点位数量
+                        <small>完善订单点位的数量等详细信息。</small>
+                    </li>
+                    <li>
+                        确认订单详细信息，并提交报价单
+                        <small>请仔细核对订单信息，确认无误，提交该订单。</small>
+                    </li>
+                </ol>
+                <!-- begin wizard step-1 -->
+                <div class="wizard-step-1">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label>@Html.LabelFor(x=>x.Customer)</label>
+                                    <div>
+                                        @Html.DropDownListFor(x => x.Customer,ViewData["CustomerId"] as IEnumerable<SelectListItem>,"选择客户", new { @class="form-control"})
+                                        @Html.ValidationMessageFor(x=>x.Customer)
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>@Html.LabelFor(x => x.Contact)</label>
+                                    <div>
+                                        @Html.DropDownListFor(x => x.Contact,new List<SelectListItem> { new SelectListItem { Value = "", Text = "请选择一个联系人" } } , new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Contact)
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>@Html.LabelFor(x => x.Remark)</label>
+                                        <div>
+                                            @Html.TextBoxFor(x => x.Remark, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Remark)
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>@Html.LabelFor(x => x.Name)</label>
+                                        <div>
+                                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Name)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>
+                                            选择档期类型
+                                        </label>
+                                        <div>
+                                            <select id="schedule-type" class="form-control">
+                                                <option >选择一种档期类型</option>
+                                                <option value="1">常规档期</option>
+                                                <option value="2">自定义档期</option>                                                
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="customer-combo" style="display:none">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>@Html.LabelFor(x => x.Start)</label>
+                                        <div>
+                                            <div class="input-group date" id="startDate" data-date-format="yyyy-mm-dd">
+                                                @Html.TextBoxFor(m => m.Start, new { @class = "form-control" })
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>@Html.LabelFor(x => x.Weeks)</label>
+                                        <div>
+                                            @Html.TextBoxFor(x => x.Weeks, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Weeks)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="regular-combo" class="form-group" style="display:none">
+
+                            </div> 
+                    </fieldset>             
+                </div>
+                <!-- end wizard step-1 -->
+                <!-- begin wizard step-2 -->
+                <div class="wizard-step-2">
+                    <fieldset>
+                        <legend class="pull-left width-full">选择订单点位</legend>
+
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-blue-grey metro-line">1号线</button>
+                                <button type="button" class="btn btn-blue-grey metro-line">2号线</button>
+                                <button type="button" class="btn btn-blue-grey metro-line">3号线</button>
+                                <button type="button" class="btn btn-blue-grey metro-line">4号线</button>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-blue-grey metro-grade">S</button>
+                                <button type="button" class="btn btn-blue-grey metro-grade">AAA</button>
+                                <button type="button" class="btn btn-blue-grey metro-grade">AA</button>
+                                <button type="button" class="btn btn-blue-grey metro-grade">A</button>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-blue-grey box-size">梯眉</button>
+                                <button type="button" class="btn btn-blue-grey box-size">梯牌</button>
+                                <button type="button" class="btn btn-blue-grey box-size">十二封</button>
+                                <button type="button" class="btn btn-blue-grey box-size">包柱</button>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="javascript:;" onclick="comboOrder()" class="btn btn-inverse">
+                                    <i class="fa fa-map-marker fa-2x pull-left"></i>自动生成套餐包
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <ul class="timeline">
+                                <li>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">升仙湖</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-defalut fa-fw"></i>
+                                            <i class="fa fa-star text-defalut fa-fw"></i>
+                                            <i class="fa fa-star text-defalut fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content"> 
+                                            <div class="inverse" id="station1">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>                            
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;" ><i class="fa fa-2x fa-refresh"></i></a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">火车北站</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                          
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    
+                                    <div class="timeline-icon">                                                                                                                
+                                        <a href="javascript:;">3</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header"> 
+                                            <span class="username">人民北路</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>                                            
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">文殊院</span>                                      
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content ">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-time">
+                                        <span class="btn btn-danger">四号线</span>
+
+                                    </div>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;"><i class="fa fa-2x fa-refresh"></i></a>
+                                       
+                                        </div>
+                                        <div class="timeline-body">
+                                            <div class="timeline-header">
+                                                <span class="username">骡马市</span>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                                <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                            </div>
+                                            <div class="timeline-content">
+                                               
+                                            </div>
+                                        </div>
+</li>
+                                <li>
+                                    <div class="timeline-time">
+                                        <span class="btn btn-danger">二号线</span>
+
+                                    </div>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;"><i class="fa fa-2x fa-refresh"></i></a>                                      
+                                        </div>
+                                        <div class="timeline-body">
+                                            <div class="timeline-header">
+                                                <span class="username">天府广场</span>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <i class="fa fa-star text-danger fa-fw"></i>
+                                                <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                                <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                            </div>
+                                            <div class="timeline-content">                                               
+                                            </div>
+                                        </div>
+</li>
+                                
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">锦江宾馆</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                            
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">华西坝</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                            
+                                        </div>
+                                    </div>
+                                </li>
+                             
+                                <li>
+                                    <div class="timeline-time">
+                                        <span class="btn btn-danger">三号线</span>
+
+                                    </div>
+                                    
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;"><i class="fa fa-2x fa-refresh"></i></a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">省体育馆</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                            
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">倪家桥</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">桐梓林</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                          
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">火车南站</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">高新</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">金融城</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                            
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">孵化园</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                          
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">锦城广场</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                              
+                                <li>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">世纪城</span>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">天府三街</span>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">天府五街</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">华府大道</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">四河</span>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <i class="fa fa-star text-danger fa-fw"></i>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">1</a>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="username">广都</span>
+                                            <a href="javascript:;" class="pull-right" onclick="showTable()"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                            <a href="javascript:;" class="pull-right m-r-15" onclick="chooseSvg()"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                        </div>
+                                        <div class="timeline-content">
+                                           
+                                        </div>
+                                    </div>                                   
+                                </li>
+                                <li>
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">end</a>
+                                    </div>
+                                    
+                                </li>
+                               
+                            </ul>
+                        </div>
+                        @Html.Partial("_OrderPartial")
+                    </fieldset>
+                </div>
+                <!-- end wizard step-2 -->
+                <!-- begin wizard step-3 -->
+                <div class="wizard-step-3">
+                    <fieldset>
+                        <legend class="pull-left width-full">完成订单</legend>
+                        <!-- begin row -->
+                        <div class="row">
+                            <table class="table table-profile">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            <h4>和易伟业国际文化传媒（北京）有限公司 <small>波大神</small></h4>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="highlight">
+                                        <td class="field">发布品牌</td>
+                                        <td>可口可乐 - 201610上</td>
+                                    </tr>
+                                    <tr class="divider">
+                                        <td colspan="2"></td>
+                                    </tr>
+                                
+                                    <tr class="divider">
+                                        <td colspan="2"></td>
+                                    </tr>
+                                    <tr class="highlight">
+                                        <td class="field">发布日期</td>
+                                        <td>2016-10-01 到 2016-10-31</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">预计价格范围</td>
+                                        <td><strong class="text-danger f-s-16"> ￥10,000</strong> </td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+                          
+                            <!-- end table -->
+                        </div>
+                        <!-- end row -->
+                        <div class="row">
+                            <h4 class="title">已选点位列表 <small>360个点位</small></h4>
+                            <table class="table table-condensed table-without-bg">
+                                <thead>
+                                    <tr>
+                                       
+                                        <th>站台</th>
+                                        <th>详情</th>
+                                        <th>总数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        
+                                        <td>
+                                            <h5 class="m-t-0 m-b-5">春熙路</h5>
+                                        </td>
+                                        <td><a ><span class="text-danger">地下一层5块</span></a> <a><span class="text-danger">地下二层5块</span></a></td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            <h5 class="m-t-0 m-b-5">春熙路</h5>
+                                        </td>
+                                        <td><a><span class="text-danger">地下一层5块</span></a> <a onmouseover=""><span class="text-danger">地下二层5块</span></a></td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            <h5 class="m-t-0 m-b-5">春熙路</h5>
+                                        </td>
+                                        <td><a><span class="text-danger">地下一层5块</span></a> <a><span class="text-danger">地下二层5块</span></a></td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            <h5 class="m-t-0 m-b-5">春熙路</h5>
+                                        </td>
+                                        <td><a><span class="text-danger">地下一层5块</span></a> <a><span class="text-danger">地下二层5块</span></a></td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            <h5 class="m-t-0 m-b-5">春熙路</h5>
+                                        </td>
+                                        <td><a><span class="text-danger">地下一层5块</span></a> <a><span class="text-danger">地下二层5块</span></a></td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            <h5 class="m-t-0 m-b-5">春熙路</h5>
+                                        </td>
+                                        <td><a><span class="text-danger">地下一层5块</span></a> <a><span class="text-danger">地下二层5块</span></a></td>
+                                        <td>10</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <input type="button" class="btn btn-success btn-lg" value="提交订单" />
+                    </fieldset>         
+                </div>
+
+                <!-- end wizard step-3 -->
+                
+
+            </div>
+           
+        </form>
+    </div>
+</div>
+
+<div class="modal  fade in" id="modal-chart-order" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">天府三街地铁站</h4>
+            </div>
+            <div class="modal-body">
+                 <div id="chart-select-menu">
+                </div>
+            </div>
+         
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+   @Scripts.Render("~/Content/themes/sean/bwizard.js")
+@Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+@Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+
+@Scripts.Render("~/Content/themes/sean/jquery-tag-it/js/tag-it.min.js")
+@Scripts.Render("~/Content/themes/sean/form-wizards.min.js")
+@Scripts.Render("~/Content/themes/metroboard/order.js")
+@Scripts.Render("~/Content/themes/metroboard/svg.js")
+@Scripts.Render("~/Content/themes/metroboard/svg-pan-zoom.js")
+@Scripts.Render("~/Content/themes/metroboard/d3.js")
+@Scripts.Render("~/Content/themes/metroboard/d3-tip.js")
+@Scripts.Render("~/Content/themes/metroboard/layer/layer.js")
+
+    <script type="text/javascript">      
+      
+        var tip = d3.tip().direction("ne").attr('class', 'd3-tip').html(function (d) {
+            return "<strong> 规格尺寸:</strong> <br/><span style='color:red'>" + "四封" + "</span>";
+        });
+        var target;
+      
+        $(document).ready(function () {      
+          
+            $("#startDate").datepicker({ autoclose: true, todayHighlight: true, format: "yyyy-mm-dd" });            
+            addNewSchedule();          
+            $("#schedule-type").change(function () {
+                var type = $("#schedule-type").val();               
+                switch (type) {
+                    case "1":
+                        $("#customer-combo").css("display", "none");
+                        $("#regular-combo").css("display", "block");
+                        $("#publish-time").css("display", "none");                       
+                        break;
+                    case "2":
+                        $("#customer-combo").css("display", "block");
+                        $("#regular-combo").css("display", "none");
+                        $("#publish-time").css("display", "block");
+                        break;
+                    default:
+                        $("#customer-combo").css("display", "none");
+                        $("#regular-combo").css("display", "none");
+                        $("#publish-time").css("display", "none");
+                        break;
+
+                }
+
+            });         
+            
+            $("#modal-chart-order").on("shown.bs.modal", function () {                
+                var svg = $(".tab-content .active").find("svg");
+                svgPanZoom(svg[0], { dblClickZoomEnabled: false });               
+            })
+            .on("hide.bs.modal", function () {
+                var box = metroOrder.cart.box;
+                var content = $(target.parentElement.parentElement).find(".timeline-content");
+                if (box.length>0) {              
+                    if (content.find("ul").length < 1) {
+                        $(target.parentElement.parentElement).find(".timeline-content").append($('<ul class="inverse tagit ui-widget ui-corner-all"></ul>'));
+                    }
+                    var tag = content.find("ul");
+                    tag.tagit();
+                    for (var i = 0; i < box.length; i++) {
+                        tag.tagit("createTag", box[i]);
+                    }
+                }
+                metroOrder.cart.box = [];
+                $(".tagit").removeClass("ui-widget").removeClass("ui-widget-content");
+
+            });
+            $(".metro-line, .metro-grade,.box-size").click(function () {
+                debugger;
+                if ($(this).hasClass("btn-light-blue")) {
+                    $(this).removeClass("btn-light-blue").addClass("btn-blue-grey");
+                } else {
+                    $(this).removeClass("btn-blue-grey").addClass("btn-light-blue");
+                }
+
+            });
+            }
+        );
+        $("#wizard").bwizard({
+            activeIndexChanged: function (e, ui) {
+                if (ui.index==2) {
+                    metroOrder.showCart();
+                }
+               
+            }
+        });
+        function addNewSchedule() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+            var n = day >= 15 ? 0 : 1;
+            var dom = $("#regular-combo");
+            var schedule = [];
+            if (n == 1) {
+                schedule.push($('<div class="col-md-3"><label class="btn btn-default btn-block"><input name="Schedule" value="' + year+'-'+month+'-' + '15' + '"type="checkbox" class="pull-left"><i class="fa fa-list pull-right"></i>' + year+'年' +month+'月'+ '下' + '</label></div>'));
+            }
+            for (var i = 0; i < 24-n; i++) {
+                var m = month + i/2;
+                var y = year;
+                if (m > 12) {
+                    y = y + 1;
+                    m = m % 12;
+                }
+                var s = new Date(now.setFullYear(y, m, 1));
+                var option = s.getFullYear().toString() + s.getMonth().toString();
+                var text = s.getFullYear() + '年' + (s.getMonth() + 1) + '月';
+                var startvalue = s.getFullYear() + '-' + parseInt(s.getMonth()+1);
+              
+                if (i % 2 == 0) {
+                    startvalue += '-' + '1';
+                    text += "上";
+                } else { text += "下"; startvalue += '-' + '15'; }
+                var sch = $('<div class="col-md-3"><label class="btn btn-default btn-block"><input name="Schedule" value="' + startvalue + '"type="checkbox" class="pull-left"><i class="fa fa-list pull-right"></i>' + text + '</label></div>');
+                schedule.push(sch);
+            }
+            for (var i = 0; i < 6; i++) {
+                var row = $('<div class="row m-b-5"></div>');
+                for (var j = 0; j < 4; j++) {
+                    schedule[i * 4 + j].appendTo(row);
+                }
+                row.appendTo(dom);
+
+            }
+        };
+        function openCustomer() {
+            $("#customer-order").css("display", "block");
+            $("#combo-table").css("display", "none");
+
+        };
+        function comboOrder() {           
+            layer.open({
+                type: 1,
+                content: $("#layer-combo"),
+                area: '1300px'
+            });
+        };
+        function search() {
+            var lines = $("#station-line").val().split(",");
+            var grades = $("#station-grade").val().split(",");
+            $.post("/metrolightorder/GetStation", { lines: lines, grades: grades }, function (d) {
+                $('#data-table-add').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "pageLength": 10,
+                    "lengthChange": false,
+                    "ordering": true,
+                    "info": true,
+                    "bAutoWidth": false,
+                    "pagingType": "full",
+                    "searching": false,
+                    "data":d,
+                    "columns": [
+                        { "data": "Name" },
+                        { "data": "GradeId" },
+                        {
+                            "data": function (e) {
+                                var chart = e.chart;
+                                for (var i = 0; i < chart.length; i++) {
+                                    return chart[i].Name;
+                                }
+                            }
+                        },
+                        {
+                            "data": function (e) {//这里给最后一列返回一个操作列表
+                                return '<a class="btn btn-default btn-xs show-detail-json" href="javascript:;" onclick="addToOrder(' + e['Id'] + ')">备选</a>';
+                            }
+                        }
+                    ],
+                    language: {
+                        lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                        processing: "载入中",//处理页面数据的时候的显示
+                        paginate: {//分页的样式文本内容。
+                            previous: "上一页",
+                            next: "下一页",
+                            first: "第一页",
+                            last: "最后一页"
+                        },
+
+                        zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                        //下面三者构成了总体的左下角的内容。
+                        info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                        infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                        infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                    }
+                });
+
+            })
+        }
+        function chooseSvg() {
+            target = window.event.target;
+            $.post("/metrolightorder/GetStation", function (d) {
+                var dom = $("#chart-select-menu");
+                dom.empty();
+                $('<ul class="nav nav-pills"></ul>').appendTo(dom);
+                $('<div class="tab-content"></div>').appendTo(dom);                           
+                if (d && d.length > 0) {
+                    for (var i = 0; i < d.length; i++) {
+                        if (i == 0) {
+                            $('<li class="active" ><a href="#svg-chart' + i + '" data-toggle="tab" onclick="showChart(this)" >' + d[i].ChartName + '</a> </li>').appendTo(dom.find("ul"));
+                            $('<div class="tab-pane fade active in" metroId="' + d[i].MetroId + '" id="svg-chart' + i + '">' + d[i].Svg + '</div>').appendTo(dom.find(".tab-content"));
+
+                        } else {
+                            $('<li ><a href="#svg-chart' + i + '" data-toggle="tab" onclick="showChart(this)">' + d[i].ChartName + '</a> </li>').appendTo(dom.find("ul"));
+                            $('<div class="tab-pane fade " metroId="' + d[i].MetroId + '" id="svg-chart' + i + '">' + d[i].Svg + '</div>').appendTo(dom.find(".tab-content"));
+
+                        }
+                    }
+                }
+                
+              
+                var svgs = document.getElementsByTagName("svg");
+                for (var i = 0; i < svgs.length; i++) {
+                    var svgdoc = svgs[i];
+                    var svgid = svgdoc.getAttribute("id");
+                    svgdoc.setAttribute('width', 800);
+                    svgdoc.setAttribute('height', 500);                  
+                }
+
+                var chart = d3.selectAll("svg");
+                chart.call(tip);
+                chart.selectAll("[name='billboard']")                      
+                .on("mouseover", function () {
+                    var info = $('<dl><dt>规格尺寸</dt><dd>十二封（1500mm*3800mm）.</dd> <dt>等级</dt> <dd>S级</dd><dt>亮灯情况</dt> <dd>不亮灯</dd>     </dl>');
+                    tip.html(function () {
+                        return '<div class="text-success box-info">' + info.html() + '</div>';
+                    });
+                    tip.style("z-index", "1998");
+                    tip.show();
+                  
+                })                
+            .on("mouseout",tip.hide)
+                 .on("click", function () {
+                     clickElement(this);                    
+                 });
+
+
+                chart.selectAll("[name='LightBox']")              
+                .on("mouseover", function () {
+                    var info = $('<dl><dt>规格尺寸</dt><dd>十二封（1500mm*3800mm）.</dd> <dt>等级</dt> <dd>S级</dd><dt>亮灯情况</dt> <dd>亮灯</dd>     </dl>');
+                    tip.html(function () {
+                        return '<div class="text-success box-info">' + info.html() + '</div>';
+                    });
+                    tip.style("z-index", "1998");
+                    tip.show();
+                })               
+                .on("mouseout", tip.hide)
+                .on("click", function () {                   
+                    clickElement(this);
+                });
+                
+            });
+           
+            $("#modal-chart-order").modal("show");
+        }
+        function clickElement(element) {
+            var flag = element.getAttribute("clicked");
+            var color = element.getAttribute("fill");           
+            if (flag) {
+                $(element).css("fill", color);
+                element.removeAttribute("clicked");
+                metroOrder.removeFromCart(element);
+              
+            } else {
+                element.setAttribute("clicked", "true");
+                $(element).css("fill", "red");
+                metroOrder.addToCart(element, element.parentElement.parentElement.parentElement);
+            }
+        };
+        function showTable() {
+            layer.open({
+                type: 1,
+                title: '站台灯箱详情列表',
+                content: $("#layer-table"),
+                area: '1300px'
+            });
+
+            
+          
+                $('#layer-table thead th').each(function () {
+                    var title = $(this).text();
+                    $(this).html('<input type="text" placeholder=" ' + title + '" />');
+                });
+
+                $('#data-table').dataTable().fnDestroy();
+                // DataTable
+                var table = $('#data-table').DataTable({
+                    //"processing": true,
+                    //"serverSide": true,
+                    "dom":"tip",
+                    "pageLength": 10,
+                    "lengthChange": false,
+                    "ordering": true,
+                    "info": true,
+                    "bAutoWidth": false,
+                    "pagingType": "full",
+                    "searching": true,
+                    language: {
+                        //lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                        processing: "载入中",//处理页面数据的时候的显示
+                        paginate: {//分页的样式文本内容。
+                            previous: "上一页",
+                            next: "下一页",
+                            first: "第一页",
+                            last: "最后一页"
+                        },
+
+                        zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                        //下面三者构成了总体的左下角的内容。
+                        info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                        infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                        infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                    }
+                });
+
+              
+                $("#box-size").on('keyup change', function () {
+                                  
+                    table.column(3).search($("#box-size").val()).draw();
+                   
+                })
+                $( "#box-grade").on('keyup change', function () {           
+                    
+                    table.column(0).search($("#box-grade").val()).draw();
+                   
+                })
+                $("#box-position").on('keyup change', function () {
+                    table.column(2).search($("#box-position").val()).draw();                  
+                  
+                })
+
+               
+           
+        }
+        function addToOrder(element) {
+            var success = $('<span class="fa fa-check on btn btn-danger">已加入</span>');           
+            var td = element.parentElement;
+            element.remove();
+            success.appendTo($(td));
+            
+          
+        }
+        function showChart(element) {
+            var svg = $(".tab-content .active").find("svg");
+            svgPanZoom(svg[0], { dblClickZoomEnabled: false });
+          
+           
+        }
+    </script>
+  
+}

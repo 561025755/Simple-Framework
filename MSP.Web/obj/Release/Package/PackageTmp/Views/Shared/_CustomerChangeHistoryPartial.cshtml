@@ -1,0 +1,121 @@
+﻿@using MSP.Web;
+@using MSP.Core.Domain;
+@using MSP.Core.Pagination;
+
+@model MSP.Models.Domain.CustomerModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+        </div>
+        <h4 class="panel-title">状态变更记录</h4>
+    </div>
+
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        状态
+                    </th>
+                    <th>
+                        描述
+                    </th>
+                    <th>
+                        订单编号
+                    </th>
+                    <th>
+                        开始时间
+                    </th>
+                    <th>
+                        结束时间
+                    </th>
+                    <th>
+                        变更时间
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.History != null)
+                {
+                    foreach (var item in Model.History)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.Status == 1)
+                                {
+                                    <span class="label label-info" data-toggle="tooltip" data-placement="right" data-original-title="通过">创建</span>
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <span class="label label-info" data-toggle="tooltip" data-placement="right" data-original-title="通过">编辑</span>
+                                }
+                                else if (item.Status == 3)
+                                {
+                                    <span class="label label-success" data-toggle="tooltip" data-placement="right" data-original-title="通过审核">通过审核</span>
+                                }
+                                else if (item.Status == 4)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="审核拒绝">审核拒绝</span>
+                                }
+                                else if (item.Status == 5)
+                                {
+                                    <span class="label label-info" data-toggle="tooltip" data-placement="right" data-original-title="重新提交">重新提交</span>
+                                }
+                                else if (item.Status == 6)
+                                {
+                                    <span class="label label-warning" data-toggle="tooltip" data-placement="right" data-original-title="排队中">排队中</span>
+                                }
+                                else if (item.Status == 7)
+                                {
+                                    <span class="label label-primary" data-toggle="tooltip" data-placement="right" data-original-title="保护期">保护期</span>
+                                }
+                                else if (item.Status == 8)
+                                {
+                                    <span class="label label-success" data-toggle="tooltip" data-placement="right" data-original-title="签约">签约</span>
+                                }
+                                else if (item.Status == 9)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="删除">删除</span>
+                                }
+                                else if (item.Status == 10)
+                                {
+                                    <span class="label label-info" data-toggle="tooltip" data-placement="right" data-original-title="所属销售变更">所属销售变更</span>
+                                }
+                                else if (item.Status == -1)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="取消">取消</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-default" data-toggle="tooltip" data-placement="right" data-original-title="未知">未知</span>
+                                }
+
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+                            <td>
+                                @item.OrderId
+                            </td>
+                            <td>
+                                @item.StartTime
+                            </td>
+                            <td>
+                                @item.EndTime
+                            </td>
+                            <td>
+                                @item.CreateTime
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,210 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@using MSP.Core.Domain;
+
+@model MSP.Models.Domain.CustomerAprManageModel
+
+@{
+    ViewBag.Title = "东方天呈客户审批权限管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    <style type="text/css">
+        .modal-dialog {
+            min-height: 400px;
+            min-width: 800px;
+        }
+
+    </style>
+}
+
+
+@section PageTitle{
+    东方天呈客户审批权限管理
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">审批部门列表</h4><small>@Html.ActionLink("创建审批部门", "CreateDepartment")</small>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-email">
+                        <thead>
+                            <tr>
+                                <td>编号</td>
+                                <td>部门名称</td>
+                                <td>操作</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model.ApprovalDepartment)
+                        {
+                                <tr class="gridrow">
+                                    <td>@m.Id</td>
+                                    <td>@m.DepartmentName</td>
+                                    <td>
+                                        <a class="email-btn" href="javascript:void(0);" onclick="examinersView(@m.Id,'@m.DepartmentName')"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="查看审批员"></i></a>
+                                        <a class="email-btn" href="@Url.Action("EditDepartment", new { id = m.Id })"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a>
+                                        <a href="javascript:void(0);" class="email-btn" onclick="deleteDepartment(@m.Id)"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a>
+                                    </td>
+                                </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">客户审批人员列表</h4><small>@Html.ActionLink("添加审批人员", "Create")</small>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    @Html.Grid(Model.ApprovalUser).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
+           {
+               columns.For(c => c.UserId).Named("编号").Sortable(false);
+               columns.For(c => c.UserName).Named("用户名称").Sortable(false);
+               columns.For(c => c.Email).Named("用户账号").Sortable(false);
+               columns.For(c => Html.Partial("ActionPartial", c)).Sortable(false);
+           }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model.ApprovalUser))
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- modal begin-->
+    <div class="modal fade" data-backdrop="static" id="modal-table-list">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="departmentName"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="data-table-list" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>用户名</th>
+                                    <th>账号</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    <script type="text/javascript">
+        function deleteDepartment(id) {
+            if (confirm("确定要删除审批部门")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/DF_SettingCustomer/DeleteDepartment',
+                    data: { id, id},
+                    dataType: 'JSON',
+                    success: function (datas) {
+                        if (datas.success) {
+                            location.reload();
+                        } else {
+                            alert('删除失败！');
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function deleteUser(userId,localityId) {
+            if (confirm("确定要删除该用户权限")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/DF_SettingCustomer/Delete',
+                    data: { userId: userId,localityId:localityId },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        }
+
+        function examinersView(id, departmentName) {
+            $('#modal-table-list').modal('show');
+            $('#data-table-list').dataTable().fnDestroy();
+            $('#departmentName').html(departmentName);
+
+            $('#data-table-list').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 8,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/DF_SettingCustomer/Examiners',
+                    "data": function (d) {
+                        d.id = id
+                    }
+                },
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "UserName" },
+                    { "data": "Email" }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+        }
+    </script>
+}

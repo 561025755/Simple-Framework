@@ -1,0 +1,154 @@
+﻿@using MSP.Models.Domain;
+@using MSP.Core.Domain;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+
+
+@model AttachModel<EquipmentBean, EquipmentQueryBean>
+
+@section header{
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    @Styles.Render("~/Content/select2-4.0.3/css/select2.min.css")
+}
+
+@{
+    ViewBag.Title = "设备列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    设备列表<small>  @Html.ActionLink("从地图查看", "EquipmentOnMap", new { @class = "btn btn-xs btn-inverse" }) <i class="fa fa-map-marker"></i></small>
+}
+
+<!-- begin col-12 -->
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">列表视图</h4>
+        </div>
+        <div class="panel-body">
+            @Html.Partial("SearchPartial", Model.Model)
+            <div class="table-responsive">
+                @Html.Grid(Model.PageModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+           {
+               column.For(c => c.Code).Named("#").Sortable(false);
+               column.For(c => c.Supplyer).Named("供应商名称").Sortable(false);
+               column.For(c => c.Standard).Named("规格名称").Sortable(false);
+               column.For(c => Convert.ToDateTime(c.StartTime).ToShortTimeString()).Named("时控开机时间").Sortable(false);
+               column.For(c => Convert.ToDateTime(c.EndTime).ToShortTimeString()).Named("时控关机时间").Sortable(false);
+               column.For(c => Html.Partial("IndexPartial", c.PropertyNumber));
+           }).Attributes(@class => "table table-email")
+            </div>
+            @Html.Raw(@Html.Pager(Model.PageModel))
+        </div>
+    </div>
+    <!-- end panel -->
+    <input type="hidden" value="@Model.Model.city" id="cityCode" />
+    <input type="hidden" value="@Model.Model.region" id="regionCode" />
+</div>
+<!--Add modal begin-->
+<div class="modal fade" data-backdrop="static" id="modal-OrderRecords-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title"><i class="fa fa-table"></i> 订单记录</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>档期</th>
+                                <th>订单用户</th>
+                                <th>订单状态</th>
+                                <th>订单客户</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--Add modal end-->
+@section Scripts {
+
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/select2-4.0.3/js/select2.min.js")
+    @Scripts.Render("~/Content/themes/sean/getCityRegion.js")
+
+    <script type="text/javascript">
+        $(function () {
+            initCity();
+        });
+
+        function initCity() {
+            $("#province").change();
+
+            if ($("#cityCode").val() != "") {
+                $('#city option[value=' + $("#cityCode").val() + ']').attr('selected', true);
+                $("#city").change();
+            }
+            if ($("#regionCode").val() != "") {
+                $('#region option[value=' + $("#regionCode").val() + ']').attr('selected', true);
+            }
+        }
+
+        function ShowOrderRecords(propertyNumber) {
+            $('#data-table').dataTable().fnDestroy();
+            $('#data-table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 20,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/Equipment/GetEquipmentSchedules',
+                    "data": function (d) {
+                        d.PropertyNumber = propertyNumber;
+                    }
+                },
+                "columns": [
+                     { "data": "ScheduleDate" },
+                    { "data": "UserName" },
+                     { "data": "ShowOrderStatus" },
+                      { "data": "CustomerName" }
+
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+
+            $("#modal-OrderRecords-list").modal('show');
+        }
+    </script>
+}

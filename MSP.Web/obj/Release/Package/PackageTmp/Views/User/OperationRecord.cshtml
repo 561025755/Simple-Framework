@@ -1,0 +1,87 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Domain;
+@using MSP.Core.Pagination;
+@using MSP.Core.Sorting;
+
+@model IPagination<Sys_Useroperationrecord>
+
+    @{
+        ViewBag.Title = "用户操作记录";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    @section header{
+        @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+        <style type="text/css">
+            .modal-dialog {
+                min-height: 400px;
+                min-width: 800px;
+            }
+            .UserActiveOn
+            {
+                color:green
+               
+            }
+             .UserActiveOff
+            {
+               color:red;
+               
+            }
+        </style>
+    }
+
+    @section PageTitle{
+        用户操作记录 <small>点击 @Html.ActionLink("这里", "Index") 返回用户列表</small>
+    }
+
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    @Html.Grid(Model).Columns(column =>
+               {
+                   column.For(c => c.UserName).Named("用户名");
+                   column.For(c => c.Operation).Named("用户操作");
+                   column.For(c => c.Caption).Named("操作说明");
+                   column.For(c => c.OperTime).Named("操作时间");
+                   column.For(c =>c.OperAddress).Named("操作地址");
+                   column.For(c => c.OperCity).Named("城市");
+               }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model))
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+    @section Scripts {
+        @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+
+        <script>
+            $(document).ready(function () {
+                $(".table  tr td:nth-child(2)").each(function () {
+                    var value = $(this).text();
+                    if (value == "禁用账号") {                       
+                        $(this).parent().addClass("UserActiveOff");
+                    }
+                    if (value=="启用账号") {
+                        $(this).parent().addClass("UserActiveOn");
+                    }
+                   
+               
+                })
+            });
+        </script>
+    }

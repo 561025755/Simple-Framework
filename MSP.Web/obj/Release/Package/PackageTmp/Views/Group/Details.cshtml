@@ -1,0 +1,69 @@
+﻿@model MSP.Models.Domain.GroupModel
+
+@{
+    ViewBag.Title = "用户组别详细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    用户组别详细 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">详细信息</h4>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.SystemName)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.SystemName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.IsSystemGroup)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.IsSystemGroup)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.CheckBoxFor(model => model.Active, "Input") @Html.LabelFor(model => model.Active)
+                    </label>
+                </div>
+
+                @Html.ActionLink("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-sm btn-success" })
+
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>

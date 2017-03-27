@@ -1,0 +1,34 @@
+﻿@model int
+@if (Model == 0)
+{
+    <span class="label label-warning" data-toggle="tooltip" data-placement="right" data-original-title="备选中">备选中</span>
+}
+else if (Model == 1)
+{
+    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="预定中">预定中</span>
+}
+else if (Model == 2)
+{
+    <span class="label label-success" data-toggle="tooltip" data-placement="right" data-original-title="已预订">已预订</span>
+}
+else if (Model== 3)
+{
+    <span class="label label-inverse" data-toggle="tooltip" data-placement="right" data-original-title="待确认">待确认</span>
+}
+else if (Model== 4)
+{
+    <span class="label label-inverse" data-toggle="tooltip" data-placement="right" data-original-title="已完成">已完成</span>
+}
+else if (Model== -1)
+{
+    <span class="label label-default" data-toggle="tooltip" data-placement="right" data-original-title="已取消">已取消</span>
+}
+else if (Model == -2)
+{
+    <span class="label label-default" data-toggle="tooltip" data-placement="right" data-original-title="已删除">已删除</span>
+}
+
+else
+{
+    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="未知">未知</span>
+}

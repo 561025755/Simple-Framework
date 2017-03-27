@@ -1,0 +1,56 @@
+﻿@using MSP.Core.Domain
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@model MSP.Models.Domain.AttachModel<Df_Agreement, Df_Agreement>
+
+@{
+    ViewBag.Title = "待审批确认单列表";
+}
+
+@section PageTitle{
+    待审批确认单列表 
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+
+            <div class="panel-body">
+                @*<form action="/User" id="SearchUser" method="get">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input class="form-control" id="UserName" name="UserName" placeholder="关键字" type="text" value="">
+                        </div>
+                        <div class="col-sm-2"><input type="submit" class="btn btn-search btn-block btn-success" value="搜索"></div>
+                    </div>
+                </form>*@
+
+                <div class="table-responsive">
+                    @Html.Grid(Model.PageModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+               {
+                   column.For(c => c.Id).Named("编号");
+                   column.For(c => c.CreateTime).Named("创建时间");
+                   column.For(c => c.UpdateTime).Named("更新时间");
+                   column.For(c => Html.Partial("AgreementStatusPartial", c.Status)).Named("状态");
+                   column.For(c => Html.IconLink("fa-floppy-o", "Approval",new { id=c.Id}));
+               }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model.PageModel))
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>

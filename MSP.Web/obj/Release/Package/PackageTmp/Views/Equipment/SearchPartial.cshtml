@@ -1,0 +1,26 @@
+﻿@using MSP.Core.Domain;
+@model EquipmentQueryBean
+
+
+@using (Html.BeginForm("Index", "Equipment", FormMethod.Get, new { @id = "EquipmentSearch" }))
+{
+    <div class="row">
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.province, (ViewData["province"] as SelectList), "省", new { @class = "form-control" })
+        </div>
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.city, new List<SelectListItem> { }, "市", new { @class = "form-control" })
+        </div>
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.region, new List<SelectListItem> { }, "区", new { @class = "form-control" })
+        </div>
+       
+        <div class="col-md-2">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-inverse" value="搜索" />
+                </div>
+            </div>
+        </div>
+    </div>
+}

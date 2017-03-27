@@ -1,0 +1,272 @@
+﻿@model MSP.Models.Domain.OrderCreateModel
+@{
+    ViewBag.Title = "创建东方天呈订单";
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/css/bwizard.min.css")
+    @Styles.Render("~/Content/themes/sean/css/datepicker3.css")
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    <style>
+        div#map {
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+
+        .panel-expand #map {
+            height: 100%;
+        }
+    </style>
+}
+
+@section PageTitle{
+    创建东方天呈订单 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <div id="wizard">
+                    <ol class="bwizard-steps clearfix clickable" role="tablist">
+                        <li role="tab" aria-selected="true" style="z-index: 3;" class="active">
+                            <span class="label badge-inverse">1</span>
+                            选择订单档期
+                            <small>配置订单内容、选择档期、播放频次.</small>
+                        </li>
+                        <li class="" role="tab" aria-selected="false" style="z-index: 2;">
+                            <span class="label">2</span>
+                            配置订单点位明细
+                            <small>设置订单生成方式、配置点位筛选条件</small>
+                        </li>
+                        <li role="tab" aria-selected="false" style="z-index: 1;" class="">
+                            <span class="label">3</span>
+                            完成订单
+                            <small>确认订单详情、点位明细.</small>
+                        </li>
+                    </ol>
+                    <!-- begin wizard step-1 -->
+                    @using (Html.BeginForm("Save", "DF_OwnOrder", FormMethod.Post, new { id = "formOrderSave" }))
+                    {
+                        @Html.HiddenFor(model => model.Id);
+                        <div>
+                            <fieldset>
+                                <legend class="pull-left width-full">选择订单档期</legend>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="CustomerId">@Html.DisplayNameFor(m => m.CustomerId)</label>
+                                            <div>
+                                                @Html.DropDownListFor(model => model.CustomerId, (ViewData["CustomerId"] as SelectList), "请选择一个订单客户", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.CustomerId)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="ContactId">@Html.DisplayNameFor(m => m.ContactId)</label>
+                                            <div>
+                                                @Html.DropDownListFor(model => model.ContactId, new List<SelectListItem> { new SelectListItem { Value = "", Text = "请选择一个联系人" } }, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.ContactId)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="Brand">@Html.DisplayNameFor(m => m.Brand)</label>
+                                            <div>
+                                                @Html.DropDownListFor(model => model.Brand, new List<SelectListItem> { new SelectListItem { Value = "", Text = "请选择一个广告品牌" } }, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Brand)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="Description">@Html.DisplayNameFor(m => m.Description)</label>
+                                            <div>
+                                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "特殊备注" })
+                                                @Html.ValidationMessageFor(model => model.Description)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="PlayTime">@Html.DisplayNameFor(m => m.PlayTime)</label>
+                                            <div>
+                                                @Html.DropDownListFor(model => model.PlayTime, (ViewData["PlayTime"] as SelectList), "请选择每次播放秒数", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.PlayTime)
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="PlayCount">@Html.DisplayNameFor(m => m.PlayCount)</label>
+                                            <div>
+                                                @Html.TextBoxFor(m => m.PlayCount, new { @class = "form-control", placeholder = "播放次数（只能输入数字）", @type = "number", @min = "1" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="BaseDate">@Html.DisplayNameFor(m => m.BaseDate)</label>
+                                            <div class="input-group date" id="startDate" data-date-format="yyyy-mm-dd">
+                                                @Html.TextBoxFor(m => m.BaseDate, new { @class = "form-control" })
+                                                @*<input type="text" id="SStartDate" class="form-control" required data-parsley-group="wizard-step-1" />*@
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div id="playweek">
+                                                <label for="PublicWeeks">@Html.DisplayNameFor(m => m.PublicWeeks)</label>
+                                                @Html.TextBoxFor(m => m.PublicWeeks, new { @class = "form-control", placeholder = "发布周数（只能输入数字）", @type = "number", @min = "1" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <strong>根据您的选择，该订单实际发布时间为：</strong><strong class="f-s-14 text-danger" id="publicDate"> <span id="StartDate"> 2016-11-14</span> 至<span id="EndDate">2016-12-4</span>，共 <span>21</span> 天</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    }
+                    <!-- end wizard step-1 -->
+
+                    <ul class="pager bwizard-buttons">
+                        <li class="previous disabled" role="button" aria-disabled="true">
+                            <a href="#">← Previous</a>
+                        </li>
+                        <li class="next " role="button" aria-disabled="false">
+                            <a href="javascript:void(0);" onclick="SaveAndNext()">Next →</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+<div class="modal fade" id="modal-alert">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="alert alert-danger m-b-0">
+                    <h4 id="alertDeleteTitle"><span>友情提示</span> </h4>
+                    <p id="message"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-danger" data-dismiss="modal">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+
+    <script>
+        $(document).ready(function () {
+
+            $("#BaseDate").datepicker({ autoclose: true, todayHighlight: true, format: "yyyy-mm-dd" });
+
+            $("#BaseDate,#PublicWeeks").change(function () {
+                var now = new Date($("#BaseDate").val());
+                var days = parseInt($("#PublicWeeks").val() != "" ? $("#PublicWeeks").val() : 0) * 7;
+
+                var endDate = new Date(now.valueOf() + days * 24 * 60 * 60 * 1000);
+                $("#publicDate").text(now.toLocaleDateString() + "至" + endDate.toLocaleDateString() + "，共" + days + "天");
+
+            });
+            $("#BaseDate").datepicker("setDate", '@DateTime.Now.AddDays(3).ToShortDateString()');
+            $('#CustomerId').change(function () {
+                var customerId = $(this).val();
+                $('#ContactId option').each(function (index, obj) {
+                    if ($(this).val() != '') {
+                        $(this).remove();
+                    }
+                });
+
+                $('#Brand option').each(function (index, obj) {
+                    if ($(this).val() != '') {
+                        $(this).remove();
+                    }
+                });
+
+                if (customerId != '') {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/DF_OwnOrder/GetContact',
+                        data: { customerId: parseInt(customerId) },
+                        dataType: 'JSON',
+                        async:false,
+                        success: function (datas) {
+                            if (datas != null) {
+                                $(datas.data).each(function (index, obj) {
+                                    $('#ContactId').append('<option value="' + obj.Id + '">' + obj.Name + '</option>')
+                                });
+
+                                $(datas.brands).each(function (index, obj) {
+                                    $('#Brand').append('<option value="' + obj + '">' + obj + '</option>')
+                                })
+                            }
+
+                        }
+                    });
+                }
+            })
+
+            $('#CustomerId').change();
+
+
+
+            if(@Model.Id>0)
+            {
+                debugger;
+                $("#ContactId option[value='@Model.ContactId']").attr("selected", true);
+                $("#Brand option[value='@Model.Brand']").attr("selected", true);
+
+                $("#BaseDate").datepicker("setDate", '@Model.BaseDate.GetValueOrDefault(DateTime.Now).ToShortDateString()');
+                $("select,input").attr("disabled","disabled");
+            }
+
+        });
+        function SaveAndNext()
+        {
+            if(@Model.Id>0)
+            {
+                window.location.href="/DF_OwnOrder/SelectEquipment/@Model.Id";
+            }
+            else
+            {
+            if ($('#CustomerId').val() == "" || $("#ContactId").val() == "" || $("#Brand").val() == "" || $("#Description").val() == ""|| $("#ContactId").val() == "" || $("#PlayCount").val() == "" || $("#PublicWeeks").val() == "") {
+                $("#modal-alert").modal('show');
+                $('#message').text("请完善订单的基本信息");
+                return false;
+            }
+            $("#formOrderSave").submit();
+            }
+        }
+    </script>
+}

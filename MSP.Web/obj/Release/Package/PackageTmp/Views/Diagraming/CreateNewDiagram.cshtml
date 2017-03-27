@@ -1,0 +1,1092 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>创建地铁灯箱示意图</title>   
+    
+
+  
+    @Styles.Render("~/Content/themes/metroboard/global.css")
+    @Styles.Render("~/Content/themes/metroboard/designer.css")
+    @Styles.Render("~/Content/themes/metroboard/ui.css")
+
+    @Scripts.Render("~/Content/themes/metroboard/jquery-1.8.2.js")
+    @Scripts.Render("~/Content/themes/metroboard/unitl.js")
+     @Scripts.Render("~/Content/themes/metroboard/Schema.js")
+     @Scripts.Render("~/Content/themes/metroboard/themes.js")
+    @Scripts.Render("~/Content/themes/metroboard/basic.js")
+     @Scripts.Render("~/Content/themes/metroboard/collaboration.js")
+     @Scripts.Render("~/Content/themes/metroboard/designer.core.js")
+     @Scripts.Render("~/Content/themes/metroboard/designer.methods.js")
+    @Scripts.Render("~/Content/themes/metroboard/designer.events.js")
+     @Scripts.Render("~/Content/themes/metroboard/designer.ui.js")
+    @Scripts.Render("~/Content/themes/metroboard/export.js")
+     @Scripts.Render("~/Content/themes/metroboard/exportsvg.js")
+     @Scripts.Render("~/Content/themes/metroboard/svg.js")
+    @Scripts.Render("~/Content/themes/metroboard/svg.export.js")
+    <style>
+    .popup{
+                position: absolute;
+                visibility: hidden;
+                overflow: auto;
+                /*border:1px solid red;*/
+                background-color:wheat;
+                opacity: 1;
+            }
+    </style >
+    <script type = "text/javascript" >
+         var chartId = '@ViewData["chartId"]';
+            var definition = { "page": { "showGrid": true, "gridSize": 5, "orientation": "portrait", "height": 1500, "backgroundColor": "transparent", "width": 1250, "padding": 20 }, "elements": { }
+        };
+        var role = "owner";
+        //var cateType = "basic";
+        var userId = @ViewData["userId"];
+        var userName = "";
+        var time = "1477018635771";
+        var dock = "";
+        var tutorial = false;
+        var chartName = "";
+
+        var showToolbar = false;
+
+
+        var cstatus = "private";
+        var dateFormat = "yyyy-MM-dd hh:mm";
+        var showCommentIco = true;
+
+        var localRuntime = false;
+        var chartVersion = 61;
+
+    </script>
+
+
+</head>
+<body>
+    <canvas id = "support_canvas" style="display: none;"></canvas>
+    <script type = "text/javascript" >
+if(!document.getElementById("support_canvas").getContext){
+	window.location.href = "/diagraming/not_support";
+}
+    </script>
+
+    <div id = "designer_header" >
+        <div class="titlebar">
+
+
+
+        </div>
+        <div class="toolbar">
+            <div id = "bar_theme" class="toolbar_button" title="切换风格"><div class="ico theme"></div></div>
+            <div class="toolbar_devider"></div>
+            <div id = "bar_undo" class="toolbar_button" title="撤销 (Ctrl+Z)"><div class="ico undo"></div></div>
+            <div id = "bar_redo" class="toolbar_button disabled" title="恢复 (Ctrl+Y)"><div class="ico redo"></div></div>
+            <div id = "bar_brush" class="toolbar_button" title="格式刷 (Ctrl+Shift+B)"><div class="ico brush"></div></div>
+            <div class="toolbar_devider"></div>
+            <div id = "bar_font_family" title="字体" class="toolbar_button" style="width: 80px;"><div class="text_content">微软雅黑</div><div class="ico ico_dropdown"></div></div>
+            <div class="toolbar_small_devider"></div>
+            <div id = "bar_font_size" title="字号" class="spinner" style="width: 50px;" min="12" max="100" old="13px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+            <div class="toolbar_small_devider"></div>
+            <div id = "bar_font_bold" title="粗体 (Ctrl+B)" class="toolbar_button"><div class="ico bold"></div></div>
+            <div id = "bar_font_italic" title="斜体 (Ctrl+I)" class="toolbar_button"><div class="ico italic"></div></div>
+            <div id = "bar_font_underline" title="下划线 (Ctrl+U)" class="toolbar_button"><div class="ico underline"></div></div>
+            <div id = "bar_font_color" title="文本颜色" class="toolbar_button drop_button">
+                <div class="ico fontcolor"></div>
+                <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id = "bar_font_align" title="对齐" class="toolbar_button drop_button">
+                <div class="ico alignleft"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div class="toolbar_devider"></div>
+            <div id = "bar_fill" title="填充样式" class="toolbar_button drop_button">
+                <div class="ico fillcolor"></div>
+                <div class="btn_color" style="background-color: rgb(255,255,255)"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id = "bar_line_color" title="线条颜色" class="toolbar_button drop_button">
+                <div class="ico linecolor"></div>
+                <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id = "bar_line_width" title="线宽" class="toolbar_button drop_button">
+                <div class="ico linewidth"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id = "bar_line_style" title="线条样式" class="toolbar_button drop_button">
+                <div class="ico linedash"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div class="toolbar_devider"></div>
+            <div id = "bar_linkertype" title="连线类型" class="toolbar_button drop_button disabled">
+                <div class="ico linkertype_broken"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id = "bar_beginarrow" title="起点" class="toolbar_button drop_button disabled">
+                <div class="ico ico_arrow larrow_none"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id = "bar_endarrow" title="终点" class="toolbar_button drop_button disabled">
+                <div class="ico ico_arrow rarrow_none"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div class="toolbar_devider"></div>
+            <div id = "bar_front" title="置于顶层 (Ctrl+] )" class="toolbar_button"><div class="ico ico_front"></div></div>
+            <div id = "bar_back" title="置于底层 (Ctrl+[ )" class="toolbar_button"><div class="ico ico_back"></div></div>
+            <div class="toolbar_devider"></div>
+            <div id = "bar_lock" title="锁定 (Ctrl+L)" class="toolbar_button"><div class="ico ico_lock"></div></div>
+            <div id = "bar_unlock" title="解锁 (Ctrl+Shift+L)" class="toolbar_button disabled"><div class="ico ico_unlock"></div></div>
+            <div class="toolbar_small_devider"></div>
+            <div id = "bar_link" title="插入链接" class="toolbar_button"><div class="ico ico_link"></div></div>
+            <div id = "size_set" title="设置尺寸" class="toolbar_button"><div class="ico ico_dock_nav"></div></div>
+
+            @*<div class="toolbar_right">
+                <div id="bar_collapse" class="toolbar_button"><div class="ico collapse"></div></div>
+            </div>*@
+            @*<a id="bar_return" class="toolbar_button" href="/diagraming/back?id=58098b37e4b0e7a6ddaa63e5" title="返回"><span class="ico ico_goback"></span></a>*@
+        </div>
+    </div>
+    <div id="designer">
+        <div id="shape_panel" class="layout" style="height: 485px;">
+            <div class="panel_container panel_collapsed">
+              
+            </div>
+            <div class="panel_container">
+           
+            </div>
+          
+            
+        </div>
+        
+        <div id="designer_viewport">
+            <div id="designer_layout" class="layout" style="height: 485px;">
+                <div id="canvas_container" style="width: 1250px; height: 1500px; padding: 1000px; cursor: default;">
+                    <div id="designer_canvas" style="background-color: rgb(242, 242, 242);">
+                        <canvas id="designer_grids" width="1250" height="1500"></canvas>
+                        <ul id="designer_contextmenu" class="menu list options_menu">
+                            <li ac="cut"><div class="ico cut"></div>剪切<div class="extend">Ctrl+X</div></li>
+                            <li ac="copy"><div class="ico copy"></div>复制<div class="extend">Ctrl+C</div></li>
+                            <li ac="paste"><div class="ico paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
+                            <li ac="duplicate">复用<div class="extend">Ctrl+D</div></li>
+                            <li class="devider devi_clip"></li>
+                            <li ac="front"><div class="ico ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
+                            <li ac="back"><div class="ico ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
+                            <li ac="lock"><div class="ico ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
+                            <li ac="unlock"><div class="ico ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
+                            <li ac="group">组合<div class="extend">Ctrl+G</div></li>
+                            <li ac="ungroup">取消组合<div class="extend">Ctrl+Shift+G</div></li>
+                            <li id="ctxmenu_align">
+                                图形对齐<div class="extend ex_arrow">►</div>
+                                <ul class="menu list extend_menu">
+                                    <li ac="align_shape" al="left">左对齐</li>
+                                    <li ac="align_shape" al="center">居中对齐</li>
+                                    <li ac="align_shape" al="right">右对齐</li>
+                                    <li class="devider"></li>
+                                    <li ac="align_shape" al="top">顶端对齐</li>
+                                    <li ac="align_shape" al="middle">垂直居中对齐</li>
+                                    <li ac="align_shape" al="bottom">底端对齐</li>
+                                </ul>
+                            </li>
+                            <li class="devider devi_shape"></li>
+                            <li ac="changelink"><div class="ico ico_link"></div>修改链接</li>
+                            <li ac="edit"><div class="ico edittext"></div>编辑文本<div class="extend">空格</div></li>
+                            <li ac="delete"><div class="ico remove"></div>删除<div class="extend">Delete/Backspace</div></li>                            
+                            <li class="devider devi_del"></li>
+                            <li ac="selectall">全选<div class="extend">Ctrl+A</div></li>
+                            <li class="devider devi_selectall"></li>
+                            <li ac="drawline"><div class="ico linkertype_normal"></div>创建连线<div class="extend">L</div></li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div id="shape_img_container"></div>
+                <div id="layout_block"></div>
+            </div>
+            <div id="shape_thumb" class="menu"><canvas width="160px"></canvas><div></div></div>
+            <div id="dock" style="right: 9px;">
+                <div class="dock_header"></div>
+                <div class="dock_buttons">
+                    <div id="dock_btn_navigator" title="导航" disabletitle="true" class="toolbar_button" onclick="Dock.showView('navigator', true)"><div class="ico ico_dock_nav"></div></div>
+                    <div id="dock_btn_graphic" title="图形" disabletitle="true" class="toolbar_button" onclick="Dock.showView('graphic', true)"><div class="ico ico_dock_styles"></div></div>
+                    <div id="dock_btn_metric" title="度量" disabletitle="true" class="toolbar_button" onclick="Dock.showView('metric', true)"><div class="ico ico_dock_metric"></div></div>
+                    <div id="dock_btn_attribute" title="数据属性" disabletitle="true" class="toolbar_button" onclick="Dock.showView('attribute', true)"><div class="ico ico_dock_attribute"></div></div>
+                    <div id="dock_btn_page" title="页面设置" disabletitle="true" class="toolbar_button" onclick="Dock.showView('page', true)"><div class="ico ico_dock_page"></div></div>
+                    @*<div id="dock_btn_history" title="历史版本" disabletitle="true" class="toolbar_button" onclick="Dock.showView('history', true)"><div class="ico ico_history"></div></div>*@
+                    @*<div id="dock_btn_comment" title="评论" disabletitle="true" class="toolbar_button" onclick="Dock.showView('comment', true)"><div class="ico ico_comment"></div></div>*@
+                </div>
+            </div>
+          <div id="navigation_view" class="dock_view dock_view_navigator" style="right: 45px;">
+                <div class="dock_view_header">
+                    导航
+                    <div class="ico ico_dock_collapse"></div>
+                </div>
+                <div class="navigation_bounding">
+                    <div class="navigation_view_container">
+                        <canvas id="navigation_canvas" width="120px" height="160px"></canvas>
+                        <div id="navigation_eye" style="left: -1px; top: -1px; width: 0px; height: 0px;"></div>
+                    </div>
+                </div>
+                <div class="dock_devider" style="margin: 0px 10px"></div>
+                <div class="navigation_view_bar">
+                    缩放：
+                    <div id="dock_zoom" class="spinner active" min="50" max="200" old="50%"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+                    <div class="toolbar_button active" onclick="Dock.enterFullScreen()" title="全屏视图 (F11)"><div class="ico ico_fullscreen"></div></div>
+                    <div class="toolbar_button active" onclick="Dock.enterPresentation()" title="演示视图 (F10)"><div class="ico ico_presentation"></div> </div>
+                </div>
+                <div id="fullscreen_tip" class="alert error">
+                    <div class="ico dlg_close" onclick="$('#fullscreen_tip').hide();"></div>
+                    <div class="t"></div>
+                    <div class="full_suggest">
+                        <span>我们推荐使用以下浏览器：</span>
+                        <a href="http://www.google.com/chrome" target="_blank"><span class="ico chrome"></span></a>
+                        <a href="http://www.firefox.com" target="_blank"><span class="ico firefox"></span></a>
+                    </div>
+                </div>
+            </div>
+
+    <div class="dock_view dock_view_graphic" style="right: 45px;">
+        <div class="dock_view_header">
+            图形
+            <div class="ico ico_dock_collapse"></div>
+        </div>
+        <div class="dock_content">
+            <div class="dock_content_title">连线</div>
+            <div id="dock_line_color" class="picker_btn btn_inline"><div class="picker_btn_holder"></div><div class="ico ico_colordrop"></div></div>
+            <div id="dock_line_style" class="toolbar_button drop_button active btn_inline" style="margin: 0px 0px 0px 10px">
+                <div class="ico linestyle linesolid"></div>
+                <div class="ico ico_dropdown"></div>
+            </div>
+            <div id="dock_line_width" class="spinner active btn_inline" style="width: 82px; margin-left: 10px;" min="0" max="10" old="0px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+            <div style="clear: both"></div>
+            <div class="dock_devider"></div>
+            <div class="dock_content_title">填充样式</div>
+            <div id="dock_fill_type" class="toolbar_button active"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+            <div class="fill_detail fill_detail_solid">
+                <div id="fill_solid_btn" class="picker_btn"><div class="picker_btn_holder"></div><div class="ico ico_colordrop"></div></div>
+            </div>
+            <div class="fill_detail fill_detail_gradient">
+                <div id="fill_gradient_begin" c="255,255,255" class="picker_btn btn_inline"><div class="picker_btn_holder"></div><div class="ico ico_colordrop"></div></div>
+                <div id="gradient_swap" class="toolbar_button btn_normal btn_inline">
+                    <div class="ico gradient_swap"></div>
+                </div>
+                <div id="fill_gradient_end" c="255,255,255" class="picker_btn btn_inline"><div class="picker_btn_holder"></div><div class="ico ico_colordrop"></div></div>
+                <div id="gradient_type" class="toolbar_button active btn_normal btn_inline" style="width: 100px;margin: 0px 0px 0px 10px;">
+                    <div class="text_content"></div><div class="ico ico_dropdown"></div>
+                </div>
+                <div style="clear: both"></div>
+                <div id="gradient_type_linear" class="gradient_details">
+                    角度：
+                    <div id="gradient_angle" class="spinner active" style="width: 100px; display: inline-block;" min="0" max="360" old="0°"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+                </div>
+                <div id="gradient_type_radial" class="gradient_details">
+                    半径：
+                    <div id="gradient_radius" class="spinner active" style="width: 100px; display: inline-block;" min="0" max="100" old="0%"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="fill_detail fill_detail_image">
+                <div id="fill_change_img" class="toolbar_button active" style="width: 95px;">更改图片</div>
+                <div style="height: 10px;"></div>
+                显示方式：
+                <div id="fill_img_display" class="toolbar_button active" style="width: 100px; display: inline-block;">
+                    <div class="text_content"></div><div class="ico ico_dropdown"></div>
+                </div>
+            </div>
+            <div class="dock_devider"></div>
+            <div class="dock_content_title">透明度</div>
+            <div id="spinner_opacity" class="spinner active" style="width: 90px;" min="0" max="100" old="0%"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+        </div>
+    </div>
+    <div class="dock_view dock_view_metric" style="right: 45px;">
+        <div class="dock_view_header">
+            度量
+            <div class="ico ico_dock_collapse"></div>
+        </div>
+        <div class="dock_content">
+            <div class="dock_content_title">位置和大小</div>
+            <div class="dock_label">X:</div>
+            <div id="dock_metric_x" class="spinner active btn_inline" style="width: 65px;" min="-800" old="0px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+            <div class="dock_label">宽:</div>
+            <div id="dock_metric_w" class="spinner active btn_inline" style="width: 65px;" min="20" old="20px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+            <div style="clear: both; height: 10px;"></div>
+            <div class="dock_label">Y:</div>
+            <div id="dock_metric_y" class="spinner active btn_inline" style="width: 65px;" min="-800" old="0px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+            <div class="dock_label">高:</div>
+            <div id="dock_metric_h" class="spinner active btn_inline" style="width: 65px;" min="20" old="20px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+            <div style="clear: both"></div>
+            <div class="dock_devider"></div>
+            <div class="dock_content_title">旋转方向</div>
+            <div id="dock_metric_angle" class="spinner active" style="width: 95px; display: inline-block;" min="0" max="360" old="0°"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div>
+        </div>
+    </div>
+    <div class="dock_view dock_view_page" style="right: 45px;">
+        <div class="dock_view_header">
+            页面设置
+            <div class="ico ico_dock_collapse"></div>
+        </div>
+        <div class="dock_content">
+            <div class="dock_content_title">页面</div>
+            <div class="dock_label" style="width: 80px;">页面大小:</div>
+            <div id="dock_page_size" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+            <div style="height: 10px; clear: both"></div>
+            <div class="dock_label" style="width: 80px;">内边距:</div>
+            <div id="dock_page_padding" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+            <div style="height: 10px; clear: both"></div>
+            <div class="dock_label" style="width: 80px;">背景颜色:</div>
+            <div id="dock_page_color" class="picker_btn btn_inline"><div class="picker_btn_holder"></div><div class="ico ico_colordrop"></div></div>
+            <div style="height: 10px; clear: both"></div>
+            <div class="dock_label" style="width: 80px;">页面方向:</div>
+            <div class="dock_page_ori_list">
+                <input type="radio" name="dock_page_ori" value="portrait">竖向<br>
+                <input type="radio" name="dock_page_ori" value="landscape">横向
+            </div>
+            <div style="clear: both"></div>
+            <div class="dock_devider"></div>
+            <div class="dock_content_title">网格</div>
+            <input id="dock_page_showgrid" type="checkbox"><label for="dock_page_showgrid">显示网格</label>
+            <div id="dock_gridsize_box" style="margin-top: 10px;">
+                <div class="dock_label">网格大小:</div>
+                <div id="dock_page_gridsize" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+                <div style="clear: both"></div>
+            </div>
+        </div>
+    </div>
+    <div class="dock_view dock_view_attribute" style="width: 350px; right: 45px;">
+        <div class="dock_view_header">
+            数据属性
+            <div class="ico ico_dock_collapse"></div>
+        </div>
+        <div class="dock_content" style="padding: 5px 0px 5px;">
+            <div class="attr_add">
+                <div id="attr_add_btn" class="toolbar_button active noover" style="width: 120px;display: inline-block;" onclick="Dock.showAttrAdd()">添加数据属性</div>
+                <div class="attr_add_items">
+                    <div class="dock_label" style="width: 50px;">名字:</div>
+                    <input id="attr_add_name" type="text" class="input_text" style="float: left; width: 260px;">
+                    <div style="height: 5px; clear: both"></div>
+                    <div class="dock_label" style="width: 50px;">类型:</div>
+                    <select id="attr_add_type" class="input_select" style="float: left; width: 120px;">
+                        <option value="string">文本</option>
+                        <option value="link">链接</option>
+                        <option value="number">数值</option>
+                        <option value="date">日期</option>
+                        <option value="boolean">布尔</option>
+                        <option value="list" style="display:none;">列表</option>
+                    </select>
+                    <div style="height: 5px; clear: both"></div>
+                    <div class="dock_label" style="width: 50px;">值:</div>
+                    <div id="attr_add_value_arera" style="float: left;"></div>
+                    <div style="height: 5px; clear: both"></div>
+                    <div class="toolbar_button active" style="width: 70px;display: inline-block;" onclick="Dock.saveAttrAdd()">确定</div>
+                    <div class="toolbar_button active" style="width: 70px;display: inline-block;" onclick="Dock.cancelAttrAdd()">取消</div>
+                </div>
+                <div class="dock_devider"></div>
+            </div>
+            <ul class="attr_list"></ul>
+        </div>
+    </div>
+    @*<div class="dock_view dock_view_history" style="right: 45px;">
+        <div class="dock_view_header">
+            历史版本
+            <div class="ico ico_dock_collapse"></div>
+        </div>
+        <div class="dock_content" style="padding: 0px;">
+            <div class="history_bar">
+                <div class="area_history">
+                    <div id="btn_history_add" class="toolbar_button active" style="padding: 0px 10px 0px 3px"><div class="ico ico_plus" style="float: left;"></div>创建历史版本</div>
+                    <div id="btn_history_restore" class="toolbar_button active disabled" title="恢复到此版本"><div class="ico ico_restore"></div></div>
+                </div>
+                <div id="area_history_add" class="area_history">
+                    <textarea id="history_remark" class="input_text" placeholder="填写注释..." style="width: 188px; height: 36px; margin-bottom: 5px;"></textarea>
+                    <div class="toolbar_button active" style="width: 70px;display: inline-block;" onclick="Dock.addHistory()">确定</div>
+                    <div class="toolbar_button active" style="width: 70px;display: inline-block;" onclick="Dock.toggleAddHistory()">取消</div>
+                </div>
+            </div>
+            <div class="dock_devider"></div>
+            <div id="history_container" style="min-height: 120px;"></div>
+        </div>
+    </div>*@
+   
+    </div>
+    
+        </div>
+   
+    @*<div id="designer_footer">
+        <input type="button" class="button" id="export2svg" onclick="export2svg()" value="sss"  />
+    </div>*@
+   
+    <div id="ui_container">
+        <div id="color_picker" class="menu color_picker" style="display: none;">
+            <div class="color_items"><div style="background-color:rgb(255,255,255);"></div><div style="background-color:rgb(229,229,229);"></div><div style="background-color:rgb(207,207,207);"></div><div style="background-color:rgb(184,184,184);"></div><div style="background-color:rgb(161,161,161);"></div><div style="background-color:rgb(138,138,138);"></div><div style="background-color:rgb(115,115,115);"></div><div style="background-color:rgb(92,92,92);"></div><div style="background-color:rgb(69,69,69);"></div><div style="background-color:rgb(50,50,50);"></div><div style="background-color:rgb(23,23,23);"></div><div style="background-color:rgb(0,0,0);"></div><div class="clear"></div></div>
+            <div class="color_items"><div style="background-color:rgb(255,204,204);"></div><div style="background-color:rgb(255,230,204);"></div><div style="background-color:rgb(255,255,204);"></div><div style="background-color:rgb(230,255,204);"></div><div style="background-color:rgb(204,255,204);"></div><div style="background-color:rgb(204,255,230);"></div><div style="background-color:rgb(204,255,255);"></div><div style="background-color:rgb(204,229,255);"></div><div style="background-color:rgb(204,204,255);"></div><div style="background-color:rgb(229,204,255);"></div><div style="background-color:rgb(255,204,255);"></div><div style="background-color:rgb(255,204,230);"></div><div style="background-color:rgb(255,153,153);"></div><div style="background-color:rgb(255,204,153);"></div><div style="background-color:rgb(255,255,153);"></div><div style="background-color:rgb(204,255,153);"></div><div style="background-color:rgb(153,255,153);"></div><div style="background-color:rgb(153,255,204);"></div><div style="background-color:rgb(153,255,255);"></div><div style="background-color:rgb(153,204,255);"></div><div style="background-color:rgb(153,153,255);"></div><div style="background-color:rgb(204,153,255);"></div><div style="background-color:rgb(255,153,255);"></div><div style="background-color:rgb(255,153,204);"></div><div style="background-color:rgb(255,102,102);"></div><div style="background-color:rgb(255,179,102);"></div><div style="background-color:rgb(255,255,102);"></div><div style="background-color:rgb(179,255,102);"></div><div style="background-color:rgb(102,255,102);"></div><div style="background-color:rgb(102,255,179);"></div><div style="background-color:rgb(102,255,255);"></div><div style="background-color:rgb(102,178,255);"></div><div style="background-color:rgb(102,102,255);"></div><div style="background-color:rgb(178,102,255);"></div><div style="background-color:rgb(255,102,255);"></div><div style="background-color:rgb(255,102,179);"></div><div style="background-color:rgb(255,51,51);"></div><div style="background-color:rgb(255,153,51);"></div><div style="background-color:rgb(255,255,51);"></div><div style="background-color:rgb(153,255,51);"></div><div style="background-color:rgb(51,255,51);"></div><div style="background-color:rgb(51,255,153);"></div><div style="background-color:rgb(51,255,255);"></div><div style="background-color:rgb(51,153,255);"></div><div style="background-color:rgb(51,51,255);"></div><div style="background-color:rgb(153,51,255);"></div><div style="background-color:rgb(255,51,255);"></div><div style="background-color:rgb(255,51,153);"></div><div style="background-color:rgb(255,0,0);"></div><div style="background-color:rgb(255,128,0);"></div><div style="background-color:rgb(255,255,0);"></div><div style="background-color:rgb(128,255,0);"></div><div style="background-color:rgb(0,255,0);"></div><div style="background-color:rgb(0,255,128);"></div><div style="background-color:rgb(0,255,255);"></div><div style="background-color:rgb(0,127,255);"></div><div style="background-color:rgb(0,0,255);"></div><div style="background-color:rgb(127,0,255);"></div><div style="background-color:rgb(255,0,255);"></div><div style="background-color:rgb(255,0,128);"></div><div style="background-color:rgb(204,0,0);"></div><div style="background-color:rgb(204,102,0);"></div><div style="background-color:rgb(204,204,0);"></div><div style="background-color:rgb(102,204,0);"></div><div style="background-color:rgb(0,204,0);"></div><div style="background-color:rgb(0,204,102);"></div><div style="background-color:rgb(0,204,204);"></div><div style="background-color:rgb(0,102,204);"></div><div style="background-color:rgb(0,0,204);"></div><div style="background-color:rgb(102,0,204);"></div><div style="background-color:rgb(204,0,204);"></div><div style="background-color:rgb(204,0,102);"></div><div style="background-color:rgb(153,0,0);"></div><div style="background-color:rgb(153,76,0);"></div><div style="background-color:rgb(153,153,0);"></div><div style="background-color:rgb(77,153,0);"></div><div style="background-color:rgb(0,153,0);"></div><div style="background-color:rgb(0,153,77);"></div><div style="background-color:rgb(0,153,153);"></div><div style="background-color:rgb(0,76,153);"></div><div style="background-color:rgb(0,0,153);"></div><div style="background-color:rgb(76,0,153);"></div><div style="background-color:rgb(153,0,153);"></div><div style="background-color:rgb(153,0,77);"></div><div style="background-color:rgb(102,0,0);"></div><div style="background-color:rgb(102,51,0);"></div><div style="background-color:rgb(102,102,0);"></div><div style="background-color:rgb(51,102,0);"></div><div style="background-color:rgb(0,102,0);"></div><div style="background-color:rgb(0,102,51);"></div><div style="background-color:rgb(0,102,102);"></div><div style="background-color:rgb(0,51,102);"></div><div style="background-color:rgb(0,0,102);"></div><div style="background-color:rgb(51,0,102);"></div><div style="background-color:rgb(102,0,102);"></div><div style="background-color:rgb(102,0,51);"></div><div style="background-color:rgb(51,0,0);"></div><div style="background-color:rgb(51,26,0);"></div><div style="background-color:rgb(51,51,0);"></div><div style="background-color:rgb(26,51,0);"></div><div style="background-color:rgb(0,51,0);"></div><div style="background-color:rgb(0,51,26);"></div><div style="background-color:rgb(0,51,51);"></div><div style="background-color:rgb(0,25,51);"></div><div style="background-color:rgb(0,0,51);"></div><div style="background-color:rgb(25,0,51);"></div><div style="background-color:rgb(51,0,51);"></div><div style="background-color:rgb(51,0,26);"></div><div class="clear"></div></div>
+            <div title="透明" class="ico transparent color_transparent"></div>
+            <div class="color_hex">#<input type="text"></div>
+            <div class="clear"></div>
+        </div>
+        
+        
+        @*<ul id="bar_list_insert" class="menu list options_menu">
+            <li ac="insert" in="text"><div class="ico text"></div>文本<div class="extend">T</div></li>
+            <li ac="insert" in="image"><div class="ico ico_img"></div>图片<div class="extend">I</div></li>
+            <li ac="insert" in="line"><div class="ico linkertype_normal"></div>连线<div class="extend">L</div></li>
+        </ul>
+        <ul id="bar_list_page" class="menu list options_menu">
+            <li id="bar_page_color">
+                <div class="ico fillcolor"></div>
+                背景颜色<div class="extend ex_arrow">►</div>
+                <div class="menu color_picker extend_menu" style="right: -179px;">
+                    <div class="color_items"><div style="background-color:rgb(255,255,255);"></div><div style="background-color:rgb(229,229,229);"></div><div style="background-color:rgb(207,207,207);"></div><div style="background-color:rgb(184,184,184);"></div><div style="background-color:rgb(161,161,161);"></div><div style="background-color:rgb(138,138,138);"></div><div style="background-color:rgb(115,115,115);"></div><div style="background-color:rgb(92,92,92);"></div><div style="background-color:rgb(69,69,69);"></div><div style="background-color:rgb(50,50,50);"></div><div style="background-color:rgb(23,23,23);"></div><div style="background-color:rgb(0,0,0);"></div><div class="clear"></div></div>
+                    <div class="color_items"><div style="background-color:rgb(255,204,204);"></div><div style="background-color:rgb(255,230,204);"></div><div style="background-color:rgb(255,255,204);"></div><div style="background-color:rgb(230,255,204);"></div><div style="background-color:rgb(204,255,204);"></div><div style="background-color:rgb(204,255,230);"></div><div style="background-color:rgb(204,255,255);"></div><div style="background-color:rgb(204,229,255);"></div><div style="background-color:rgb(204,204,255);"></div><div style="background-color:rgb(229,204,255);"></div><div style="background-color:rgb(255,204,255);"></div><div style="background-color:rgb(255,204,230);"></div><div style="background-color:rgb(255,153,153);"></div><div style="background-color:rgb(255,204,153);"></div><div style="background-color:rgb(255,255,153);"></div><div style="background-color:rgb(204,255,153);"></div><div style="background-color:rgb(153,255,153);"></div><div style="background-color:rgb(153,255,204);"></div><div style="background-color:rgb(153,255,255);"></div><div style="background-color:rgb(153,204,255);"></div><div style="background-color:rgb(153,153,255);"></div><div style="background-color:rgb(204,153,255);"></div><div style="background-color:rgb(255,153,255);"></div><div style="background-color:rgb(255,153,204);"></div><div style="background-color:rgb(255,102,102);"></div><div style="background-color:rgb(255,179,102);"></div><div style="background-color:rgb(255,255,102);"></div><div style="background-color:rgb(179,255,102);"></div><div style="background-color:rgb(102,255,102);"></div><div style="background-color:rgb(102,255,179);"></div><div style="background-color:rgb(102,255,255);"></div><div style="background-color:rgb(102,178,255);"></div><div style="background-color:rgb(102,102,255);"></div><div style="background-color:rgb(178,102,255);"></div><div style="background-color:rgb(255,102,255);"></div><div style="background-color:rgb(255,102,179);"></div><div style="background-color:rgb(255,51,51);"></div><div style="background-color:rgb(255,153,51);"></div><div style="background-color:rgb(255,255,51);"></div><div style="background-color:rgb(153,255,51);"></div><div style="background-color:rgb(51,255,51);"></div><div style="background-color:rgb(51,255,153);"></div><div style="background-color:rgb(51,255,255);"></div><div style="background-color:rgb(51,153,255);"></div><div style="background-color:rgb(51,51,255);"></div><div style="background-color:rgb(153,51,255);"></div><div style="background-color:rgb(255,51,255);"></div><div style="background-color:rgb(255,51,153);"></div><div style="background-color:rgb(255,0,0);"></div><div style="background-color:rgb(255,128,0);"></div><div style="background-color:rgb(255,255,0);"></div><div style="background-color:rgb(128,255,0);"></div><div style="background-color:rgb(0,255,0);"></div><div style="background-color:rgb(0,255,128);"></div><div style="background-color:rgb(0,255,255);"></div><div style="background-color:rgb(0,127,255);"></div><div style="background-color:rgb(0,0,255);"></div><div style="background-color:rgb(127,0,255);"></div><div style="background-color:rgb(255,0,255);"></div><div style="background-color:rgb(255,0,128);"></div><div style="background-color:rgb(204,0,0);"></div><div style="background-color:rgb(204,102,0);"></div><div style="background-color:rgb(204,204,0);"></div><div style="background-color:rgb(102,204,0);"></div><div style="background-color:rgb(0,204,0);"></div><div style="background-color:rgb(0,204,102);"></div><div style="background-color:rgb(0,204,204);"></div><div style="background-color:rgb(0,102,204);"></div><div style="background-color:rgb(0,0,204);"></div><div style="background-color:rgb(102,0,204);"></div><div style="background-color:rgb(204,0,204);"></div><div style="background-color:rgb(204,0,102);"></div><div style="background-color:rgb(153,0,0);"></div><div style="background-color:rgb(153,76,0);"></div><div style="background-color:rgb(153,153,0);"></div><div style="background-color:rgb(77,153,0);"></div><div style="background-color:rgb(0,153,0);"></div><div style="background-color:rgb(0,153,77);"></div><div style="background-color:rgb(0,153,153);"></div><div style="background-color:rgb(0,76,153);"></div><div style="background-color:rgb(0,0,153);"></div><div style="background-color:rgb(76,0,153);"></div><div style="background-color:rgb(153,0,153);"></div><div style="background-color:rgb(153,0,77);"></div><div style="background-color:rgb(102,0,0);"></div><div style="background-color:rgb(102,51,0);"></div><div style="background-color:rgb(102,102,0);"></div><div style="background-color:rgb(51,102,0);"></div><div style="background-color:rgb(0,102,0);"></div><div style="background-color:rgb(0,102,51);"></div><div style="background-color:rgb(0,102,102);"></div><div style="background-color:rgb(0,51,102);"></div><div style="background-color:rgb(0,0,102);"></div><div style="background-color:rgb(51,0,102);"></div><div style="background-color:rgb(102,0,102);"></div><div style="background-color:rgb(102,0,51);"></div><div style="background-color:rgb(51,0,0);"></div><div style="background-color:rgb(51,26,0);"></div><div style="background-color:rgb(51,51,0);"></div><div style="background-color:rgb(26,51,0);"></div><div style="background-color:rgb(0,51,0);"></div><div style="background-color:rgb(0,51,26);"></div><div style="background-color:rgb(0,51,51);"></div><div style="background-color:rgb(0,25,51);"></div><div style="background-color:rgb(0,0,51);"></div><div style="background-color:rgb(25,0,51);"></div><div style="background-color:rgb(51,0,51);"></div><div style="background-color:rgb(51,0,26);"></div><div class="clear"></div></div>
+                    <div title="透明" class="ico transparent color_transparent"></div>
+                    <div class="color_hex">#<input type="text"></div>
+                    <div class="clear"></div>
+                </div>
+            </li>
+            <li>
+                页面大小<div class="extend ex_arrow">►</div>
+                <ul id="bar_list_pagesize" class="menu list extend_menu menu_ico">
+                    <li ac="set_page_size" w="1500" h="2100">A3(1500x2100)</li>
+                    <li ac="set_page_size" w="1050" h="1500">A4(1050x1500)</li>
+                    <li ac="set_page_size" w="750" h="1050">A5(750x1050)</li>
+                    <li class="devider"></li>
+                    <li class="menu_text" id="page_size_custom">自定义</li>
+                    <li class="menu_text" style="line-height: 30px;"><span class="lbl">W:</span><div id="page_size_w" class="spinner active" style="width: 75px;" min="200" old="200px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div></li>
+                    <li class="menu_text" style="line-height: 30px;"><span class="lbl">H:</span><div id="page_size_h" class="spinner active" style="width: 75px;" min="200" old="200px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div></li>
+                </ul>
+            </li>
+            <li>
+                页面方向<div class="extend ex_arrow">►</div>
+                <ul id="bar_list_orientation" class="menu list extend_menu menu_ico">
+                    <li ac="set_page_orientation" ori="portrait">竖向</li>
+                    <li ac="set_page_orientation" ori="landscape">横向</li>
+                </ul>
+            </li>
+            <li>
+                <div class="ico padding"></div>
+                内边距<div class="extend ex_arrow">►</div>
+                <ul id="bar_list_padding" class="menu list extend_menu menu_ico">
+                    <li ac="set_page_padding" p="0">0px</li>
+                    <li ac="set_page_padding" p="20">20px</li>
+                    <li ac="set_page_padding" p="40">40px</li>
+                    <li ac="set_page_padding" p="60">60px</li>
+                    <li ac="set_page_padding" p="80">80px</li>
+                    <li ac="set_page_padding" p="100">100px</li>
+                </ul>
+            </li>
+            <li class="devider"></li>
+            <li ac="set_page_showgrid"><div class="ico ico_selected"></div>显示网格</li>
+            <li>
+                <div class="ico gridsize"></div>
+                网格大小<div class="extend ex_arrow">►</div>
+                <ul id="bar_list_gridsize" class="menu list extend_menu menu_ico">
+                    <li ac="set_page_gridsize" s="10">小</li>
+                    <li ac="set_page_gridsize" s="15">正常</li>
+                    <li ac="set_page_gridsize" s="20">大</li>
+                    <li ac="set_page_gridsize" s="30">很大</li>
+                </ul>
+            </li>
+        </ul>
+        <ul id="bar_list_arrange" class="menu list options_menu">
+            <li ac="front" class=""><div class="ico ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
+            <li ac="back" class=""><div class="ico ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
+            <li ac="forward" class="">上移一层<div class="extend">Ctrl+Shift+]</div></li>
+            <li ac="backward" class="">下移一层<div class="extend">Ctrl+Shift+[</div></li>
+            <li class="devider"></li>
+            <li id="bar_arrange_align" class="disabled">
+                图形对齐<div class="extend ex_arrow">►</div>
+                <ul class="menu list extend_menu">
+                    <li ac="align_shape" al="left">左对齐</li>
+                    <li ac="align_shape" al="center">居中对齐</li>
+                    <li ac="align_shape" al="right">右对齐</li>
+                    <li class="devider"></li>
+                    <li ac="align_shape" al="top">顶端对齐</li>
+                    <li ac="align_shape" al="middle">垂直居中对齐</li>
+                    <li ac="align_shape" al="bottom">底端对齐</li>
+                </ul>
+            </li>
+            <li id="bar_arrange_dist" class="disabled">
+                图形分布<div class="extend ex_arrow">►</div>
+                <ul class="menu list extend_menu">
+                    <li ac="distribute_shape" dis="h">水平平均分布</li>
+                    <li ac="distribute_shape" dis="v">垂直平均分布</li>
+                </ul>
+            </li>
+            <li id="bar_arrange_match" class="disabled">
+                匹配大小<div class="extend ex_arrow">►</div>
+                <ul class="menu list extend_menu">
+                    <li ac="match_size" w="auto" h="">宽度</li>
+                    <li ac="match_size" w="" h="auto">高度</li>
+                    <li ac="match_size" w="auto" h="auto">宽度和高度</li>
+                    <li ac="match_size" custom="true">自定义</li>
+                </ul>
+            </li>
+            <li class="devider"></li>
+            <li ac="lock" class=""><div class="ico ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
+            <li ac="unlock" class="disabled"><div class="ico ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
+            <li class="devider"></li>
+            <li ac="group" class="disabled">组合<div class="extend">Ctrl+G</div></li>
+            <li ac="ungroup" class="disabled">取消组合<div class="extend">Ctrl+Shift+G</div></li>
+        </ul>
+        <ul id="bar_list_help" class="menu list options_menu noico">
+            <li ac="hotkey">快捷键列表</li>
+            <li ac="getting_started">开始向导</li>
+            <li ac="feedback">发送反馈</li>
+        </ul>*@
+        <ul id="font_list" class="menu list menu_ico" style="display: none;">
+            <li style="font-family: Arial">Arial</li>
+            <li style="font-family: Verdana">Verdana</li>
+            <li style="font-family: Georgia">Georgia</li>
+            <li style="font-family: Times New Roman">Times New Roman</li>
+            <li style="font-family: Courier New">Courier New</li>
+            <li style="font-family: Impact">Impact</li>
+            <li style="font-family: Comic Sans MS">Comic Sans MS</li>
+            <li style="font-family: Tahoma">Tahoma</li>
+            <li style="font-family: Garamond">Garamond</li>
+            <li style="font-family: Lucida Console">Lucida Console</li>
+            <li class="devider"></li>
+            <li style="font-family: 宋体">宋体</li>
+            <li style="font-family: 微软雅黑">微软雅黑</li>
+            <li style="font-family: 黑体">黑体</li>
+        </ul>
+        @*<ul id="font_size_list" class="menu list" style="display: none;">
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+            <li>11</li>
+            <li>12</li>
+            <li>14</li>
+            <li>18</li>
+            <li>24</li>
+            <li>30</li>
+            <li>36</li>
+            <li>48</li>
+            <li>60</li>
+            <li>72</li>
+        </ul>*@
+        <ul id="font_align_list" class="menu list" style="display: none;">
+            <li cate="textAlign" al="left"><div class="ico alignleft"></div></li>
+            <li cate="textAlign" al="center"><div class="ico aligncenter"></div></li>
+            <li cate="textAlign" al="right"><div class="ico alignright"></div></li>
+            <li cate="vAlign" al="top"><div class="ico aligntop"></div></li>
+            <li cate="vAlign" al="middle"><div class="ico alignmiddle"></div></li>
+            <li cate="vAlign" al="bottom"><div class="ico alignbottom"></div></li>
+        </ul>
+        <ul id="line_width_list" class="menu list menu_ico" style="display: none;">
+            <li>0px</li>
+            <li>1px</li>
+            <li>2px</li>
+            <li>3px</li>
+            <li>4px</li>
+            <li>5px</li>
+            <li>6px</li>
+            <li>8px</li>
+            <li>10px</li>
+        </ul>
+        <ul id="line_style_list" class="menu list menu_ico" style="display: none;">
+            <li line="solid"><div class="ico linestyle linesolid"></div></li>
+            <li line="dashed"><div class="ico linestyle linedashed"></div></li>
+            <li line="dot"><div class="ico linestyle linedot"></div></li>
+            <li line="dashdot"><div class="ico linestyle linedashdot"></div></li>
+        </ul>
+        <ul id="line_type_list" class="menu list" style="display: none;">
+            <li tp="broken"><div class="ico linkertype_broken"></div></li>
+            <li tp="curve"><div class="ico linkertype_curve"></div></li>
+            <li tp="normal"><div class="ico linkertype_normal"></div></li>
+        </ul>
+        <ul id="beginarrow_list" class="menu list menu_ico" style="display: none;">
+            <li arrow="none"><div class="ico ico_arrow larrow_none"></div></li>
+            <li arrow="solidArrow"><div class="ico ico_arrow larrow_solidarrow"></div></li>
+            <li arrow="dashedArrow"><div class="ico ico_arrow larrow_dashedarrow"></div></li>
+            <li arrow="normal"><div class="ico ico_arrow larrow_normal"></div></li>
+            <li arrow="solidDiamond"><div class="ico ico_arrow larrow_soliddiamond"></div></li>
+            <li arrow="dashedDiamond"><div class="ico ico_arrow larrow_dasheddiamond"></div></li>
+            <li arrow="solidCircle"><div class="ico ico_arrow larrow_solidcircle"></div></li>
+            <li arrow="dashedCircle"><div class="ico ico_arrow larrow_dashedcircle"></div></li>
+            <li arrow="cross"><div class="ico ico_arrow larrow_cross"></div></li>
+        </ul>
+        <ul id="endarrow_list" class="menu list menu_ico" style="display: none;">
+            <li arrow="none"><div class="ico ico_arrow rarrow_none"></div></li>
+            <li arrow="solidArrow"><div class="ico ico_arrow rarrow_solidarrow"></div></li>
+            <li arrow="dashedArrow"><div class="ico ico_arrow rarrow_dashedarrow"></div></li>
+            <li arrow="normal"><div class="ico ico_arrow rarrow_normal"></div></li>
+            <li arrow="solidDiamond"><div class="ico ico_arrow rarrow_soliddiamond"></div></li>
+            <li arrow="dashedDiamond"><div class="ico ico_arrow rarrow_dasheddiamond"></div></li>
+            <li arrow="solidCircle"><div class="ico ico_arrow rarrow_solidcircle"></div></li>
+            <li arrow="dashedCircle"><div class="ico ico_arrow rarrow_dashedcircle"></div></li>
+            <li arrow="cross"><div class="ico ico_arrow rarrow_cross"></div></li>
+        </ul>
+        @*<div id="hotkey_list" class="dialog">
+            <div class="dialog_header">快捷键列表</div>
+            <div class="dialog_content">
+                <div class="hotkey_content">
+                    <span class="hotkey_line hotkey_group">通用 </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Alt</span><span class="hotkey_desc">按住Alt，通过鼠标可以对页面进行拖动 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl</span><span class="hotkey_desc">按住Ctrl，点击一个图形，将其添加到选择图形中，或者从中移除 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Alt + (+) , Alt + (-)</span><span class="hotkey_desc">放大，缩小 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + A</span><span class="hotkey_desc">全部选中 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Esc</span><span class="hotkey_desc">取消选中，并取消当先操作 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">T</span><span class="hotkey_desc">插入文本 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">I</span><span class="hotkey_desc">插入图片 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">L</span><span class="hotkey_desc">插入连线 </span>
+                    </span>
+                    <span class="hotkey_line null_line">&nbsp;</span>
+                    <span class="hotkey_line hotkey_group">图形被选中时 </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">箭头 (←↑↓→) </span><span class="hotkey_desc">将选中图形向左、向上、向下、向右移动 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + 箭头 (←↑↓→) </span><span class="hotkey_desc">每次微移一个像素 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">调整图形大小时按住Ctrl </span><span class="hotkey_desc">调整图形大小，并且约束比例 </span>
+                    </span>
+                    <span class="hotkey_line">&nbsp;</span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Z</span><span class="hotkey_desc">撤销 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Y</span><span class="hotkey_desc">恢复 </span>
+                    </span>
+                    <span class="hotkey_line">&nbsp;</span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + X</span><span class="hotkey_desc">剪切 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + C</span><span class="hotkey_desc">复制 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + V</span><span class="hotkey_desc">粘贴 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + D</span><span class="hotkey_desc">复用 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Shift + B</span><span class="hotkey_desc">格式刷 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Delete, Backspace</span><span class="hotkey_desc">删除 </span>
+                    </span>
+                    <span class="hotkey_line">&nbsp;</span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + ]</span><span class="hotkey_desc">将选中的图形置于顶层 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + [</span><span class="hotkey_desc">将选中的图形置于底层 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Shift + ]</span><span class="hotkey_desc">将选中的图形上移一层 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Shift + [</span><span class="hotkey_desc">将选中的图形下移一层 </span>
+                    </span>
+                    <span class="hotkey_line">&nbsp;</span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + L</span><span class="hotkey_desc">锁定选中的图形 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Shift + L</span><span class="hotkey_desc">将选中的图形解锁 </span>
+                    </span>
+                    <span class="hotkey_line">&nbsp;</span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + G</span><span class="hotkey_desc">组合选中的图形 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Shift + G</span><span class="hotkey_desc">将选中的图形取消组合 </span>
+                    </span>
+                    <span class="hotkey_line null_line">&nbsp;</span>
+                    <span class="hotkey_line hotkey_group">编辑文本 </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">空格 </span><span class="hotkey_desc">编辑文本 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + B</span><span class="hotkey_desc">粗体 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + I</span><span class="hotkey_desc">斜体 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + U</span><span class="hotkey_desc">下划线 </span>
+                    </span>
+                    <span class="hotkey_line">
+                        <span class="hotkey">Ctrl + Enter</span><span class="hotkey_desc">保存文本编辑 </span>
+                    </span>
+                </div>
+            </div>
+            <div class="designer_button normal hotkey_ok" onclick="$('#hotkey_list').dlg('close')">确定 </div>
+        </div>*@
+      
+        <div id="link_dialog" class="dialog" style="min-width: 500px;">
+            <div class="dialog_header">插入链接</div>
+            <div class="dialog_content" style="padding: 30px 20px; text-align: center;">
+                <b>链接到：</b><input id="linkto_addr" type="text" class="input_text" style="width: 350px;">
+            </div>
+            <div class="dialog_buttons">
+                <div class="designer_button" onclick="UI.setLink()">确定</div>&nbsp;
+                <div class="designer_button normal" onclick="$('#link_dialog').dlg('close');">取消</div>
+            </div>
+        </div>
+
+        <div id="size_dialog" class="dialog" style="min-width: 500px;">
+            <div class="dialog_header">设置灯箱牌子属性</div>
+            <div class="dialog_content" style="padding: 30px 20px; text-align: center;">
+                <div>
+                    <label>尺寸规格:</label>
+                    <select id="size_id">
+                        <option value="1">四封(1456mm*1725mm)</option>
+                        <option value="2">十二封</option>
+                        <option value="3">梯牌</option>
+                        <option value="4">梯眉</option>
+                    </select>
+
+                </div>
+                <div>
+                    <label>序号 ：</label>
+                    <input type="text" class="input_text" id="box-sort" />
+
+                </div>
+                            
+            </div>
+            <div class="dialog_buttons">
+                <div class="designer_button" onclick="UI.setSize()">确定</div>&nbsp;
+                <div class="designer_button normal" onclick="$('#size_dialog').dlg('close');">取消</div>
+            </div>
+        </div>
+        @*<div id="saveas_dialog" class="dialog" style="min-width: 450px;">
+            <div class="dialog_header">另存...</div>
+            <div class="dialog_content" style="padding: 30px 20px; text-align: center;">
+                <form id="saveas_form" action="/diagraming/saveas" method="post">
+                    <input id="hid_saveas_id" type="hidden" name="id">
+                    <b>标题：</b><input name="title" id="saveas_title" type="text" class="input_text" style="width: 300px;" onkeydown="if(event.keyCode == 13) return false;">
+                </form>
+            </div>
+            <div class="dialog_buttons">
+                <div class="designer_button" onclick="UI.doSaveAs()" id="btn_dosaveas">确定</div>&nbsp;
+                <div class="designer_button normal" onclick="$('#saveas_dialog').dlg('close');">取消</div>
+            </div>
+        </div>*@
+        <div id="export_dialog" class="dialog" style="min-width: 450px;">
+            <div class="dialog_header">下载格式</div>
+            <div class="dialog_content">
+                <form id="export_form" action="/diagraming/diagram_export" method="get">
+                    <ul class="export-list">
+                        <li class="first">
+                            <input id="export_png" type="radio" name="type" value="image" checked="checked" style="float: left;margin-right: 5px;">
+                            <label for="export_png" class="export-menu" style="float:left;line-height: 18px;">
+                                图片文件<span class="suffix"> (*.png)</span>
+                                <span class="export_des">将文件导出为图片</span>
+                            </label>
+                            <div style="clear: both;"></div>
+                        </li>
+                        <li class="first">
+                            <input id="export_pdf" type="radio" name="type" value="pdf" style="float: left;margin-right: 5px;">
+                            <label for="export_pdf" class="export-menu" style="float:left;line-height: 18px;">
+                                PDF文件<span class="suffix"> (*.pdf)</span>
+                                <span class="export_des">由图片保存成的PDF文件</span>
+                            </label>
+                            <div style="clear: both;"></div>
+                        </li>
+                        <li class="first">
+                            <input id="export_pdfHD" type="radio" name="type" value="pdfHD" style="float: left;margin-right: 5px;">
+                            <label for="export_pdfHD" class="export-menu" style="float:left;line-height: 18px;">
+                                PDF文件<span class="suffix"> (*.pdf)</span>
+                                <span class="export_des">导出高清PDF文件（仅支持部分字体样式）</span>
+                            </label>
+                            @*<img style="margin-left:5px;" src="/images/icon/icon_new.gif">*@
+                            <div style="clear: both;"></div>
+                        </li>
+                        <li class="first">
+                            <input id="export_pos" type="radio" name="type" value="pos" style="float: left;margin-right: 5px;">
+                            <label for="export_pos" class="export-menu" style="float:left;line-height: 18px;">
+                                POS文件<span class="suffix"> (*.pos)</span>
+                                <span class="export_des">包含图片与图形结构定义（可导入）</span>
+                            </label>
+                            <div style="clear: both;"></div>
+                        </li>
+                        <li class="first">
+                            <input id="export_svg" type="radio" name="type" value="svg" style="float: left;margin-right: 5px;">
+                            <label for="export_svg" class="export-menu" style="float:left;line-height: 18px;">
+                                SVG文件<span class="suffix"> (*.svg)</span>
+                                <span class="export_des">导出为SVG矢量图形</span>
+                            </label>
+                            <div style="clear: both;"></div>
+                        </li>
+                    </ul>
+                    <input id="export_title" type="hidden" name="title">
+                    <input type="hidden" name="chartId" value="58098b37e4b0e7a6ddaa63e5">
+                </form>
+            </div>
+            <div class="dialog_buttons">
+                <div class="designer_button" id="export_ok" onclick="UI.doExport()">确定</div>&nbsp;
+                <div class="designer_button normal" onclick="$('#export_dialog').dlg('close');">取消</div>
+            </div>
+        </div>
+        <div id="svg_dialog" style="width:100%;height:100%;position:fixed;top:0;left:0;visibility:hidden;"></div>
+        @*<div class="menu mark_content mark1_content">
+            <div class="dialog_header">开始</div>
+            <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+            <div class="_content">把您想使用的图形拖到右侧画布上，创建图形就是如此简单。</div>
+            <div class="arr-icon left"><div class="arr-border"></div><div class="inner-arr"></div></div>
+            <div class="mark_next"><span class="designer_button normal" onclick="UI.showStartStep(2)">下一步</span></div>
+        </div>
+        <div class="menu mark_content mark2_content">
+            <div class="dialog_header">菜单栏</div>
+            <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+            <div class="_content">通过这些菜单，您可以调整和设置图形的属性、样式，也可以管理您的文件。</div>
+            <div class="arr-icon top"><div class="arr-border"></div><div class="inner-arr"></div></div>
+            <div class="mark_next"><span class="designer_button normal" onclick="UI.showStartStep(3)">下一步</span></div>
+        </div>
+        <div class="menu mark_content mark3_content">
+            <div class="dialog_header">属性工具栏</div>
+            <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+            <div class="_content">对选中的文本、图形、连线进行个性化设置，让他们看起来更漂亮。</div>
+            <div class="arr-icon top"><div class="arr-border"></div><div class="inner-arr"></div></div>
+            <div class="mark_next"><span class="designer_button normal" onclick="UI.showStartStep(4)">下一步</span></div>
+        </div>
+        <div class="menu mark_content mark4_content">
+            <div class="dialog_header">属性面板</div>
+            <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+            <div class="_content">这些面板让您的绘制过程更方便、简单，使用之后，您一定会喜欢。</div>
+            <div class="arr-icon right"><div class="arr-border"></div><div class="inner-arr"></div></div>
+            <div class="mark_next"><span class="designer_button normal" onclick="UI.closeGettingStart()">关闭</span></div>
+        </div>
+        <div class="menu mark_content markcreated_content">
+            <div class="dialog_header">编辑图形</div>
+            <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+            <div class="_content">
+                <p>在图形边缘的任何地方点击并拖动，您可以创建出一条漂亮的连线。（小圆点是推荐的连接点）</p><p>通过小的矩形控制点，您可以改变图形大小。（按住CTRL键可约束比例）</p><p>通过顶部的圆形控制点，对图形进行旋转。</p><p>双击可以编辑文本。（CTRL+ENTER保存文本）</p>
+            </div>
+            <div class="arr-icon left"><div class="arr-border"></div><div class="inner-arr"></div></div>
+            <div class="mark_next"><span class="designer_button normal" onclick="UI.closeGettingStart()">关闭</span></div>
+        </div>*@
+        <ul id="dock_fill_list" class="menu list menu_ico" style="display: none; width: 198px;">
+            <li ty="none">无</li>
+            <li ty="solid">颜色</li>
+            <li ty="gradient">渐变</li>
+            <li ty="image">图片</li>
+        </ul>
+        <ul id="gradient_type_list" class="menu list menu_ico" style="display: none; z-index: 1;">
+            <li ty="linear" style="width: 60px">线性渐变</li>
+            <li ty="radial" style="width: 60px">径向渐变</li>
+        </ul>
+        <ul id="img_display_list" class="menu list" style="display: none;">
+            <li ty="fill">填充</li>
+            <li ty="fit">自适应</li>
+            <li ty="stretch">按图形伸展</li>
+            <li ty="original">原始尺寸</li>
+            <li ty="tile">平铺</li>
+        </ul>
+        <ul id="page_size_list" class="menu list dock_page_menu menu_ico" style="display: none;">
+            <li ac="set_page_size" w="1500" h="2100">A3(1500x2100)</li>
+            <li ac="set_page_size" w="1050" h="1500">A4(1050x1500)</li>
+            <li ac="set_page_size" w="750" h="1050">A5(750x1050)</li>
+            <li class="devider"></li>
+            <li class="menu_text" id="dock_size_custom">自定义</li>
+            <li class="menu_text" style="line-height: 30px;"><span class="lbl">W:</span><div id="dock_size_w" class="spinner active" style="width: 75px;" min="200" old="200px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div></li>
+            <li class="menu_text" style="line-height: 30px;"><span class="lbl">H:</span><div id="dock_size_h" class="spinner active" style="width: 75px;" min="200" old="200px"><div class="spinner_input"><input></div><div class="buttons"><div class="spinner_up"></div><div class="spinner_down"></div></div></div></li>
+        </ul>
+        <ul id="page_padding_list" class="menu list dock_page_menu menu_ico" style="display: none;">
+            <li p="0">0px</li>
+            <li p="20">20px</li>
+            <li p="40">40px</li>
+            <li p="60">60px</li>
+            <li p="80">80px</li>
+            <li p="100">100px</li>
+        </ul>
+        <ul id="page_gridsize_list" class="menu list dock_page_menu menu_ico" style="display: none;">
+            <li s="1">小</li>
+            <li s="15">正常</li>
+            <li s="20">大</li>
+            <li s="30">很大</li>
+        </ul>
+        <ul id="attr_display_list" class="menu list dock_page_menu menu_ico" style="display: none;">
+            <li ty="none">无</li>
+            <li ty="text">文本</li>
+            <li ty="icon">图标</li>
+        </ul>
+        <ul id="attr_icon_list" class="menu list dock_page_menu" style="display: none;">
+            <li></li>
+        </ul>
+        <ul id="attr_location_h_list" class="menu list attr_location_menu dock_page_menu" style="display: none;">
+            <li loc="mostleft"><div><span style="left: -5px"></span></div>最左边</li>
+            <li loc="leftedge"><div><span style="left: -3px"></span></div>左边缘</li>
+            <li loc="left"><div><span style="left: 0px"></span></div>左边</li>
+            <li loc="center"><div><span style="left: 3px"></span></div>中间</li>
+            <li loc="right"><div><span style="left: 6px"></span></div>右边</li>
+            <li loc="rightedge"><div><span style="left: 9px"></span></div>右边缘</li>
+            <li loc="mostright"><div><span style="left: 11px"></span></div>最右边</li>
+        </ul>
+        <ul id="attr_location_v_list" class="menu list attr_location_menu dock_page_menu" style="display: none;">
+            <li loc="mosttop"><div><span style="top: -5px"></span></div>最上边</li>
+            <li loc="topedge"><div><span style="top: -3px"></span></div>上边缘</li>
+            <li loc="top"><div><span style="top: 0px"></span></div>顶部</li>
+            <li loc="middle"><div><span style="top: 3px"></span></div>中间</li>
+            <li loc="bottom"><div><span style="top: 6px"></span></div>底部</li>
+            <li loc="bottomedge"><div><span style="top: 9px"></span></div>下边缘</li>
+            <li loc="mostbottom"><div><span style="top: 11px"></span></div>最下边</li>
+        </ul>
+       
+        @*<div id="confirm_dlg">
+            <div class="confirm_header">提示： </div>
+            <div class="confirm_content">
+                <p>请从列表中选择一个用户</p>
+                <div class="designer_button" onclick="$('#confirm_dlg').hide();">确定 </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>*@
+        <div id="exportsvg_dlg" class="dialog">
+            <div class="confirm_header">提示： </div>
+            <div class="confirm_content">
+                <p>请为图片输入一个名字</p>
+                <input type="text" class="input_text" id="chart-name" />
+                <div class="designer_button normal" id="export-btn" >确定</div>
+                <div class="designer_button" onclick="$('#exportsvg_dlg').dlg('close');">取消 </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+        <div id="image_dialog" class="dialog">
+            <div class="dialog_header">选择图片</div>
+            <div class="dialog_content" style="padding: 0px;">
+                <ul class="image_sources">
+                    <li ty="upload" class="active">我的图片</li>
+                    <li ty="url">网络图片</li>
+                    <li ty="search">搜索图片</li>
+                </ul>
+                <div class="image_content">
+                    <div id="image_select_upload" class="image_list">
+                        <form id="frm_upload_image" action="/user_image/upload" method="post" enctype="multipart/form-data">
+                            <div id="btn_img_upload" class="toolbar_button active">
+                                <div class="ico"></div>上传图片
+                                <input id="input_upload_image" name="image" type="file">
+                            </div>
+                            <span id="upload_img_res"></span>
+                            <div style="clear: both;"></div>
+                        </form>
+                        <div id="user_image_items" class="image_items"></div>
+                    </div>
+                    <div id="image_select_url" class="image_list" style="display: none">
+                        粘贴一个图片地址：<input id="input_img_url" type="text" class="input_text" style="width: 380px;">
+                        <div id="img_url_area"></div>
+                    </div>
+                   
+                    <div class="image_btns">
+                        <div id="set_image_submit" class="designer_button">确定</div>
+                        <div id="set_image_cancel" class="designer_button normal">取消</div>
+                        <span id="set_image_text"></span>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+       
+        @*<div id="disconnected" class="dialog">
+            <div class="dialog_content" style="padding: 40px;">
+                您已经和服务器断开连接，请刷新重试。
+            </div>
+            <div class="dialog_buttons">
+                <a class="designer_button" href="/diagraming/58098b37e4b0e7a6ddaa63e5">重试</a>&nbsp;
+                <a class="designer_button normal" href="/diagraming/back?id=58098b37e4b0e7a6ddaa63e5">关闭</a>
+            </div>
+        </div>*@
+     
+        <div id="themes" class="menu" style="display: none;"></div>
+    </div>
+    <div style="width:95%;height:400px;z-index:999 ;" class="popup" id="a">
+
+    </div>
+  
+</body>
+</html>
+<script type="text/javascript">
+    var stationId=@ViewData["metroId"];
+    function export2svg() {
+        $("#exportsvg_dlg").dlg();
+        $("#export-btn").click(function () {
+            setChartName();
+
+        })
+
+    };
+    $(document).ready(function () {
+        $.get("/diagraming/EditDiagram",{metroId:stationId,Guid:chartId},function (d) {
+            if (d&&d.length>0) {
+                for (var i = 0; i < d.length; i++) {
+                    var c=d[i].Content;
+                    var start=c.indexOf('[');
+                    if (start!=0) {
+                        c='['+d[i].Content+']';    
+                    }
+                    var o=eval(c)[0];
+                    var shape=Schema.shapes[o.name];
+                    shape.id=o.id;                   
+                    shape.attribute=o.attribute;
+                    shape.dataAttributes=o.dataAttributes;
+                    shape.fillStyle=o.fillStyle;
+                    shape.lineStyle=o.lineStyle;
+                    shape.props=o.props;
+                    shape.textBlock=o.textBlock;
+                    Designer.painter.renderShape(shape); 
+                   
+                    Model.define.elements[o.id] = shape;
+                    Model.persistence.elements[o.id] = shape;
+                }
+    
+            }
+    
+        })
+        $("#a").hover(function () {
+            this.style.visibility = "hidden";
+        })
+
+
+
+    });
+    function setChartName() {
+
+        chartName=$('#chart-name').val();
+        $("#exportsvg_dlg").dlg("close");
+        var name = "shape_box";
+     
+        var doc= Export.svg.save2Local(name,chartId);
+        var popup = document.getElementById("a");
+        
+        popup.style.top = "10px";
+        popup.style.left = "10px";
+        popup.style.visibility = "visible";
+        $.post("/Diagraming/SaveDiagram",
+            {
+                svgstr: doc,
+                stationId: stationId,
+                chartId: chartId,
+                chartName:chartName
+            }, function (data) {
+                if (data.success) {
+                    window.location.href='/metrostation/edit?id='+stationId;
+
+                }
+
+            })
+
+    }
+</script>

@@ -1,0 +1,67 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@using MSP.Core.Domain;
+
+@model MSP.Models.Domain.AttachModel<Cus_Customer, Cus_Customer>
+
+    @{
+        ViewBag.Title = "待审核客户列表";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    @section PageTitle{
+        待审核客户列表 
+    }
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                @Html.Partial("SearchPartial", Model.Model)
+                <div class="table-responsive">
+                    @Html.Grid(Model.PageModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+               {
+                   column.For(c => Html.Truncate(c.Name, 16)).Named("客户名称").SortColumnName("a.Name");
+                   column.For(c => Html.Truncate(c.Remark, 16)).Named("广告品牌").SortColumnName("a.Name");
+                   column.For(c => c.OrgCode).Named("组织机构代码/统一社会信用代码").SortColumnName("a.OrgCode");
+                   column.For(c => c.UserName).Named("创建人员").SortColumnName("user.UserName");
+                   column.For(c => c.UpdateTime).Named("处理时间").SortColumnName("a.UpdateTime");
+
+                   column.For(c => Html.Partial("VerifyStatusPartial", c)).Named("审核状态").Sortable(false);
+                   column.For(c => Html.RowVerifyActionLink(c.Id));
+               }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model.PageModel))
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+
+</div>
+
+    @section Scripts{
+        @Scripts.Render("~/Content/themes/sean/getuserbyagent.js")
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#FilingStatus option').each(function (index, obj) {
+                    if ($(this).val() != '1' && $(this).val() != '6' && $(this).val() != '') {
+                        $(this).hide();
+                    }
+                })
+            })
+        </script>
+    }

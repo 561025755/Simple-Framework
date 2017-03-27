@@ -1,0 +1,123 @@
+﻿@using MSP.Core.Enum;
+
+@model MSP.Models.Domain.AgentModel
+
+@{
+    ViewBag.Title = "代理商详细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    代理商详细 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+
+    <div class="col-md-2">
+        @Html.Partial("OperatePartial",Model)
+    </div>
+
+    <!-- begin col-12 -->
+    <div class="col-md-10 ui-sortable">
+
+        @Html.Partial("MenuPartial", Model)
+
+        <!-- begin panel -->
+        <div class="panel panel-info">
+
+            <div class="panel-body ">
+
+                <table class="table table-profile">
+                    <thead>
+                        <tr>
+
+                            <th colspan="2">
+                                <h4>@Html.DisplayFor(model => model.Company) <small>（代理商）</small></h4>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight">
+                            <td class="field">@Html.LabelFor(model => model.Address)</td>
+                            <td>@Html.DisplayFor(model => model.Address)</td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.LegalPerson)</td>
+                            <td><i class="fa fa-user"></i> @Html.DisplayFor(model => model.LegalPerson)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.BusinessLicence)</td>
+                            <td><i class="fa fa-shield"></i>  @Html.DisplayFor(model => model.BusinessLicence)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.Phone)</td>
+                            <td><i class="fa fa-phone-square"></i>  @Html.DisplayFor(model => model.Phone)</td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.Fax)</td>
+                            <td><i class="fa fa-fax"></i>  @Html.DisplayFor(model => model.Fax)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.PostCode)</td>
+                            <td><i class="fa fa-envelope"></i>  @Html.DisplayFor(model => model.PostCode)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.WebSite)</td>
+                            <td><i class="fa fa-globe"></i> @Html.DisplayFor(model => model.WebSite)</td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.RegisterDate)</td>
+                            <td>
+                                <i class="fa fa-calendar"></i> @Html.DisplayFor(model => model.RegisterDate)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.RegisterCapital)</td>
+                            <td>
+                                <i class="fa fa-rmb"></i> @Html.DisplayFor(model => model.RegisterCapital)
+                            </td>
+                        </tr>
+
+                        <tr class="divider">
+                            <td colspan="2"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.DepositBank)</td>
+                            <td>
+                                <i class="fa fa-credit-card"></i> @Html.DisplayFor(model => model.DepositBank)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.Account)</td>
+                            <td>
+                                <i class="fa fa-credit-card"></i> @Html.DisplayFor(model => model.Account)
+                            </td>
+                        </tr>
+                        <tr class="divider">
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.UpdateTime)</td>
+                            <td>
+                                <i class="fa fa-clock-o"></i> @Html.DisplayFor(model => model.UpdateTime)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.CreateTime)</td>
+                            <td>
+                                <i class="fa fa-clock-o"></i> @Html.DisplayFor(model => model.CreateTime)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>

@@ -1,0 +1,11 @@
+﻿@model MSP.Models.Domain.CustomerModel
+
+<div class="form-group">
+    <label>
+        @Html.LabelFor(model => model.IndustryId)
+    </label>
+    <div>
+        @Html.DropDownListFor(model => model.IndustryId, (ViewData["IndustryId"] as SelectList), "选择一个选项", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IndustryId)
+    </div>
+</div>

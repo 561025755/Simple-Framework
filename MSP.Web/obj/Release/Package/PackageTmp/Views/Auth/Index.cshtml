@@ -1,0 +1,108 @@
+﻿@using MSP.Web;
+
+@model MSP.Models.Domain.PermissionMappingModel
+
+@{
+    ViewBag.Title = "系统设置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    系统设置 <small> @Html.ActionLink("初始", "Initialize") </small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <div class="m-b-5">
+            <a href="@Url.Action("Index", new { type = 0 })" class="btn btn-sm btn-primary"><i class="fa fa-file-text-o m-r-5"></i> 系统权限管理</a>
+            <a href="@Url.Action("Index", new { type = 1 })" class="btn btn-sm btn-primary"><i class="fa fa-file-text-o m-r-5"></i> 东方天呈权限管理</a>
+        </div>
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+            {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+
+                    <div class="table-responsive">
+                        <table class="table table-email">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        配额项
+                                    </th>
+                                    @foreach (var cr in Model.AvailableGroups)
+                                {
+                                        <th>
+                                            <strong>@cr.Name</strong>
+                                            <input type="checkbox" id="selectall-@(cr.Id)" />
+                                        </th>
+                                }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                bool altRow = true;
+                                }
+                                @foreach (var pr in Model.AvailablePermissions)
+                            {
+                                altRow = !altRow;
+                                    <tr>
+                                        <td>
+                                            @pr.Name
+                                        </td>
+                                        @foreach (var cr in Model.AvailableGroups)
+                                    {
+                                        var allowed = Model.Allowed.ContainsKey(pr.SystemName) && Model.Allowed[pr.SystemName][cr.Id];
+                                            <td>
+                                                <input class="allow_@(cr.Id)" type="checkbox" value="@(pr.SystemName)" name="allow_@(cr.Id)" @(allowed ? " checked=checked" : null) />
+                                            </td>
+                                    }
+                                    </tr>
+                            }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <div class="email-footer clearfix">
+                        <input type="submit" class="btn btn-sm btn-success" value="保存" />
+                        <input type="reset" class="btn btn-sm btn-default" value="重置" />
+                    </div>
+                                }
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @foreach (var cr in Model.AvailableGroups)
+                            {
+                                <text>
+            $('#selectall-@(cr.Id)').click(function () {
+                $('.allow_@(cr.Id)').attr('checked', $(this).is(':checked')).change();
+            });
+
+            </text>
+                            }
+        });
+    </script>
+}

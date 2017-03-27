@@ -1,0 +1,65 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="zh" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh">
+<!--<![endif]-->
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>登录 - OOH Force平台</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    @Styles.Render("~/Content/themes/sean/css")
+    <style type="text/css">
+        .login {
+            margin: 120px 0 0 0;
+        }
+
+            .login .login-content {
+                padding: 0 40px;
+            }
+    </style>
+
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    <!-- begin #page-container -->
+    <div class="fade in" id="page-container">
+
+        <div class="login bg-white animated fadeInDown">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand">
+                    <span class="logo"></span> 用户登录
+                    <small>OOH Force平台</small>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-sign-in"></i>
+                </div>
+            </div>
+            <!-- end brand -->
+            <div class="login-content" id="login-content">
+                @if (!string.IsNullOrWhiteSpace(ViewBag.AuthUrl))
+                {
+                    <iframe src="@ViewBag.AuthUrl" frameborder="0" scrolling="no" style="width: 360px; height: 400px;"></iframe>
+                }
+                @*<iframe src="https://open.weixin.qq.com/connect/qrconnect?appid=wxbdc5610cc59c1631&redirect_uri=https%3A%2F%2Fpassport.yhd.com%2Fwechat%2Fcallback.do&response_type=code&scope=snsapi_login&state=3d6be0a4035d839573b04816624a415e#wechat_redirect" frameborder="0" scrolling="no"  style="width: 360px; height: 400px;"></iframe>*@
+            </div>
+        </div>
+
+    </div>
+    <!-- end page container -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/themes/sean/crossbrowserjs")
+        <![endif]-->
+    @Scripts.Render("~/bundles/themes/sean/js")
+</body>
+</html>

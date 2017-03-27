@@ -1,0 +1,5 @@
+﻿@model int
+
+<button class="btn btn-sm btn-success" onclick="initPassword(@Model)">初始密码</button>
+@Html.ActionLink("查看操作记录", "OperationRecord", "User", new { userId = Model }, new { data_toggle = "tooltip", data_placement = "top", data_original_title = "查看操作记录", @class = "btn btn-sm btn-success" })
+<button class="btn btn-sm btn-success" onclick="selectCities(@Model)">城市列表</button>

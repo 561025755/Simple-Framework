@@ -1,0 +1,112 @@
+﻿@model MSP.Models.Domain.UserModel
+
+@{
+    ViewBag.Title = "编辑用户账号";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    编辑用户账号 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">编辑表单</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm())
+{
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+
+                    <div class="form-group">
+                        <label>
+                            @Html.LabelFor(model => model.UserName)
+                        </label>
+                        <div>
+                            @Html.TextBoxFor(model => model.UserName, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.UserName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.LabelFor(model => model.Email)
+                        </label>
+                        <div>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.LabelFor(model => model.Password)
+                        </label>
+                        <div>
+                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsDirector, "Input") @Html.LabelFor(model => model.IsDirector)
+                            @Html.ValidationMessageFor(model => model.IsDirector)
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            @Html.CheckBoxFor(model => model.Active, "Input") @Html.LabelFor(model => model.Active)
+                            @Html.ValidationMessageFor(model => model.Active)
+                        </label>
+                    </div>
+                    @Html.HiddenFor(model => model.UserStateChange.Reason)
+                    @Html.HiddenFor(model => model.UserStateChange.Days)
+
+                    @Html.Hidden("AgentId")
+                    <input type="submit" class="btn btn-sm btn-success" value="保存" />
+                    <input type="reset" class="btn btn-sm btn-default" value="重置" />
+}
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+
+</div>
+
+<!--启用用户对话框-->
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+         function isInt(a) {
+            var reg = /^[0-9]*$/
+            return reg.test(a);
+        }
+        $(document).ready(function () {
+
+            if ($.browser.msie) {
+                $('input:checkbox').click(function () {
+                    this.blur();
+                    this.focus();
+                });
+            };
+        })
+</script>
+
+}

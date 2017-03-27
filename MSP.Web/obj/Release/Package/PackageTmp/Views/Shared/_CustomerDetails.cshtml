@@ -1,0 +1,208 @@
+﻿
+@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Domain;
+@using MSP.Core.Pagination;
+@using MSP.Core.Sorting;
+@using MSP.Models.Domain;
+
+@model MSP.Models.Domain.AttachModel<Cus_Contact, CustomerModel>
+
+@{
+    ViewBag.Title = "客户详细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    客户详细 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+@section header{
+}
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">详细信息</h4>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.Name)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.Name)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.OrgCode)
+
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.OrgCode)
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.Description)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.Description)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.Remark)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.Remark)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.UserName)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.UserName)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.CreateTime)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.CreateTime)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.Status)
+                            </label>
+                            <div>
+
+                                @if (Model.Model.Status == 1)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="请求审核">请求审核</span>
+                                }
+                                else if (Model.Model.Status == 2)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="审核失败">审核失败</span>
+                                }
+                                else if (Model.Model.Status == 3)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="排队中">排队中</span>
+                                }
+                                else if (Model.Model.Status == 4)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="保护期">保护期</span>
+                                }
+                                else if (Model.Model.Status == 5)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="已签约">已签约</span>
+                                }
+                                else if (Model.Model.Status == 6)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="审核中">审核中</span>
+                                }
+                                else if (Model.Model.Status == -1)
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="已取消">已取消</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-original-title="未知">未知</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.AgentName)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.AgentName)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>
+                                @Html.DisplayNameFor(model => model.Model.Address)
+                            </label>
+                            <div>
+                                @Html.DisplayFor(model => model.Model.Address)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label>@Html.DisplayNameFor(model => model.Model.IndustryName)</label>
+                            <div>
+                                <span class="label label-inverse" data-toggle="tooltip" data-placement="right" data-original-title="@Model.Model.IndustryName">@Model.Model.IndustryName</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label>@Html.DisplayNameFor(model => model.Model.Citys)</label>
+                            <div>@Html.DisplayFor(model => model.Model.Citys)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <h4 class="m-t-35">联系人列表</h4>
+                    @Html.Grid(Model.PageModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+                    {
+                        column.For(c => c.Name).Named("名称");
+                        column.For(c => c.Business).Named("职务");
+                        column.For(c => c.Department).Named("部门");
+                        column.For(c => c.Phone).Named("固定电话");
+                        column.For(c => c.Mobile).Named("移动电话");
+                        column.For(c => c.WebChat).Named("微信号码");
+                        column.For(c => c.CreateTime).Named("创建时间");
+                    }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model.PageModel))
+
+                @Html.Partial("ResubmitPartial", Model.Model)
+            </div>
+        </div>
+        @*@Html.Partial("_CustomerApprovalRecordPartial", Model.Model)*@
+        @Html.Partial("_CustomerChangeHistoryPartial", Model.Model)
+        <!-- end panel -->
+        @Html.Partial("UpFilePartial", Model.Model)
+
+    </div>
+    <!-- end col-12 -->
+
+</div>
+
+@section scripts{
+
+}
+

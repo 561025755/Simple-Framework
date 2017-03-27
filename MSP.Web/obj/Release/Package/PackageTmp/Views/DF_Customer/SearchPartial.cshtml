@@ -1,0 +1,31 @@
+﻿@model MSP.Core.Domain.Cus_Customer
+
+@using (Html.BeginForm("Index", "DF_Customer", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DropDownListFor(model => model.Status, new SelectList((IEnumerable<SelectListItem>)ViewData["FilingStatus"], "Value", "Text"), "选择一个报备状态", new { @class = "form-control" })
+        </div>
+
+        <div class="col-sm-2">
+            @Html.DropDownListFor(model => model.AgentId, new SelectList((IEnumerable<SelectListItem>)ViewData["AllAgents"], "Value", "Text"), "选择一个代理商", new { @class = "form-control" })
+        </div>
+        <div class="col-sm-2">
+            @Html.DropDownListFor(model => model.UserId, (ViewData["UserId"] as SelectList),  "选择一个销售人员", new { @class = "form-control" })
+            
+        </div>
+
+        <div class="col-sm-6">
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "客户名称或备注关键字" })
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-inverse" value="搜索" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+

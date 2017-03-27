@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewBag.Title = "我的KPI";
+}
+
+<!-- begin row -->
+<div class="row">
+    <div class="panel panel-inverse" data-sortable-id="index-7">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">我的KPI</h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="container" style="min-width: 400px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-valign-middle m-b-0">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>我的KPI</th>
+                                <th>平台销售平均KPI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><label class="label label-danger">订单总额</label></td>
+                                <td>13,203 <span class="text-success"><i class="fa fa-arrow-up"></i></span></td>
+                                <td>5,587</td>
+                            </tr>
+                            <tr>
+                                <td><label class="label label-default">订单成交率</label></td>
+                                <td>90.5% <span class="text-success"><i class="fa fa-arrow-up"></i></span></td>
+                                <td>88.7%</td>
+                            </tr>
+                            <tr>
+                                <td><label class="label label-warning">客户报备数</label></td>
+                                <td>17 <span class="text-danger"><i class="fa fa-arrow-down"></i></span></td>
+                                <td>28</td>
+                            </tr>
+                            <tr>
+                                <td><label class="label label-primary">客户转化率</label></td>
+                                <td>40.5% <span class="text-success"><i class="fa fa-arrow-up"></i></span></td>
+                                <td>23.6%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="container2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/themes/sean/chart")
+
+    <script>
+        $(document).ready(function () {
+            $('#container').highcharts({
+                chart: {
+                    polar: true,
+                    type: 'line'
+                },
+                title: {
+                    text: '我的综合能力值对比',
+                    x: -80
+                },
+                pane: {
+                    size: '80%'
+                },
+                xAxis: {
+                    categories: ['订单总额', '订单成交率', '客户报备数', '客户转化率'],
+                    tickmarkPlacement: 'on',
+                    lineWidth: 0
+                },
+                yAxis: {
+                    gridLineInterpolation: 'polygon',
+                    lineWidth: 0,
+                    min: 0
+                },
+                tooltip: {
+                    shared: true,
+                    pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+                },
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'top',
+                    y: 70,
+                    layout: 'vertical'
+                },
+                series: [{
+                    name: '我的KPI',
+                    data: [43000, 19000, 60000, 35000],
+                    pointPlacement: 'on'
+                }, {
+                    name: '平台平均KPI',
+                    data: [50000, 39000, 42000, 31000],
+                    pointPlacement: 'on'
+                }]
+            });
+
+            $('#container2').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '我的能力值汇总'
+                },
+                xAxis: {
+                    categories: ['2016-01', '2016-02', '2016-03', '2016-04', '2016-05', '2016-06', '2016-07', '2016-08', '2016-09', '2016-10', '2016-11', '2016-12']
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total fruit consumption'
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    x: -30,
+                    verticalAlign: 'top',
+                    y: 25,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            'Total: ' + this.point.stackTotal;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            style: {
+                                textShadow: '0 0 3px black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: '订单总额',
+                    data: [5, 3, 4, 7, 2]
+                }, {
+                    name: '订单成交率',
+                    data: [2, 2, 3, 2, 1]
+                }, {
+                    name: '客户报备数',
+                    data: [3, 4, 4, 2, 5]
+                }, {
+                    name: '客户转化率',
+                    data: [3, 4, 4, 2, 5]
+                }]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,97 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>HTTP @ViewBag.Code | OOH Force平台</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    @Styles.Render("~/Content/themes/sean/css/base")
+    @Styles.Render("~/Content/themes/sean/font-awesome/css/base")
+</head>
+<body class="pace-top bg-grey-800">
+
+
+    <!-- Copyright � 2008. Spidersoft Ltd -->
+    <style>
+        A.applink:hover {
+            border: 2px dotted #DCE6F4;
+            padding: 2px;
+            background-color: #ffff00;
+            color: green;
+            text-decoration: none;
+        }
+
+        A.applink {
+            border: 2px dotted #DCE6F4;
+            padding: 2px;
+            color: #2F5BFF;
+            background: transparent;
+            text-decoration: none;
+        }
+
+        A.info {
+            color: #2F5BFF;
+            background: transparent;
+            text-decoration: none;
+        }
+
+            A.info:hover {
+                color: green;
+                background: transparent;
+                text-decoration: underline;
+            }
+    </style>
+    <!-- begin #page-loader -->
+    <div id="page-loader">
+        <div class="material-loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+            </svg>
+            <div class="message">Loading...</div>
+        </div>
+    </div>
+    <!-- end #page-loader -->
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade">
+        <!-- begin error -->
+        <div class="error">
+            <div class="error-code m-b-10 text-yellow">@ViewBag.Code <i class="material-icons">warning</i></div>
+            <div class="error-content bg-grey-700">
+                <div class="error-message">@ViewBag.Message</div>
+                <div class="error-desc m-b-20">
+                    @ViewBag.Description
+                </div>
+                <div>
+                    <a href="/" class="btn btn-inverse text-yellow"><i class="material-icons pull-left f-s-18 m-t-1 m-r-5">arrow_back</i>返回平台首页</a>
+                </div>
+            </div>
+        </div>
+        <!-- end error -->
+        <!-- begin scroll to top btn -->
+        <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+        <!-- end scroll to top btn -->
+    </div>
+    <!-- end page container -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/themes/sean/crossbrowserjs")
+    <![endif]-->
+    @Scripts.Render("~/bundles/themes/sean/base")
+    @Scripts.Render("~/bundles/themes/sean/apps")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            App.init();
+        })
+
+    </script>
+</body>
+</html>

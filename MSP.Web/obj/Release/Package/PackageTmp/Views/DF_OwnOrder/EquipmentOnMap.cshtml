@@ -1,0 +1,362 @@
+﻿@using System.Web.Optimization;
+
+@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+
+@using SelectListItem = System.Web.Mvc.SelectListItem;
+
+@model MSP.Core.Domain.BusinessQueryBean
+
+@{
+    ViewBag.Title = "站牌地图列表";
+}
+
+@section header{
+    @Scripts.Render(ViewData["mapAddress"].ToString())
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    @Styles.Render("~/Content/powerange/powerange.css")
+    @Styles.Render("~/Content/select2-4.0.3/css/select2.min.css")
+    @Styles.Render("~/Content/mapDefault.css")
+}
+
+
+
+<div class="map" id="map"></div>
+
+<div class="theme-panel active">
+    <a href="javascript:;" data-click="theme-panel-expand" class="theme-collapse-btn ui-sortable"><i class="fa fa-search"></i></a>
+    <div class="theme-panel-content">
+        <div class="form-group">
+            <input type="checkbox" id="ckShowAllStation" /> 显示全部可用站牌资源
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="ckSetTag" /> 设置中心标记
+            <br /><span class=" text-danger">(您可以拖动蓝色标注，设置新的中心点)</span>
+        </div>
+        <div class="form-group">
+            <label>查找范围</label> <label id="radius-label"></label><label>00米</label>
+            <div id="divRadius" class="m-t-15 m-b-20">
+                <input type="text" class="form-control" id="Radius">
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.DropDownListFor(model => model.city, (ViewData["city"] as SelectList), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="form-group">
+        <a class="btn btn-warning btn-block" href="javascript:;" onclick="autoGenerate()">自动生成</a>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-success btn-block" href="javascript:;" onclick="backSelectEquipment()">返回</a>
+    </div>
+</div>
+
+
+@*<div class="panel" style="position:relative;top:-40px; padding:15px;">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.city, (ViewData["city"] as SelectList), new { @class = "form-control" })
+        </div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <div class="input-group-btn  p-l-5">
+                    <a class="btn btn-inverse btn-block" href="javascript:;" onclick="ChangeCity()">查询</a>
+                </div>
+                <div class="input-group-btn  p-l-5">
+                    <a class="btn btn-warning btn-block" href="javascript:;" onclick="autoGenerate()">自动生成</a>
+                </div>
+                <div class="input-group-btn p-l-5">
+                    <a class="btn btn-success btn-block" href="javascript:;" onclick="backSelectEquipment()">返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<!-- #modal-without-animation -->
+<div class="modal fade" id="modal-Equipment-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="modal-title">设备列表</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>商家名称</th>
+                                <th>经营面积</th>
+                                <th>人均消费程度（元）</th>
+                                <th>商圈名称</th>
+                                <th>摄像头数量</th>
+                                <th>是否联网</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal-message -->
+<div class="modal fade" data-backdrop="static" id="modal-auto-generate">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">自动生成订单点位</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div class="alert alert-info">
+                        <div class="alert m-b-0">
+                            <h4><i class="fa fa-info-circle"></i> 将要自动生成订单设备</h4>
+                            <p class="label label-inverse">自动生成功能将会清空您已经选择的设备，全部进行重新生成，请谨慎操作！</p>
+                        </div>
+                        <table id="data-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>区/县</th>
+                                    <th>投放数量</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbRegionsDelivery">
+
+                                <tr><td>青羊区</td><td><input type="number" step="100" class="form-control" /></td></tr>
+                                <tr><td>金牛区</td><td><input type="number" step="100" class="form-control" /></td></tr>
+                                <tr><td>武侯区</td><td><input type="number" step="100" class="form-control" /></td></tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><td>总计</td><td><span id="TotalDeliveryNumber">0</span></td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">关闭</a>
+                <a href="javascript:;" class="btn btn-sm btn-light-blue" onclick="ConfirmGenerate()">一键生成</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modal-post" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info m-b-0">
+                    <h4><i class="fa fa-info-circle"></i> 将要自动生成订单设备</h4>
+                    <p class="label label-inverse">自动生成功能将会清空您已经选择的设备，全部进行重新生成，请谨慎操作！</p>
+                    <p>@Html.TextBox("DeliveryEquipNumber", "",new { @type = "Number", @min = "0",@class= "form-control",@placeholder= "请输入您要自动生成的设备的数量" })</p>
+                    @Html.CheckBox("ckSelectAddBorad",new { @EquipMaxNumber="100"}) @Html.Label("选择全部设备", new {@id="lableCkAll", @for = "ckSelectAddBorad", @style = "color: #31708f;" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                <a href="javascript:;" onclick="ConfirmGenerateRadius()" class="btn btn-sm btn-success" id="commit-btn">确认</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loading-overlay fade in">
+    <span class="spinner"></span>
+</div>
+<input id="pointVS" type="hidden" />
+<input type="hidden" id="orderId" value="@ViewData["orderId"]" />
+<input type="hidden" id="CurrentCityCoordinate" value="@ViewData["CurrentCityCoordinate"]" />
+<input type="hidden" id="DefaultCityCode" value="@ViewData["DefaultCityCode"]" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/powerange/powerange.js")
+    @Scripts.Render("~/Content/themes/" + ViewData["fileAddress"].ToString() + "/ds.map.selectEquipment.js")
+    @Scripts.Render("~/Content/select2-4.0.3/js/select2.min.js")
+    @Scripts.Render("~/Content/themes/sean/getCityRegion.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+           
+
+            clearAndReload(false);
+
+            $("#city").change(function () {
+                ChangeCity();
+                clearAndReload(true);
+            });
+            $('#ckSetTag').change(function () {
+                clearAndReload(true);
+            });
+            $("#divRadius").mouseup(function () {
+                clearAndReload(true);
+            });
+           
+            $('#ckSelectAddBorad').change(function () {
+                if ($(this).attr("checked") == "checked") {
+                    $("#DeliveryEquipNumber").val($(this).attr("EquipMaxNumber"));
+                }
+            });
+
+            $('#ckShowAllStation').change(function () {
+                clearAndReload(true);
+            });
+
+            $("#city").change();
+        });
+
+        var distanceIpt = document.querySelector('#Radius');
+        distanceIpt.onchange = function () {
+            document.getElementById('radius-label').innerHTML = distanceIpt.value;
+        };
+        var initDistanceIpt = new Powerange(distanceIpt, { step: 0.5, min: 3, max: 80, start: 5, hideRange: true });
+
+        function backSelectEquipment() {
+            location.href = "/DF_OwnOrder/SelectEquipment/" + $("#orderId").val();
+        }
+
+        function ChangeCity() {
+            if ($("#city").val() != $('#DefaultCityCode').val()) {
+                //先调整地图中心点
+                $('#DefaultCityCode').val($("#city").val());
+
+                //调整地图
+                $.ajax({
+                    type: "POST",
+                    url: "/DF_OwnOrder/GetCityCoordinate",
+                    async: false,
+                    data: {
+                        cityCode:  $("#DefaultCityCode").val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        var point = parsePoint(data.Coordinate);  // 创建点坐标
+                        map.centerAndZoom(point, 12);
+                        $("#pointVS").val(point.lng+ "," +point.lat);
+                    }
+                });
+
+            }
+
+            $("#TotalDeliveryNumber").text(0);
+            //调整自动生成条件
+            $.ajax({
+                type: 'POST',
+                url: '/Equipment/GetRegion',
+                data: { cityCode:  $("#DefaultCityCode").val() },
+                async: false,
+                dataType: 'JSON',
+                success: function (datas) {
+                    $("#tbRegionsDelivery").html("");
+                    $(datas.regions).each(function (index, obj) {
+                        $("#tbRegionsDelivery").append(' <tr><td>' + obj.Name + '</td><td><input type="number" min="0"  step="100" class="form-control" value="0" regionCode="'+obj.Code+'" /></td></tr>')
+                    });
+
+                }
+            });
+
+            $("input[type=number]").change(function () {
+                var TotalNumber = 0;
+                $("input[type=number]").each(function () {
+                    if ($(this).val() != "")
+                        TotalNumber += parseInt($(this).val());
+                });
+                $("#TotalDeliveryNumber").text(TotalNumber);
+            });
+        }
+
+
+        function autoGenerate() {
+            if ($("#city").val() != $('#DefaultCityCode').val()) {
+                ChangeCity();
+            }
+            if ($('#ckSetTag').attr("checked") == "checked") {
+                $("#modal-post").modal('show');
+            } else {
+                $("#modal-auto-generate").modal('show');
+            }
+
+          
+        }
+
+        
+        function ConfirmGenerate()
+        {
+            var regionNumbers=new Array();
+            $("input[type=number]").each(function () {
+                if ($(this).val() != ""&&$(this).val()!="0")
+                {
+                    regionNumbers.push($(this).attr("regionCode") + "_" + $(this).val())
+                }
+            });
+
+            $("#modal-auto-generate").modal('hide');
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/GenerateEquipmentByRegions',
+                async:false,
+                data: { orderId: $("#orderId").val(), cityCode: $('#DefaultCityCode').val(), regionNumbers: regionNumbers.join() },
+                dataType: 'JSON',
+                error: function (XMLHttpRequest, textStatus, errorThrown) { $(".loading-overlay").hide(); },
+                beforeSend: function () {
+                    $(".loading-overlay").show();
+                },
+                success: function (datas) {
+                    if(datas.success)
+                    {
+                        clearAndReload(true);
+                    }
+                    else
+                        $("#modal-auto-generate").modal('show');
+                    $(".loading-overlay").hide();
+                }
+            });
+
+        }
+
+        function ConfirmGenerateRadius() {
+        
+            $("#modal-post").modal('hide');
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/GenerateEquipmentByRadius',
+                async: false,
+                data: {
+                    orderId: $("#orderId").val(),
+                    cityCode: $('#DefaultCityCode').val(),
+                    Coordinate: $("#pointVS").val(),
+                    Radius: $("#Radius").val() * 100,
+                    DeliveryCount: $("#DeliveryEquipNumber").val()
+                },
+                dataType: 'JSON',
+                error: function (XMLHttpRequest, textStatus, errorThrown) { $(".loading-overlay").hide(); },
+                beforeSend: function () {
+                    $(".loading-overlay").show();
+                },
+                success: function (datas) {
+                    if (datas.success) {
+                        clearAndReload(true);
+                    }
+                    else
+                        $("#modal-post").modal('show');
+                    $(".loading-overlay").hide();
+                }
+            });
+
+        }
+    </script>
+
+}

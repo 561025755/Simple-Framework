@@ -1,0 +1,128 @@
+﻿@model MSP.Models.Domain.AgentModel
+
+@{
+    ViewBag.Title = "删除代理商";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    删除代理商 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">您确认要删除该条目？</h4>
+            </div>
+            <div class="panel-body">
+
+
+                <table class="table table-profile">
+                    <thead>
+                        <tr>
+
+                            <th colspan="2">
+                                <h4>@Html.DisplayFor(model => model.Company) <small>（代理商）</small></h4>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight">
+                            <td class="field">@Html.LabelFor(model => model.Address)</td>
+                            <td>@Html.DisplayFor(model => model.Address)</td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.LegalPerson)</td>
+                            <td><i class="fa fa-user"></i> @Html.DisplayFor(model => model.LegalPerson)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.BusinessLicence)</td>
+                            <td><i class="fa fa-shield"></i>  @Html.DisplayFor(model => model.BusinessLicence)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.Phone)</td>
+                            <td><i class="fa fa-phone-square"></i>  @Html.DisplayFor(model => model.Phone)</td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.Fax)</td>
+                            <td><i class="fa fa-fax"></i>  @Html.DisplayFor(model => model.Fax)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.PostCode)</td>
+                            <td><i class="fa fa-envelope"></i>  @Html.DisplayFor(model => model.PostCode)</td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.WebSite)</td>
+                            <td><i class="fa fa-globe"></i> @Html.DisplayFor(model => model.WebSite)</td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.RegisterDate)</td>
+                            <td>
+                                <i class="fa fa-calendar"></i> @Html.DisplayFor(model => model.RegisterDate)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.RegisterCapital)</td>
+                            <td>
+                                <i class="fa fa-rmb"></i> @Html.DisplayFor(model => model.RegisterCapital)
+                            </td>
+                        </tr>
+
+                        <tr class="divider">
+                            <td colspan="2"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.DepositBank)</td>
+                            <td>
+                                <i class="fa fa-credit-card"></i> @Html.DisplayFor(model => model.DepositBank)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.Account)</td>
+                            <td>
+                                <i class="fa fa-credit-card"></i> @Html.DisplayFor(model => model.Account)
+                            </td>
+                        </tr>
+                        <tr class="divider">
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.UpdateTime)</td>
+                            <td>
+                                <i class="fa fa-clock-o"></i> @Html.DisplayFor(model => model.UpdateTime)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="field">@Html.LabelFor(model => model.CreateTime)</td>
+                            <td>
+                                <i class="fa fa-clock-o"></i> @Html.DisplayFor(model => model.CreateTime)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                @using (Html.BeginForm()) {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model=>model.Company)
+                    <input type="submit" class="btn btn-sm btn-danger" value="确认并删除该代理商" />
+}
+
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>

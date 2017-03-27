@@ -1,0 +1,7 @@
+﻿@model MSP.Models.Domain.AgentModel
+
+<div class="email-btn-row hidden-xs">
+    <a href="@Url.Action("Details", new { id=Model.Id})" class="btn btn-sm btn-default"><i class="fa fa-file-text-o m-r-5"></i> 代理商信息</a>
+    <a href="@Url.Action("CredentialsDetails", new { id=Model.Id})" class="btn btn-sm btn-default"><i class="fa fa-suitcase m-r-5"></i> 代理商证件</a>
+    <a href="@Url.Action("Account", new { id=Model.Id})" class="btn btn-sm btn-default"><i class="fa fa-users m-r-5"></i> 代理商账号</a>
+</div>

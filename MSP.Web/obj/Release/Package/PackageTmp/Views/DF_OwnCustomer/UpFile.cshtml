@@ -1,0 +1,179 @@
+﻿
+
+@{
+    ViewBag.Title = "上传客户证件";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    上传客户证件 <small>点击 @Html.ActionLink("这里", "Details", new { id = Request.RequestContext.RouteData.Values["Id"] }) 回到客户详情</small>
+}
+
+
+@section header{
+    @Styles.Render("~/Content/file-upload/css/css")
+}
+
+<div class="row">
+
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">上传代理商证件</h4>
+            </div>
+
+            <div class="panel-body">
+                <div class="m-t-20">
+                    <form id="fileupload" action="@Url.Action("UploadFiles", new { id = Request.RequestContext.RouteData.Values["Id"], actionName = Request.RequestContext.RouteData.Values["action"] })" method="POST" enctype="multipart/form-data" class="">
+                        <div class="row fileupload-buttonbar">
+                            <div class="col-md-7">
+                                <span class="btn btn-success fileinput-button">
+                                    <i class="fa fa-plus"></i>
+                                    <span>选择上传附件</span>
+                                    <input type="file" name="files[]" multiple="">
+                                </span>
+                                <button type="submit" class="btn btn-primary start">
+                                    <i class="fa fa-upload"></i>
+                                    <span>开始上传</span>
+                                </button>
+                                <button type="reset" class="btn btn-warning cancel">
+                                    <i class="fa fa-ban"></i>
+                                    <span>取消上传</span>
+                                </button>
+
+
+                                <!-- The global file processing state -->
+                                <span class="fileupload-process"></span>
+                            </div>
+                            <!-- The global progress state -->
+                            <div class="col-md-5 fileupload-progress fade">
+                                <!-- The global progress bar -->
+                                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                                </div>
+                                <!-- The extended global progress state -->
+                                <div class="progress-extended">&nbsp;</div>
+                            </div>
+                        </div>
+                        <!-- The table listing the files available for upload/download -->
+                        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                        @Html.Hidden("ControllerName", Request.RequestContext.RouteData.Values["controller"])
+                        @Html.Hidden("ActionName", Request.RequestContext.RouteData.Values["action"])
+                        @Html.Hidden("Id", Request.RequestContext.RouteData.Values["Id"])
+                    </form>
+                </div>
+                <div class="note note-info">
+                    <h4>上传提示</h4>
+                    <ul>
+                        <li>支持上传代理商证件文件最大长度为 <strong>10 MB</strong> (支持多文件上传).</li>
+                        <li>仅支持文件类型 (<strong>JPG, GIF, PNG,DOC,XLS,PDF</strong>) (非允许类型代理商证件文件需转成相应格式上传).</li>
+                        <li>上传代理商证件文件名请确保可读性与唯一性.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- end panel -->
+    </div>
+
+</div>
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td class="col-md-1">
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">准备上传 ...</p>
+            <div class="progress progress-striped active"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+            <button class="btn btn-primary btn-sm start" disabled>
+                <i class="fa fa-upload"></i>
+                <span>开始</span>
+            </button>
+            {% } %}
+            {% if (!i) { %}
+            <button class="btn btn-white btn-sm cancel">
+                <i class="fa fa-ban"></i>
+                <span>取消</span>
+            </button>
+            {% } %}
+        </td>
+    </tr>
+    {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% if (file.url) { %}
+                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                {% } else { %}
+                <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+            <div><span class="label label-danger">错误</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            {% if (file.delete_url) { %}
+            <button type="button" onclick="delete_File(this, '{%=file.file_id%}')" class="btn btn-danger delete" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+                <i class="glyphicon glyphicon-trash"></i>
+                <span>删除</span>
+            </button>
+
+            {% } else { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-ban-circle"></i>
+                <span>取消</span>
+            </button>
+
+            {% } %}
+        </td>
+    </tr>
+    {% } %}
+</script>
+
+
+@section Scripts {
+@Scripts.Render("~/bundles/fileupload/js")
+@Scripts.Render("~/Content/themes/sean/fileoperate.js")
+    <script>
+        $(function(){
+            UploadInit(null, null);
+        });
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,213 @@
+﻿@model MSP.Models.StationModel
+@{
+    ViewBag.Title = "编辑站台信息与灯箱";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+ 
+@Styles.Render("~/Content/themes/metroboard/d3-context-menu.css")
+<style>
+    /*.svg-document
+    {
+        width:1000px;
+        height:800px;
+
+    }*/
+   .box-info{     
+    background: lightblue;
+    border:solid gray;
+    }
+   
+   
+    /*#gallery{
+        height:650px;
+    }*/
+    </style>
+
+}
+
+@section PageTitle{
+    编辑地铁站台 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">创建</h4>
+        </div>
+        <div class="panel-body">
+           @Html.Partial("_SvgContextMenu")
+            @using (Html.BeginForm("edit", "MetroStation"))
+            {
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Name)
+                            </label>
+                            <div>
+                              @Html.TextBoxFor(x=>x.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.GradeId)
+                            </label>
+                            <div>
+                                @Html.DropDownListFor(model => model.GradeId, (ViewData["grade"] as IEnumerable<SelectListItem>), "选择一个选项", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.GradeId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Line)
+                            </label>
+                            <div>
+                                @Html.DropDownListFor(model => model.Line, (ViewData["line"] as IEnumerable<SelectListItem>), "选择一个选项", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Line)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.BusinessArea)
+                            </label>
+                            <div>
+                                @Html.TextBoxFor(model => model.BusinessArea, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BusinessArea)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6" id="gallery">
+                        </div>
+                      
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div>
+                                @Html.CheckBoxFor(model => model.Available)<label>
+                                    @Html.LabelFor(x => x.Available)
+                                </label>
+                                @Html.ValidationMessageFor(model => model.Available)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div>
+                                @Html.CheckBoxFor(model => model.Customerizable) <label>
+                                    @Html.LabelFor(x => x.Customerizable)
+                                </label>
+                                @Html.ValidationMessageFor(model => model.Customerizable)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                     
+
+
+                <input type="submit" class="btn btn-success" />
+                <input type="reset" class="btn btn-default" />
+                
+
+
+            }
+        </div>
+    </div>
+    <!-- end panel -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+   @Scripts.Render("~/Content/themes/metroboard/svg.js")
+@Scripts.Render("~/Content/themes/metroboard/metrolightbox.js")
+@Scripts.Render("~/Content/themes/metroboard/svg-pan-zoom.js")
+@Scripts.Render("~/Content/themes/metroboard/d3.js")
+@Scripts.Render("~/Content/themes/metroboard/d3-tip.js")
+@Scripts.Render("~/Content/themes/metroboard/d3-context-menu.js")
+
+
+    <script type="text/javascript">
+        var id = @ViewData["id"]; 
+        var charts=[];
+        $(document).ready(function () {
+            var dom= $("#gallery");
+            dom.empty();
+            $.post("/metrostation/getrelatedsvg", { id: id }, function (data) {
+                $('<div class="tab-content"></div>').appendTo(dom);
+                $('<ul class="nav nav-pills"></ul>').appendTo(dom);
+                if (data &&data.length>0) {
+                    charts=data;
+                    for (var i = 0; i < data.length; i++) {
+                        var svgstr= data[i].Svg;                                    
+                        if (i==0) {
+                            $('<li class="active" onclick="change(this)"><a href="#nav-pills-tab-'+i+'" data-toggle="tab" aria-expanded="false" chartId="'+data[i].Guid+'">'+data[i].ChartName+'</a></li>').appendTo(dom.find("ul"));
+                            $('<div class="tab-pane fade active in svg-document" id="nav-pills-tab-'+i+'" chartId="'+data[i].Id+'" guid="'+data[i].Guid+'" > <h3 class="m-t-10">'+data[i].ChartName+'</h3> '+  svgstr+'</div>').appendTo(dom.find(".tab-content"));
+    
+                        }else {
+                            $('<li class="" onclick="change(this)"><a href="#nav-pills-tab-'+i+'" data-toggle="tab" aria-expanded="false" chartId="'+data[i].Guid+'">'+data[i].ChartName+'</a></li>').appendTo(dom.find("ul"));
+                            $('<div class="tab-pane fade svg-document" id="nav-pills-tab-'+i+'" chartId="'+data[i].Id+'" guid="'+data[i].Guid +'"> <h3 class="m-t-10">'+data[i].ChartName+'</h3>'+ svgstr+'</div>').appendTo(dom.find(".tab-content"));
+    
+                        }
+                    }
+    
+                }
+                $('<a href="javascript:;"  class="btn btn-primary btn-lg m-r-5" onclick="addNew()">添加一张灯箱图</a>').appendTo($("#gallery"));
+             
+                showChart();  
+                Station.init(id);
+               
+            });
+           
+        });
+        function addNew() {
+            window.location.href='/diagraming/createnewdiagram?stationId='+id;
+        }
+        function change(element) {
+            showChart();
+         
+        }
+        function showChart() {
+            var chartId=$(".nav-pills ").find(".active")[0].children[0].getAttribute("chartId");            
+            var svg=$(".active.svg-document").find("svg").get(0);
+            svg.setAttribute("width","1000px");
+            svg.setAttribute("height","800px");
+            svgPanZoom(svg,{
+                        dblClickZoomEnabled: false});         
+    
+        }
+        function selectSvgByGuid(guid) {
+            for (var i = 0; i < charts.length; i++) {
+                if (charts[i].Guid &&charts[i].Guid==guid) {
+                    return charts[i];    
+                }    
+            }
+            return null;
+    
+        }
+    </script>
+}

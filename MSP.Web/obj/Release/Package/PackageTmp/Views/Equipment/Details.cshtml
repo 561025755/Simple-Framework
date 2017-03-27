@@ -1,0 +1,118 @@
+﻿@using MSP.Core.Domain
+@using MSP.Models.Domain
+
+@model EquipmentModel
+@{
+    ViewBag.Title = "设备详细";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    设备详细 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+@section header{
+@Scripts.Render(ViewData["mapAddress"].ToString())
+    <style>
+        div#map {
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+
+        .panel-expand #map {
+            height: 100%;
+        }
+    </style>
+
+}
+
+<!-- begin col-12 -->
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">详细信息</h4>
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="invoice">
+                    <h3 class="m-t-10">
+                        <i class="fa fa-desktop"></i> 设备属性
+                    </h3>
+                    <div class="invoice-content invoice-content-detail m-t-5 clearfix">
+                        <div class="col-md-4 m-t-10">供应商名称：@Model.Equipment.Supplyer</div>
+                        <div class="col-md-4 m-t-10">规格名称： @Model.Equipment.Standard</div>
+                        <div class="col-md-4 m-t-10">摄像头数量：@Model.Equipment.CameraCount</div>
+                        <div class="col-md-4 m-t-10">时控开机时间：@Convert.ToDateTime(Model.Equipment.StartTime).ToShortTimeString()</div>
+                        <div class="col-md-4 m-t-10">时控关机时间：@Convert.ToDateTime(Model.Equipment.EndTime).ToShortTimeString()</div>
+                        <div class="col-md-4 m-t-10">是否联网： @(Model.Equipment.Networking == true ? "已联网" : "未联网")</div>
+                        <div class="col-md-4 m-t-10">可售卖：@(Model.Equipment.Available == true ? "是" : "否")</div>
+                        <div class="col-md-4 m-t-10">更新时间：@Convert.ToDateTime(Model.Equipment.UpdateTime)</div>
+                    </div>
+
+                    <h3 class="m-t-10">
+                        <i class="fa fa-desktop"></i> 商业属性
+                    </h3>
+                    <div class="invoice-content invoice-content-detail m-t-5 clearfix">
+                        <div class="col-md-4 m-t-10">商家名称：@Model.Equipment.Business.Name</div>
+                        @*<div class="col-md-4 m-t-10">经营类型：@Model.Equipment.Business.Type</div>*@
+                        <div class="col-md-4 m-t-10">经营面积： @Model.Equipment.Business.Area</div>
+                        <div class="col-md-4 m-t-10">人均消费程度（元）：@(Model.Equipment.Business.Charge == "null" ? "0": Model.Equipment.Business.Charge)</div>
+                        <div class="col-md-4 m-t-10">商圈名称：@Model.Equipment.Business.TradingAreaName</div>
+                        <div class="col-md-4 m-t-10">商家地址：@Model.Equipment.Business.Location</div>
+                    </div>
+
+                    <!-- img begin row -->
+                    @if (Model.Photos.Count() > 0)
+                    {
+                        <h3 class="m-t-10"><i class="fa fa-image"></i> 设备图片</h3>
+                        <ul class="attached-document clearfix" id="gallery">
+                            @foreach (var item in Model.Photos)
+                            {
+                                <li>
+                                    <div class="document-file">
+
+                                        <a href="@item.OssLocation" data-lightbox="attach">
+                                            <img src="@item.OssLocation" alt="">
+                                        </a>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    <!-- img end row -->
+                    <h3 class="m-t-10"><i class="fa fa-map-marker"></i> 地理位置上的点</h3>
+                    <div  id="map"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- end panel -->
+</div>
+<!-- end col-12 -->
+<input type="hidden" id="pointX" value="@ViewData["PointX"]" />
+<input type="hidden" id="pointY" value="@ViewData["PointY"]" />
+<!-- end col-12 -->
+@section Scripts {
+    @Scripts.Render("~/Content/themes/" + ViewData["fileAddress"].ToString() + "/ds.stations.map.js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            DSMap.init({
+                mapContainerId:"map",
+                @*pointObj: @Html.ParseGeoPointToJsonObj(""),*@
+                pointObj: { lng: @Model.Equipment.Business.BdLongitude, lat: @Model.Equipment.Business.BdLatitude },
+            });
+
+
+        });
+    </script>
+}

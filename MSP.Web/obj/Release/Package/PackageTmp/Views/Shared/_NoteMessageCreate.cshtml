@@ -1,0 +1,323 @@
+﻿@using MSP.Models.Domain
+
+@model NoteMessageModel
+
+@{
+    ViewBag.Title = "创建通知消息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header{
+    @Styles.Render("~/Content/file-upload/css/css")
+    @Styles.Render("~/Content/UMeditor/themes/default/css/umeditor.css")
+}
+
+@section PageTitle{
+
+    创建通知消息 <small>点击 @Html.ActionLink("这里", "Index") 回到通知列表</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <input type="hidden" id="current-controller" value="@ViewContext.RouteData.Values["controller"]" />
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>@Html.LabelFor(x => x.Title)</label>
+                            <div>
+                                @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.Title)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>@Html.LabelFor(x => x.Type)</label>
+                            <div>
+                                @Html.DropDownListFor(x => x.Type, ViewData["Type"] as SelectList, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(x => x.Title)
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>@Html.LabelFor(x => x.IsTop)</label>
+                            <div>
+                                @Html.CheckBoxFor(x => x.IsTop)
+                                @Html.ValidationMessageFor(x => x.IsTop)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                @if (Model.Localities != null && Model.Localities.Count > 1)
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>@Html.LabelFor(x => x.Localities)</label>
+                                <div>
+                                    @*@Html.DropDownListFor(x => x.Type, ViewData["Type"] as SelectList, new { @class = "form-control" })*@
+                                    @foreach (var item in Model.Localities)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="SelectedCitys" id="SelectdLocalities_@item.Id" value="@item.Id" @if (Model.SelectedCitys != null && Model.SelectedCitys.Contains(item.Id)) { <text> checked="checked" </text>                         }>
+                                            @item.LocalityName
+                                        </label>
+                                    }
+                                    @Html.ValidationMessageFor(x => x.Localities)
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" name="SelectedCitys" value="@Model.Localities[0].Id"  />
+                }
+
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>@Html.LabelFor(x => x.Content)</label>
+                            <div>
+                                @Html.TextAreaFor(modelItem => Model.Content, new { @class = "form-control", @style = "height:500px" })
+
+                                @Html.ValidationMessageFor(model => model.Content)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("UploadFiles", "NoteMessageBase", FormMethod.Post, new { @id = "fileupload", @enctype = "multipart/form-data" }))
+                {
+                    <input type="hidden" name="id" id="NoteMessageId" />
+                    <div class="row fileupload-buttonbar">
+                        <div class="col-md-7">
+                            <span class="btn btn-success fileinput-button">
+                                <i class="fa fa-plus"></i>
+                                <span>选择上传附件</span>
+                                <input type="file" name="files[]" multiple="">
+                            </span>
+                            <button type="submit" class="btn btn-primary start" id="startSubmit" style="display:none">
+                                <i class="fa fa-upload"></i>
+                                <span>开始上传</span>
+                            </button>
+                            <!-- The global file processing state -->
+                            <span class="fileupload-process"></span>
+                        </div>
+                        <!-- The global progress state -->
+                        <div class="col-md-5 fileupload-progress fade">
+                            <!-- The global progress bar -->
+                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                            </div>
+                            <!-- The extended global progress state -->
+                            <div class="progress-extended">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- The table listing the files available for upload/download -->
+                    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                    <div class="note note-info">
+                        <h4>上传提示</h4>
+                        <ul>
+                            <li>支持上传附件文件最大长度为 <strong>10 MB</strong> (支持多文件上传).</li>
+                            <li>仅支持文件类型 (<strong>JPG, GIF, PNG,DOC,XLS,PDF</strong>) (非允许类型附件文件需转成相应格式上传).</li>
+                            <li>上传附件文件名请确保可读性与唯一性.</li>
+                        </ul>
+                    </div>
+
+                }
+
+                @Html.HiddenFor(x => x.MediaType)
+                <input type="button" class="btn btn-success" value="提交" onclick="submit()" />
+                <input type="button" class="btn btn-default" value="取消" onclick="cancel()" />
+
+                <script id="template-upload" type="text/x-tmpl">
+                    {% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class="template-upload fade">
+                        <td class="col-md-1">
+                            <span class="preview"></span>
+                        </td>
+                        <td>
+                            <p class="name">{%=file.name%}</p>
+                            <strong class="error text-danger"></strong>
+                        </td>
+                        <td>
+                            <p class="size">准备上传 ...</p>
+                            <div class="progress progress-striped active"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                        </td>
+                        <td>
+                            {% if (!i && !o.options.autoUpload) { %}
+                            <button class="btn btn-primary btn-sm start" style="display:none" disabled>
+                                <i class="fa fa-upload"></i>
+                                <span>开始</span>
+                            </button>
+                            {% } %}
+                            {% if (!i) { %}
+                            <button class="btn btn-white btn-sm cancel">
+                                <i class="fa fa-ban"></i>
+                                <span>取消</span>
+                            </button>
+                            {% } %}
+                        </td>
+                    </tr>
+                    {% } %}
+                </script>
+                <!-- The template to display files available for download -->
+                <script id="template-download" type="text/x-tmpl">
+                    {% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class="template-download fade">
+                        <td>
+                            <span class="preview">
+                                {% if (file.thumbnailUrl) { %}
+                                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                                {% } %}
+                            </span>
+                        </td>
+                        <td>
+                            <p class="name">
+                                {% if (file.url) { %}
+                                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                                {% } else { %}
+                                <span>{%=file.name%}</span>
+                                {% } %}
+                            </p>
+                            {% if (file.error) { %}
+                            <div><span class="label label-danger">错误</span> {%=file.error%}</div>
+                            {% } %}
+                        </td>
+                        <td>
+                            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+                        </td>
+                        <td>
+                            {% if (file.delete_url) { %}
+                            <button type="button" onclick="delete_File(this, '{%=file.file_id%}')" class="btn btn-danger delete" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <span>删除</span>
+                            </button>
+
+                            {% } else { %}
+                            <button class="btn btn-warning cancel">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>取消</span>
+                            </button>
+
+                            {% } %}
+                        </td>
+                    </tr>
+                    {% } %}
+                </script>
+
+
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/UMeditor/umeditor.min.js")
+    @Scripts.Render("~/Content/UMeditor/umeditor.config.js")
+    @Scripts.Render("~/Content/UMeditor/lang/zh-cn/zh-cn.js")
+    @Scripts.Render("~/bundles/fileupload/js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajaxSetup({
+                async: false
+            });
+            var um = UM.getEditor('Content');
+            //文件上传
+            $("#fileupload").fileupload({
+                autoUpload: false,
+                disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+                maxFileSize: 10e6,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png|doc|xls|docx?|xlsx?|pdf|tif|bmp)$/i
+            });
+            $("#fileupload").fileupload(
+                "option",
+                "redirect",
+                window.location.href.replace(/\/[^\/]*$/, "/cors/result.html?%s")
+                );
+            if ($.support.cors) {
+                $.ajax({ type: "HEAD" }).fail(function () {
+                    $('<div class="alert alert-danger"/>').text("Upload server currently unavailable - " + new Date).appendTo("#fileupload")
+                })
+            }
+
+        });
+
+        function delete_File(p, id) {
+            $.post("/NoteMessageBase/DeleteFile", { id: id }, function (data) {
+                if (data.success == "true") {
+                    $(p).closest('tr').remove();
+                } else {
+                    $("#alert_msg").text(data.reason);
+                    $("#modal-alert").modal('show');
+                }
+            });
+        }
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+        function submit() {
+            var citys = new Array();
+            if ($("input[name=SelectedCitys]").length>1) {
+                $("input[name=SelectedCitys]").each(function () {
+                    if ($(this).attr("checked") == "checked")
+                        citys.push($(this).attr("value"));
+                });
+            } else {
+                citys.push($("input[name = SelectedCitys]").attr("value"));
+            }
+           
+            var success = false;
+            $.post("/NoteMessageBase/Create", { Title: $("#Title").val(), Content: escape(UM.getEditor('Content').getContent()), MediaType: $("#MediaType").val(), SelectedCitys: citys, IsTop: $("#IsTop").attr("checked") == "checked", Type: $("#Type").val() }, function (data) {
+                if (data.success) {
+                    $("#NoteMessageId").val(data.id);
+                    $("#startSubmit").click();
+                    success = true;
+                } else {
+                    $("#alert_msg").text(data.msg);
+                    $("#modal-alert").modal('show');
+                }
+            });
+            if (success)
+                location.href = "/" + $("#current-controller").val();
+        }
+        function cancel() {
+            location.href = "/" + $("#current-controller").val();
+        }
+    </script>
+}
+
+
+
+
+

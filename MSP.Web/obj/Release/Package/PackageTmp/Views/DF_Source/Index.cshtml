@@ -1,0 +1,749 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="zh" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh">
+<!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
+    <title>东方天呈 -  OOH Force平台</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+    @Styles.Render("~/Content/themes/sean/source")
+    @Scripts.Render("~/bundles/themes/sean/pace")
+</head>
+<body data-spy="scroll" data-target="#header-navbar" data-offset="51" class="pace-done">
+    <div class="pace  pace-inactive hide">
+        <div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+            <div class="pace-progress-inner"></div>
+        </div>
+        <div class="pace-activity"></div>
+    </div>
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade in">
+        <!-- begin #header -->
+        <div id="header" class="header navbar navbar-transparent navbar-fixed-top navbar-small">
+            <!-- begin container -->
+            <div class="container">
+                <!-- begin navbar-header -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/DF" class="navbar-brand">
+                        <span class="brand-logo"></span>
+                        <span class="brand-text">
+                            <span class="text-theme">东方天呈</span>
+                        </span>
+                    </a>
+                </div>
+                <!-- end navbar-header -->
+                <!-- begin navbar-collapse -->
+                <div class="collapse navbar-collapse" id="header-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="#about" data-click="scroll-to-target">简介</a></li>
+                        <li><a href="#team" data-click="scroll-to-target">团队</a></li>
+                        <li><a href="#service" data-click="scroll-to-target">服务</a></li>
+                        <li><a href="#work" data-click="scroll-to-target">工作内容</a></li>
+                        <li><a href="#client" data-click="scroll-to-target">终端</a></li>
+                        <li><a href="#pricing" data-click="scroll-to-target">价格</a></li>
+                    </ul>
+                </div>
+                <!-- end navbar-collapse -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #header -->
+        <!-- begin #about -->
+        <div id="about" class="content">
+            <!-- begin container -->
+            <div class="container fadeInDown contentAnimated finishAnimated" data-animation="true" data-animation-type="fadeInDown">
+                <h2 class="content-title">关于我们</h2>
+                <p class="content-desc">
+                    东方天呈信息产业有限公司
+                </p>
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-6">
+                        <!-- begin about -->
+                        <div class="about">
+                            <h3>我们的简介</h3>
+                            <p>
+                                作为中国智慧食安整体解决方案的提供商，东方天呈一直以助力食品安全为导向，
+                                率先打造出1个中心+9个平台+7大业务系统+N种智能终端的智慧食安整体解决方案，
+                                成为行业的风向标。集团下设六家子公司，
+                                涵盖软硬件开发、大数据、云计算、供应链、移动物联网、电子商务、专业咨询、广告媒体等业务，
+                                针对智慧食安领域，进行全方位的行业创新。
+                            </p>
+                            <p>
+                                在“食品安全”与“互联网+”被高度关注的时代，东方天呈积极推动食品安全与互联网的深度融合，
+                                为政府、企业、商家以及消费者提供了多套智慧食安解决方案，
+                                致力成为行业标杆。
+                            </p>
+                        </div>
+                        <!-- end about -->
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-6">
+                        <h3>东方天呈</h3>
+                        <!-- begin about-author -->
+                        <div class="about-author">
+                            <div class="quote bg-silver">
+                                <i class="fa fa-quote-left"></i>
+                                <h3>智慧食安整体解决方案提供商</h3>
+                                <i class="fa fa-quote-right"></i>
+                            </div>
+                            <div class="author">
+                                <div class="image">
+                                    <img src="~/Content/Images/DF/user-1.jpg" alt="Traxex.Gao">
+                                </div>
+                                <div class="info">
+                                    Sean Ngu
+                                    <small>Front End Developer</small>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end about-author -->
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-12">
+                        <h3>城市覆盖率</h3>
+                        <!-- begin skills -->
+                        <div class="skills">
+                            <div class="skills-name">深圳</div>
+                            <div class="progress progress-striped">
+                                <div class="progress-bar progress-bar-success" style="width: 95%">
+                                    <span class="progress-number">95%</span>
+                                </div>
+                            </div>
+                            <div class="skills-name">广东</div>
+                            <div class="progress progress-striped">
+                                <div class="progress-bar progress-bar-success" style="width: 90%">
+                                    <span class="progress-number">90%</span>
+                                </div>
+                            </div>
+                            <div class="skills-name">北京</div>
+                            <div class="progress progress-striped">
+                                <div class="progress-bar progress-bar-success" style="width: 85%">
+                                    <span class="progress-number">85%</span>
+                                </div>
+                            </div>
+                            <div class="skills-name">重庆</div>
+                            <div class="progress progress-striped">
+                                <div class="progress-bar progress-bar-success" style="width: 80%">
+                                    <span class="progress-number">80%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end skills -->
+                    </div>
+                    <!-- end col-4 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #about -->
+        <!-- begin #milestone -->
+        <div id="milestone" class="content bg-black-darker has-bg" data-scrollview="true">
+            <!-- begin content-bg -->
+            <div class="content-bg">
+                <img src="~/Content/Images/DF/milestone-bg.jpg" alt="Milestone">
+            </div>
+            <!-- end content-bg -->
+            <!-- begin container -->
+            <div class="container">
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-3 milestone-col">
+                        <div class="milestone">
+                            <div class="number contentAnimated" data-animation="true" data-animation-type="number" data-final-number="1292">1,292</div>
+                            <div class="title">北京</div>
+                        </div>
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-3 milestone-col">
+                        <div class="milestone">
+                            <div class="number contentAnimated" data-animation="true" data-animation-type="number" data-final-number="9039">9,038</div>
+                            <div class="title">广东</div>
+                        </div>
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-3 milestone-col">
+                        <div class="milestone">
+                            <div class="number contentAnimated" data-animation="true" data-animation-type="number" data-final-number="89291">89,277</div>
+                            <div class="title">深圳</div>
+                        </div>
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-3 milestone-col">
+                        <div class="milestone">
+                            <div class="number contentAnimated" data-animation="true" data-animation-type="number" data-final-number="129">129</div>
+                            <div class="title">成都</div>
+                        </div>
+                    </div>
+                    <!-- end col-3 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #milestone -->
+        <!-- begin #team -->
+        <div id="team" class="content" data-scrollview="true">
+            <!-- begin container -->
+            <div class="container">
+                <h2 class="content-title">我们的价值观</h2>
+                <p class="content-desc">
+                    东方天呈倡导全面的诚信观，诚信于客户、诚信于股东、诚信于员工、诚信于社会。
+                </p>
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <!-- begin team -->
+                        <div class="team">
+                            <div class="image flipInX contentAnimated finishAnimated" data-animation="true" data-animation-type="flipInX">
+                                <img src="~/Content/Images/DF/user-1.jpg" alt="Ryan Teller" style="max-height:128px;">
+                            </div>
+                            <div class="info">
+                                <h3 class="name">社会责任</h3>
+                                <div class="title text-theme">Social Responsibility</div>
+                                <p>社会责任是东方天呈的核心价值观，是东方天呈文化的基石，是东方天呈人的崇高品质，是东方天呈的建基立业之本。</p>
+                            </div>
+                        </div>
+                        <!-- end team -->
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <!-- begin team -->
+                        <div class="team">
+                            <div class="image flipInX contentAnimated finishAnimated" data-animation="true" data-animation-type="flipInX">
+                                <img src="~/Content/Images/DF/user-2.jpg" alt="Jonny Cash" style="max-height:128px;">
+                            </div>
+                            <div class="info">
+                                <h3 class="name">多方共赢</h3>
+                                <div class="title text-theme">Mutual Win-Win</div>
+                                <p>以优秀的解决方案促成“政府、企业、商家、消费者”实现多方共赢的良好局面。</p>
+                            </div>
+                        </div>
+                        <!-- end team -->
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <!-- begin team -->
+                        <div class="team">
+                            <div class="image flipInX contentAnimated finishAnimated" data-animation="true" data-animation-type="flipInX">
+                                <img src="~/Content/Images/DF/user-3.jpg" alt="Mia Donovan">
+                            </div>
+                            <div class="info">
+                                <h3 class="name">感恩回报</h3>
+                                <div class="title text-theme">Grateful Heart</div>
+                                <p>常怀感恩之心，构建“政府信任、商家支持、员工热爱、社会尊重、大众称道”的优秀企业形象，努力成为全社会企业的榜样。 </p>
+                            </div>
+                        </div>
+                        <!-- end team -->
+                    </div>
+                    <!-- end col-4 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #team -->
+        <!-- begin #quote -->
+        <div id="quote" class="content bg-black-darker has-bg" data-scrollview="true">
+            <!-- begin content-bg -->
+            <div class="content-bg">
+                <img src="~/Content/Images/DF/quote-bg.jpg" alt="Quote">
+            </div>
+            <!-- end content-bg -->
+            <!-- begin container -->
+            <div class="container fadeInLeft contentAnimated finishAnimated" data-animation="true" data-animation-type="fadeInLeft">
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-12 -->
+                    <div class="col-md-12 quote">
+                        <i class="fa fa-quote-left"></i>我们的愿景： 让人人都可以吃到更放心的食品！
+                        <i class="fa fa-quote-right"></i>
+                        <small>未来，东方天呈将持续深耕智慧食安领域，通过人与设备、设备与设备、系统与系统的交互，全面实现智慧食安的广泛应用，让人人都可以吃到更放心的食品。</small>
+                    </div>
+                    <!-- end col-12 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #quote -->
+        <!-- beign #service -->
+        <div id="service" class="content" data-scrollview="true">
+            <!-- begin container -->
+            <div class="container">
+                <h2 class="content-title">我们的精神、承诺</h2>
+                <p class="content-desc">
+                    为社会创造更多价值，是东方天呈实践自己庄严使命向社会的宣示。
+                </p>
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="service">
+                            <div class="icon bg-theme bounceIn contentAnimated finishAnimated" data-animation="true" data-animation-type="bounceIn"><i class="fa fa-cog"></i></div>
+                            <div class="info">
+                                <h4 class="title">务实</h4>
+                                <p class="desc">务实是一种工作作风，东方天呈人要脚踏实地.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="service">
+                            <div class="icon bg-theme bounceIn contentAnimated finishAnimated" data-animation="true" data-animation-type="bounceIn"><i class="fa fa-paint-brush"></i></div>
+                            <div class="info">
+                                <h4 class="title">激情</h4>
+                                <p class="desc">激情是一种工作态度，东方天呈人要永葆激情.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="service">
+                            <div class="icon bg-theme bounceIn contentAnimated finishAnimated" data-animation="true" data-animation-type="bounceIn"><i class="fa fa-file"></i></div>
+                            <div class="info">
+                                <h4 class="title">专业</h4>
+                                <p class="desc">专业是一种工作能力，东方天呈人应精于本职.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col-4 -->
+                </div>
+                <!-- end row -->
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="service">
+                            <div class="icon bg-theme bounceIn contentAnimated finishAnimated" data-animation="true" data-animation-type="bounceIn"><i class="fa fa-code"></i></div>
+                            <div class="info">
+                                <h4 class="title">创新</h4>
+                                <p class="desc">创新是一种工作思维，东方天呈人要敢于突破传统，颠覆自我，努力探索、实践新理念、新方法、新路径.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="service">
+                            <div class="icon bg-theme bounceIn contentAnimated finishAnimated" data-animation="true" data-animation-type="bounceIn"><i class="fa fa-shopping-cart"></i></div>
+                            <div class="info">
+                                <h4 class="title">开放进取</h4>
+                                <p class="desc">开放进取，源于对生活的憧憬与期冀.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col-4 -->
+                    <!-- begin col-4 -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="service">
+                            <div class="icon bg-theme bounceIn contentAnimated finishAnimated" data-animation="true" data-animation-type="bounceIn"><i class="fa fa-heart"></i></div>
+                            <div class="info">
+                                <h4 class="title">以人为本</h4>
+                                <p class="desc">以人为本，源于对社会的体察与尊重.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col-4 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #about -->
+        <!-- beign #action-box -->
+        <div id="action-box" class="content has-bg" data-scrollview="true">
+            <!-- begin content-bg -->
+            <div class="content-bg">
+                <img src="~/Content/Images/DF/action-bg.jpg" alt="Action">
+            </div>
+            <!-- end content-bg -->
+            <!-- begin container -->
+            <div class="container fadeInRight contentAnimated finishAnimated" data-animation="true" data-animation-type="fadeInRight">
+                <!-- begin row -->
+                <div class="row action-box">
+                    <!-- begin col-9 -->
+                    <div class="col-md-9 col-sm-9">
+                        <div class="icon-large text-theme">
+                            <i class="fa fa-binoculars"></i>
+                        </div>
+                        <h3>智慧食安整体解决方案提供商!</h3>
+                        <p>
+                            东方天呈传媒全力打造的“中国消费终端联播网”，被形象的喻为“舌尖上的中国新媒体”.
+                        </p>
+                    </div>
+                    <!-- end col-9 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-3">
+                        <a href="http://www.dftcgroup.com/" class="btn btn-outline btn-block">查看官网</a>
+                    </div>
+                    <!-- end col-3 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #action-box -->
+        <!-- begin #work -->
+        <div id="work" class="content" data-scrollview="true">
+            <!-- begin container -->
+            <div class="container fadeInDown contentAnimated finishAnimated" data-animation="true" data-animation-type="fadeInDown">
+                <h2 class="content-title">我们最近的工作</h2>
+                <p class="content-desc">
+                    广大吃货得认准装有信息公开互动屏的餐厅啊！成都已全面在推进，实现厨房有监控，食材有溯源，消费者能监督，企业自律，在线监管！
+                </p>
+                <!-- begin row -->
+                <div class="row row-space-10">
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-1.jpg" alt="Work 1"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Aliquam molestie</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-3.jpg" alt="Work 3"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Quisque at pulvinar lacus</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-5.jpg" alt="Work 5"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Vestibulum et erat ornare</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-7.jpg" alt="Work 7"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Sed vitae mollis magna</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                </div>
+                <!-- end row -->
+                <!-- begin row -->
+                <div class="row row-space-10">
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-2.jpg" alt="Work 2"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Suspendisse at mattis odio</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-4.jpg" alt="Work 4"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Aliquam vitae commodo diam</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-6.jpg" alt="Work 6"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Phasellus eu vehicula lorem</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                    <!-- begin col-3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <!-- begin work -->
+                        <div class="work">
+                            <div class="image">
+                                <a href=":;"><img src="~/Content/Images/DF/work-8.jpg" alt="Work 8"></a>
+                            </div>
+                            <div class="desc">
+                                <span class="desc-title">Morbi bibendum pellentesque</span>
+                                <span class="desc-text">Lorem ipsum dolor sit amet</span>
+                            </div>
+                        </div>
+                        <!-- end work -->
+                    </div>
+                    <!-- end col-3 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #work -->
+        <!-- begin #client -->
+        <div id="client" class="content has-bg bg-green" data-scrollview="true">
+            <!-- begin content-bg -->
+            <div class="content-bg">
+                <img src="~/Content/Images/DF/client-bg.jpg" alt="Client">
+            </div>
+            <!-- end content-bg -->
+            <!-- begin container -->
+            <div class="container fadeInUp contentAnimated finishAnimated" data-animation="true" data-animation-type="fadeInUp">
+                <h2 class="content-title">明厨亮灶解决方案</h2>
+                <!-- begin carousel -->
+                <div class="carousel testimonials slide" data-ride="carousel" id="testimonials">
+                    <!-- begin carousel-inner -->
+                    <div class="carousel-inner text-center">
+                        <!-- begin item -->
+                        <div class="item active">
+                            <blockquote>
+                                <i class="fa fa-quote-left"></i>
+                                率先实现“八个透明”,现已遍布全国大中型城市，<br>
+                                上百万餐饮企业，成为各省市“明厨亮灶”优先解决方案。
+                                <i class="fa fa-quote-right"></i>
+                            </blockquote>
+                            <div class="name"> — <span class="text-theme">Mark Doe</span>, Designer</div>
+                        </div>
+                        <!-- end item -->
+                        <!-- begin item -->
+                        <div class="item">
+                            <blockquote>
+                                <i class="fa fa-quote-left"></i>
+                                全方位立体化。360度监管无漏洞.<br>
+                                监管无“断层”，打通餐饮监管“最后一公里”
+                                <i class="fa fa-quote-right"></i>
+                            </blockquote>
+                            <div class="name"> — <span class="text-theme">Joe Smith</span>, Developer</div>
+                        </div>
+                        <!-- end item -->
+                        <!-- begin item -->
+                        <div class="item">
+                            <blockquote>
+                                <i class="fa fa-quote-left"></i>
+                                率先实现“八个透明”，<br>
+                                看得见的食品安全。
+                                <i class="fa fa-quote-right"></i>
+                            </blockquote>
+                            <div class="name"> — <span class="text-theme">Linda Adams</span>, Programmer</div>
+                        </div>
+                        <!-- end item -->
+                    </div>
+                    <!-- end carousel-inner -->
+                    <!-- begin carousel-indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#testimonials" data-slide-to="0" class="active"></li>
+                        <li data-target="#testimonials" data-slide-to="1" class=""></li>
+                        <li data-target="#testimonials" data-slide-to="2" class=""></li>
+                    </ol>
+                    <!-- end carousel-indicators -->
+                </div>
+                <!-- end carousel -->
+            </div>
+            <!-- end containter -->
+        </div>
+        <!-- end #client -->
+        <!-- begin #pricing -->
+        <div id="pricing" class="content" data-scrollview="true">
+            <!-- begin container -->
+            <div class="container">
+                <h2 class="content-title">刊例价格</h2>
+                <p class="content-desc">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consectetur eros dolor,<br>
+                    sed bibendum turpis luctus eget
+                </p>
+                <!-- begin pricing-table -->
+                <ul class="pricing-table col-4">
+                    <li data-animation="true" data-animation-type="fadeInUp" class="fadeInUp contentAnimated finishAnimated">
+                        <div class="pricing-container">
+                            <h3>广东</h3>
+                            <div class="price">
+                                <div class="price-figure">
+                                    <span class="price-number">FREE</span>
+                                </div>
+                            </div>
+                            <ul class="features">
+                                <li>1GB Storage</li>
+                                <li>2 Clients</li>
+                                <li>5 Active Projects</li>
+                                <li>5 Colors</li>
+                                <li>Free Goodies</li>
+                                <li>24/7 Email support</li>
+                            </ul>
+                            <div class="footer">
+                                <a href="#pricing" class="btn btn-inverse btn-block">Buy Now</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li data-animation="true" data-animation-type="fadeInUp" class="fadeInUp contentAnimated finishAnimated">
+                        <div class="pricing-container">
+                            <h3>深圳</h3>
+                            <div class="price">
+                                <div class="price-figure">
+                                    <span class="price-number">$9.99</span>
+                                    <span class="price-tenure">per month</span>
+                                </div>
+                            </div>
+                            <ul class="features">
+                                <li>2GB Storage</li>
+                                <li>5 Clients</li>
+                                <li>10 Active Projects</li>
+                                <li>10 Colors</li>
+                                <li>Free Goodies</li>
+                                <li>24/7 Email support</li>
+                            </ul>
+                            <div class="footer">
+                                <a href="#pricing" class="btn btn-inverse btn-block">Buy Now</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="highlight fadeInUp contentAnimated finishAnimated" data-animation="true" data-animation-type="fadeInUp">
+                        <div class="pricing-container">
+                            <h3>成都</h3>
+                            <div class="price">
+                                <div class="price-figure">
+                                    <span class="price-number">$19.99</span>
+                                    <span class="price-tenure">per month</span>
+                                </div>
+                            </div>
+                            <ul class="features">
+                                <li>5GB Storage</li>
+                                <li>10 Clients</li>
+                                <li>20 Active Projects</li>
+                                <li>20 Colors</li>
+                                <li>Free Goodies</li>
+                                <li>24/7 Email support</li>
+                            </ul>
+                            <div class="footer">
+                                <a href="#pricing" class="btn btn-theme btn-block">Buy Now</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li data-animation="true" data-animation-type="fadeInUp" class="fadeInUp contentAnimated finishAnimated">
+                        <div class="pricing-container">
+                            <h3>北京</h3>
+                            <div class="price">
+                                <div class="price-figure">
+                                    <span class="price-number">$999</span>
+                                </div>
+                            </div>
+                            <ul class="features">
+                                <li>Unlimited Storage</li>
+                                <li>Unlimited Clients</li>
+                                <li>Unlimited Projects</li>
+                                <li>Unlimited Colors</li>
+                                <li>Free Goodies</li>
+                                <li>24/7 Email support</li>
+                            </ul>
+                            <div class="footer">
+                                <a href="#pricing" class="btn btn-inverse btn-block">Buy Now</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end #pricing -->
+        <!-- begin #footer -->
+        <div id="footer" class="footer">
+            <div class="container">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo"></div>
+                    Color Admin
+                </div>
+                <p>
+                    © Copyright Color Admin 2014 <br>
+                    An admin &amp; front end theme with serious impact. Created by <a href="http://seantheme.com/color-admin-v2.0/frontend/one-page-parallax/index.html#">SeanTheme</a>
+                </p>
+                <p class="social-list">
+                    <a href="http://seantheme.com/color-admin-v2.0/frontend/one-page-parallax/index.html#"><i class="fa fa-facebook fa-fw"></i></a>
+                    <a href="http://seantheme.com/color-admin-v2.0/frontend/one-page-parallax/index.html#"><i class="fa fa-instagram fa-fw"></i></a>
+                    <a href="http://seantheme.com/color-admin-v2.0/frontend/one-page-parallax/index.html#"><i class="fa fa-twitter fa-fw"></i></a>
+                    <a href="http://seantheme.com/color-admin-v2.0/frontend/one-page-parallax/index.html#"><i class="fa fa-google-plus fa-fw"></i></a>
+                    <a href="http://seantheme.com/color-admin-v2.0/frontend/one-page-parallax/index.html#"><i class="fa fa-dribbble fa-fw"></i></a>
+                </p>
+            </div>
+        </div>
+        <!-- end #footer -->
+
+    </div>
+    <!-- end #page-container -->
+
+    @Scripts.Render("~/bundles/themes/sean/source")
+    <script>
+
+        $(document).ready(function () {
+            App.init();
+        });
+    </script>
+</body>
+</html>

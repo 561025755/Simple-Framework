@@ -1,0 +1,42 @@
+﻿@using MSP.Core.Domain
+
+@model IList<Metro_Ordertype>
+@if (Model != null && Model.Count > 0)
+{
+    var Customable = Model.Where(x => x.Customerable).ToList();
+    var notCust = Model.Where(x => !x.Customerable).ToList();
+    
+    <div class="row">
+        <div class="col-lg-6">
+            @foreach (var item in Customable)
+            {
+                <a href="javascripe:;" class="btn btn-primary btn-lg" onclick="Order.getCombos(@item.Id,@item.Customerable)">
+                    <i class="fa fa-2x fa-flag pull-left">
+                        @item.Name
+                        <br />
+                        <small>@item.Remark</small>
+                    </i>
+                </a>
+
+            }
+
+        </div>
+        <div class="col-lg-6">
+            @foreach (var item in notCust)
+            {
+                <a href="javascripe:;" class="btn btn-primary btn-lg" onclick="Order.getCombos(@item.Id)">
+                    <i class="fa fa-2x fa-bullseye pull-left">
+                        @item.Name
+                        <br />
+                        <small>@item.Remark</small>
+                    </i>
+                </a>
+
+            }
+
+        </div>
+    </div>
+
+    
+}
+

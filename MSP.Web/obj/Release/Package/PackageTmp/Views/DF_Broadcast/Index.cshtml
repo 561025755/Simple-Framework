@@ -1,0 +1,281 @@
+﻿@using MSP.Web;
+@using MSP.Core.Domain
+@using MSP.Models.Domain
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+
+
+@model AttachModel<Df_Order, Df_Order>
+@{
+    ViewBag.Title = "广告刊播表";
+}
+
+@section PageTitle{
+    广告刊播表
+}
+
+@section header{
+@Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    @Styles.Render("~/Content/themes/sean/css/datepicker3.css")
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+        </div>
+        <h4 class="panel-title">列表视图</h4>
+    </div>
+    <div class="panel-body">
+        @Html.Partial("_BroadSearchPartial", Model.Model)
+
+        <br /><br />
+        <div class="well">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h4 id="disTitle">2016-12-16 成都 广告刊播表</h4>
+                </div>
+                <div id="downblock" class="col-sm-4">
+                    <span class="pull-right hidden-print">
+                        <a href="javascript:download();" class="btn btn-sm btn-inverse m-b-10"><i class="fa fa-print m-r-5"></i> 下载列表</a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+
+
+                @Html.Grid(Model.PageModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+       {
+           column.For(c => Html.Truncate(c.BrandDesc, 10)).Named("广告品牌").SortColumnName("customer.Remark");
+           column.For(c => c.Frequency).Named("播放频次").SortColumnName("customer.OrgCode");
+           column.For(c => c.PlayCount).Named("投放数量").SortColumnName("customer.UserId");
+           column.For(c => Html.Partial("_BroadcastActionPartial", c.Id)).Named("  ").Sortable(false);
+
+        }).Attributes(@class => "table table-responsive")
+            </div>
+            @Html.Raw(@Html.Pager(Model.PageModel))
+        </div>
+    </div>
+    </div>
+
+
+<!--Add modal begin-->
+<div class="modal fade" id="modal-point-list">
+    <div class="modal-dialog" style="min-width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">王老吉-订单刊播点位明细</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input class="form-control" id="Description" name="Description" placeholder="关键字" type="text" value="">
+                    </div>
+                    <div class="col-sm-2"><input type="submit" class="btn btn-search btn-block btn-success" value="搜索"></div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-responsive" id="data-table-equipment" >
+                        <thead><tr><th>#</th><th>商家名称</th><th>规格名称</th><th>时控开机时间</th><th>时控关机时间</th><th class="sort_asc"><a href="/Equipment?Direction=Descending"></a></th></tr></thead>
+                        <tbody>
+                            <tr class="gridrow">
+                                <td>BQ-20160129-009-006696</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000001">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>BQ-AC12-009-008276</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000002">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>BLC42-AE10680</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000003">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>BLC42-AE10680</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000003">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>BLC42-AD10411</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000004">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>BLC42-AD10382</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000005">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>BLC42-AD10448</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000006">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>BQ-AC18-009-008766</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000007">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>BQ-AC18-009-008740</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000008">站牌详情</a>
+                                </td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>BQ-AC19-009-008956</td>
+                                <td>保千里</td>
+                                <td>42寸立式三屏</td>
+                                <td>10:00</td>
+                                <td>10:00</td>
+                                <td>
+                                    <a class="btn btn-xs  btn-success" target="_blank" data-original-title="查看站牌" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=000009">站牌详情</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="loading-overlay fade in">
+    <span class="spinner"></span>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    <script>
+
+        $(document).ready(function () {
+            $("#StartDate").datepicker({ autoclose: true, todayHighlight: true, format: "yyyy-mm-dd" });
+            $("#StartDate").datepicker("setDate", '@DateTime.Now.ToShortDateString()');
+
+
+            $("#disTitle").html($("input#StartDate").val() + "   " + $("select#CityCode").find("option:selected").text() + "   广告刊播表");
+        });
+       
+        function openPointList(orderid, eve) {
+            var row = eve.parentElement.parentElement;
+            var title = $(row).find("td :eq(0)").text() + "-订单刊播点位明细";
+            $('#modal-point-list').find(".modal-title").html(title);           
+           
+            $.post("/DF_Broadcast/GetOrder", { orderId: orderid, cityCode: $("#CityCode").val(), date: $("input#StartDate").val() }, function (d) {
+                if (d.success) {
+                   
+                    $('#data-table-equipment').dataTable().fnDestroy();
+                    $("#data-table-equipment").DataTable({
+                        "dom":"tip",
+                        "pageLength": 10,                       
+                        "lengthChange": false,
+                        "ordering": true,
+                        "data": d.data,
+                        "columns": [
+                            { "data": "Code" },
+                            { "data": "Supplyer" },
+                            { "data": "Standard" },
+                            { "data": "StartTime" },
+                            { "data": "EndTime" },
+                            {
+                                "data": function (e) {//这里给最后一列返回一个操作列表
+                                    return '<a class="btn btn-xs  btn-success" target="_blank" data-original-title="设备详情" data-placement="top" data-toggle="tooltip" href="/Equipment/Details?PropertyNumber=' + e['PropertyNumber'] + '">设备详情</a>';
+                                }
+                            }
+                        ],
+                        "info": true,
+                        "bAutoWidth": false,
+                        "pagingType": "full",
+                        "searching": true,
+                        language: {
+                            //lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                            processing: "载入中",//处理页面数据的时候的显示
+                            paginate: {//分页的样式文本内容。
+                                previous: "上一页",
+                                next: "下一页",
+                                first: "第一页",
+                                last: "最后一页"
+                            },
+
+                            zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                            //下面三者构成了总体的左下角的内容。
+                            info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                            infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                            infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                        }
+                    });
+                    $("#Description").on("keyup change", function () {
+                        
+                        $("#data-table-equipment").DataTable().search($(this).val()).draw();
+                    })
+                   
+
+                }
+            })
+            $('#modal-point-list').modal('show');
+        }
+
+        function download() {           
+            window.location.href = "/DF_Broadcast/DownBroadcastTable?citycode=" + $("select#CityCode").val() + "&date=" + $("input#StartDate").val();
+
+
+        }
+
+    </script>
+}

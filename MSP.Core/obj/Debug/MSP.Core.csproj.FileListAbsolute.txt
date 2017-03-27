@@ -1,0 +1,12 @@
+C:\工作\Msp项目\源码\MSP.Core\bin\Debug\MSP.Core.dll.config
+C:\工作\Msp项目\源码\MSP.Core\bin\Debug\MSP.Core.dll
+C:\工作\Msp项目\源码\MSP.Core\bin\Debug\MSP.Core.pdb
+C:\工作\Msp项目\源码\MSP.Core\obj\Debug\MSP.Core.dll
+C:\工作\Msp项目\源码\MSP.Core\obj\Debug\MSP.Core.pdb
+C:\工作\Msp项目\源码\MSP.Core\obj\Debug\MSP.Core.csprojResolveAssemblyReference.cache
+C:\工作\学习\框架简化\源码\MSP.Core\bin\Debug\MSP.Core.dll.config
+C:\工作\学习\框架简化\源码\MSP.Core\bin\Debug\MSP.Core.dll
+C:\工作\学习\框架简化\源码\MSP.Core\bin\Debug\MSP.Core.pdb
+C:\工作\学习\框架简化\源码\MSP.Core\obj\Debug\MSP.Core.dll
+C:\工作\学习\框架简化\源码\MSP.Core\obj\Debug\MSP.Core.pdb
+C:\工作\学习\框架简化\源码\MSP.Core\obj\Debug\MSP.Core.csprojResolveAssemblyReference.cache

@@ -1,0 +1,51 @@
+﻿@using MSP.Core.Domain;
+
+
+<h4 class="m-b-15 m-t-0 p-b-10">审批记录</h4>
+
+<table class='table table-email'>
+    <thead>
+        <tr>
+            <th><a href='javascript:;'>审批部门</a></th>
+            <th><a href='javascript:;'>是否通过</a></th>
+            <th class="col-md-6"><a href='javascript:;'>说明</a></th>
+            <th><a href='javascript:;'>审批时间</a></th>
+        </tr>
+    </thead>
+
+
+    @foreach (var item in Model)
+    {
+        <tr class='gridrow'>
+            <td>@item.DepartmentName</td>
+
+
+            @{
+                string disText = "";
+                string colorClass = "";
+                if (item.Status)
+                {
+                    disText = "通过";
+                    colorClass = "label label-success";
+                }
+                else
+                {
+                    disText = "不通过";
+                    colorClass = "label label-danger";
+                }
+                if (!item.Effective)
+                {
+                    disText += "(无效)";
+                    colorClass = "label label-default";
+                }
+            } 
+            <td><span class="@colorClass"> @disText </span></td>
+            <td>@item.Description</td>
+            <td>@item.CreateTime</td>
+        </tr>
+
+    }
+
+
+</table>
+

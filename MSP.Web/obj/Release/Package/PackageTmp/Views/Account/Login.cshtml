@@ -1,0 +1,109 @@
+﻿@using MSP.Models.Domain;
+@using CaptchaMvc.HtmlHelpers;
+
+@model LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="zh" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh">
+<!--<![endif]-->
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>登录 -  OOH Force平台</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    @Styles.Render("~/Content/themes/sean/css/base")
+    @Styles.Render("~/Content/themes/sean/font-awesome/css/base")
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body class="pace-top">
+    <!-- begin #page-loader -->
+    <div id="page-loader">
+        <div class="material-loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+            </svg>
+            <div class="message">Loading...</div>
+        </div>
+    </div>
+    <!-- end #page-loader -->
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade">
+
+        <div class="login bg-grey-900 animated fadeInDown">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand text-inverse">
+                    <span class="logo"></span> 用户登录
+                    <small>OOH Force平台</small>
+                </div>
+                <div class="icon">
+                    <i class="material-icons">lock</i>
+                </div>
+            </div>
+            <!-- end brand -->
+            <div class="login-content">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="form-group m-b-20">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-lg without-border inverse-mode", placeholder = "邮箱地址" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <div class="form-group m-b-20">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control input-lg without-border inverse-mode", placeholder = "登录密码" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                    if (Model.DisplayCaptcha)
+                    {
+                        <div class="form-group m-b-20">
+                            <div class="captcha-box">
+                                @{
+                                    CaptchaMvc.Models.ParameterModel[] catchaParams = new CaptchaMvc.Models.ParameterModel[] {
+                                    //new CaptchaMvc.Models.ParameterModel(CaptchaMvc.Infrastructure.DefaultCaptchaManager.MathCaptchaAttribute, false),
+                                    new CaptchaMvc.Models.ParameterModel(CaptchaMvc.Infrastructure.DefaultCaptchaManager.PartialViewNameAttribute, "_Captcha"),
+                                    //new CaptchaMvc.Models.ParameterModel(CaptchaMvc.Infrastructure.DefaultCaptchaManager.RefreshTextAttribute, "刷新文本"),
+                                    new CaptchaMvc.Models.ParameterModel(CaptchaMvc.Infrastructure.DefaultCaptchaManager.IsRequiredAttribute, true),
+                                    new CaptchaMvc.Models.ParameterModel(CaptchaMvc.Infrastructure.DefaultCaptchaManager.RequiredMessageAttribute, "必填项提醒文本")
+                                };
+                                }
+                                @Html.Captcha(5, catchaParams)
+                            </div>
+                        </div>}
+
+
+                                    <div class="form-group m-b-20">
+                                        @Html.CheckBoxFor(model => model.RememberMe) @Html.Label("记住这次登录", new { @for = "RememberMe" })
+
+                                    </div>
+
+                                    <div class="login-buttons">
+                                        <button type="submit" class="btn btn-info btn-block btn-lg">立即登录</button>
+                                    </div>
+                                    }
+            </div>
+        </div>
+
+    </div>
+    <!-- end page container -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/themes/sean/crossbrowserjs")
+        <![endif]-->
+    @Scripts.Render("~/bundles/themes/sean/login")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            App.init();
+        });
+    </script>
+</body>
+</html>

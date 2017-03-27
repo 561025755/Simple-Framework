@@ -1,0 +1,206 @@
+﻿
+@using MSP.Core.Enum;
+@using MSP.Web;
+
+@model MSP.Models.Domain.CustomerModel
+
+@{
+    ViewBag.Title = "创建客户";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    创建客户 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+@section header{
+    @Styles.Render("~/Content/tagsinput-0.5.0/bootstrap-tagsinput.css")
+    @Styles.Render("~/Content/select2-4.0.3/css/select2.min.css")
+    @*@Styles.Render("~/Content/jstree-3.0.9/themes/default/style.css")*@
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">创建表单</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("Create", null, FormMethod.Post, new { @id = "createcustomer" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.MediaTypeId)
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Name)
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Name)
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+
+                                <label>
+                                    @Html.LabelFor(model => model.OrgCode)
+                                </label>
+                                <div>
+                                    <div class="col-sm-9 p-0">
+                                        @Html.TextBoxFor(model => model.OrgCode, new { @class = "form-control", placeholder = "格式：95684236-8或91010005MA61Z12858" })
+                                        @Html.ValidationMessageFor(model => model.OrgCode)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="button" class="btn btn-sm btn-success" onclick="check()" value="校验" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            @Html.LabelFor(model => model.Remark) （可同时报备多个广告品牌）
+                        </label>
+                        <div>
+                            @Html.TextBoxFor(model => model.Remark, new { @class = "form-control", data_role = "tagsinput", placeholder = "多个品牌用英文字符逗号“,”隔开 " })
+                            @Html.ValidationMessageFor(model => model.Remark)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Phone)
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Phone)
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Fax)
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Fax, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Fax)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            @Html.LabelFor(model => model.Address)
+                        </label>
+                        <div>
+                            @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Address)
+                        </div>
+                    </div>
+                     <!-- CreatePartial begin -->
+                    @Html.Partial("CreatePartial", Model)
+
+                    <!-- CreatePartial end -->
+                    <div class="form-group">
+                        <label>
+                            @Html.LabelFor(model => model.Description)
+                        </label>
+                        <div>
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>@Html.LabelFor(model => model.Contacts) (可多选)</label>
+                        <div class="table-responsive">
+                            <table id="tblContacts" class="table table-email">
+                                <thead>
+                                    <tr>
+                                        <th>联系人名称</th>
+                                        <th>职务</th>
+                                        <th>所属部门</th>
+                                        <th>移动电话</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Contacts != null)
+                                    {
+                                        for (int i = 0; i < Model.Contacts.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.HiddenFor(modelItem => Model.Contacts[i].CustomerId)
+                                                    @Html.TextBoxFor(modelItem => Model.Contacts[i].Name, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(modelItem => Model.Contacts[i].Name)
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(modelItem => Model.Contacts[i].Business, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(modelItem => Model.Contacts[i].Business)
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(modelItem => Model.Contacts[i].Department, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(modelItem => Model.Contacts[i].Department)
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(modelItem => Model.Contacts[i].Mobile, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(modelItem => Model.Contacts[i].Mobile)
+                                                </td>
+
+                                                <td>
+                                                    <a class="email-btn" href="javascript:;" onclick="rp(this);">
+                                                        <i class="fa fa-trash-o" data-original-title="删除" data-toggle="tooltip"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5"><a href="javascript:ap();"><i class="fa fa-plus-circle"></i> 添加更多联系人</a></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <input type="submit" class="btn btn-sm btn-success" id="crate" value="创建" />
+                    <input type="reset" class="btn btn-sm btn-default" value="重置" />
+                }
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!--begin modal-->
+    <div class="modal fade modal-sm" tabindex="-1" role="dialog">
+
+    </div>
+
+</div>
+<!--end modal-->
+<!-- end col-12 -->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/select2-4.0.3/js/select2.min.js")
+    @Scripts.Render("~/Content/tagsinput-0.5.0/bootstrap-tagsinput.js")
+    @*@Scripts.Render("~/Content/jstree-3.0.9/jstree.min.js")*@
+
+    @Html.Partial("CreateScriptPartial")
+}

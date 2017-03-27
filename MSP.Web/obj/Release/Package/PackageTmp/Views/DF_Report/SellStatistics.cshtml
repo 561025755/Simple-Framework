@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "资源售卖情况";
+}
+@section header {
+@Styles.Render("~/Content/themes/sean/css/datepicker3.css")
+
+    }
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <div class="panel panel-inverse" data-sortable-id="flot-chart-1">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">资源售卖情况</h4>
+            </div>
+            <div class="panel-body">
+                <div class="m-b-20">
+                    <div class="row">
+                        <div class="col-md-6 ui-sortable" id="cityAgentSalerContainer">
+
+                        </div>
+                      
+                        <div class="col-md-2 ui-sortable">
+                            <div class="input-group date">
+                                <input class="form-control" id="StartDate" name="StartDate" placeholder="起始日期">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ui-sortable">
+                            <div class="input-group date">
+                                <input class="form-control" id="EndDate" name="EndDate" placeholder="截止日期">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 ui-sortable">
+                            <button id="btn-chart-query" class="btn btn-search btn-inverse" onclick="SearchChart()"><i class="fa fa-line-chart"></i> 查询</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="container" class="height-600" data-highcharts-chart="0">
+                </div>    
+            </div>
+        </div>
+    </div>
+    <!-- end col-12-->
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/themes/sean/chart")
+  @Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+@Scripts.Render("~/Content/themes/sean/getCityAgentSaler.js")
+
+    <script>
+        $(document).ready(function () {
+            $("#StartDate,#EndDate").datepicker({ autoclose: true, todayHighlight: true, format: "yyyy-mm", minView: 3 });
+            SearchChart();
+        });
+        $("#cityAgentSalerContainer").casDropdownList({ containerID: "cityAgentSalerContainer" });
+        function SearchChart() {
+            $.post("/Df_Report/GetSaleChartData",
+                {
+                    start: $("input#StartDate").val(),
+                    end: $("input#EndDate").val(),
+                    citycode: $("#City").val(),
+                    agent: $("#AgentId").val(),
+                    agent: $("#UserId").val(),
+                }, function (d) {
+                if (d.success) {
+                   
+                    $('#container').highcharts({
+                        chart: {
+                            zoomType: 'xy'
+                        },
+                        title: {
+                            text: '东方天呈资源售卖统计'
+                        },
+                        subtitle: {
+                            text: '月平均售卖情况'
+                        },
+                        xAxis: [{
+                            categories: d.data.Series,
+                            crosshair: true
+                        }],
+                        yAxis: [{ // Primary yAxis
+                            labels: {
+                                format: '{value} 台 ',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            title: {
+                                text: '点位数',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            }
+                        }, { // Secondary yAxis
+                            title: {
+                                text: '总时长',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} 小时',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            opposite: true
+                        }],
+                        tooltip: {
+                            shared: true
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'left',
+                            x: 120,
+                            verticalAlign: 'top',
+                            y: 100,
+                            floating: true,
+                            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                        },
+                        series: [{
+                            name: '总时长',
+                            type: 'column',
+                            yAxis: 1,
+                            data: d.data.Hours,
+                            tooltip: {
+                                valueSuffix: ' 小时'
+                            }
+                        }, {
+                            name: '点位数',
+                            type: 'spline',
+                            data: d.data.EquipmentCount,
+                            tooltip: {
+                                valueSuffix: ' 台'
+                            }
+                        }]
+                    });
+                } else {
+                    $('#container').html(d.data);l
+                }
+            })
+        }
+    </script>
+}

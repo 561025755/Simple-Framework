@@ -1,0 +1,12 @@
+﻿@model int
+   @switch (Model)
+   {
+       case 0:
+        <span class="label label-success" data-toggle="tooltip" data-placement="right" data-original-title="版本更新">版本更新</span>
+           break;
+       case 1:
+        <span class="label label-success" data-toggle="tooltip" data-placement="right" data-original-title="系统通知">系统通知</span>
+           break;
+       default:
+           break;
+   }

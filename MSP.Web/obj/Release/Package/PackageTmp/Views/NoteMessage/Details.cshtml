@@ -1,0 +1,83 @@
+﻿@using MSP.Models.Domain
+
+@model NoteMessageModel
+
+@{
+    ViewBag.Title = "创建通知消息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header{
+    @Styles.Render("~/Content/file-upload/css/css")
+    @Styles.Render("~/Content/UMeditor/themes/default/css/umeditor.css")
+}
+
+@section PageTitle{
+
+    创建通知消息 <small>点击 @Html.ActionLink("这里", "Index") 回到通知列表</small>
+}
+
+<style>
+    div, img, p, form, table, th, td, ul, ol, li, dl, dt, dd, h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    #con_news_c_title {
+        margin-bottom: 20px;
+        text-align: center;
+        border-bottom: 1px dashed #CCCCCC;
+    }
+
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        -webkit-margin-before: 0.83em;
+        -webkit-margin-after: 0.83em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: bold;
+    }
+
+    #con_news_c_title h3 {
+        font-size: 12px;
+        font-weight: normal;
+        color: #989898;
+    }
+</style>
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="con_news_c" style="margin-bottom:30px;">
+                <div id="con_news_c_title">
+                    <h2>@Model.Title</h2>
+                    <h3>发布时间:@Model.CreateTime &nbsp;&nbsp;分类:@Model.TypeName &nbsp;&nbsp;发布人:@Model.UserName</h3>
+                </div>
+                <div id="Content">
+                    @Html.Raw(Model.Content)
+                </div>
+                <div id="Files" style="border-top: 1px dashed #CCCCCC;">
+                    @foreach (var item in Model.Files)
+                    {
+                        <span style="color:cornflowerblue;line-height:30px;">@item.FileName <a class='email-btn' href="@Url.Action("DownLoad","NotifyBase", new { id=item.Id })"><i class='fa fa-download'></i></a></span><br />
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- end panel -->
+</div>

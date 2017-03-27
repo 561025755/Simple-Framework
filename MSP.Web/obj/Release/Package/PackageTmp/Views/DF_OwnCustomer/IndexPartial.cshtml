@@ -1,0 +1,61 @@
+﻿
+<div class="modal fade" id="modal-customer-analyze">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">客户撞单冲突查询</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <input class="form-control" id="txtSearchKeyword" placeholder="关键字" type="text">
+                    <div class="input-group-btn">
+                        <input type="submit" class="btn btn-inverse" onclick="searchAnalyzeCustomer()" value="搜索">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                @*<th>客户代码</th>*@
+                                <th>名称</th>
+                                <th>广告品牌</th>
+                                <th>报备状态</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--QueueDetails modal begin-->
+<div class="modal fade" data-backdrop="static" id="modal-customer-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">查看当前排队信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="text-danger">红色字体为自己</div>
+                <div class="table-responsive">
+                    <table id="data-table-queue" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>客户代码</th>
+                                <th>客户名称</th>
+                                <th>广告品牌</th>
+                                <th>报备状态</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--QueueDetails modal end-->

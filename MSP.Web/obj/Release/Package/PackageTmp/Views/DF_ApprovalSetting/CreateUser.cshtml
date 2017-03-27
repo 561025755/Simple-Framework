@@ -1,0 +1,126 @@
+﻿@using MSP.Core.Domain
+
+@model MSP.Models.Domain.ApprovalDepartmentUserModel
+
+@{
+    ViewBag.Title = "添加用户审批权限";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@section header{
+    @Styles.Render("~/Content/select2-4.0.3/css/select2.min.css")
+}
+
+@section PageTitle{
+    添加用户审批权限 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">创建表单</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm())
+            {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+
+                    <div class="form-group">
+                        <label>
+                            选择授权人
+                        </label>
+                        <div>
+                            @Html.Select2For(model => model.UserId, model => model.UserName, new { @class = "user-select2 form-control" })
+                            @Html.HiddenFor(model => model.UserName)
+                            @Html.HiddenFor(model => model.UserId)
+                            @Html.ValidationMessageFor(model => model.UserId)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>
+                            所属审批部门
+                        </label>
+                        <div>
+                            @Html.DropDownListFor(model=>model.DepartmentId, ViewData["DepartmentId"] as SelectList,new { @class="form-control"})
+                        </div>
+                    </div>
+
+                    <input type="submit" id="create" class="btn btn-sm btn-success" value="创建" />
+            }
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/Content/select2-4.0.3/js/select2.min.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".user-select2").select2({
+                ajax: {
+                    url: '@Url.Action("Select")',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            term: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // parse the results into the format expected by Select2
+                        // since we are using custom formatting functions we do not need to
+                        // alter the remote JSON data, except to indicate that infinite
+                        // scrolling can be used
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                minimumInputLength: 1,
+                templateResult: function (repo) {
+                    if (repo.loading) return repo.text;
+                    var markup = '<div class=" media media-lg">' +
+                      '<div class="media-body">' +
+                          '<b class="media-heading">' + repo.name + '</b><br/>' + repo.mail +
+                          //'<br/><i class="fa fa-clock-o"></i> ' + repo.pt +
+                        '</div>';
+                    markup += '</div>';
+                    return markup;
+                }, // omitted for brevity, see the source of this page
+                templateSelection: function (repo) {
+                    return repo.name || repo.text;
+                }
+
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,117 @@
+﻿<div id="layer-table" class="form-group" style="display:none">
+    <div class="row" id="search-box">
+        <div class="col-sm-4">
+            
+            <input type="text" class="form-control" id="box-size" placeholder="规格尺寸"/>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="box-grade" placeholder="等级" />
+        </div>
+        <div class="col-sm-4">
+
+            <input type="text" class="form-control" id="box-position" placeholder="位置" />
+        </div>
+      
+    </div>
+    <table class="table table-bordered" id="data-table">
+        <thead>
+            <tr>                
+                <td>灯箱等级</td>
+                <td>灯箱编号</td>
+                <td>灯箱位置</td>
+                <td>灯箱规格</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>               
+                <td>S级</td>
+                <td>SCD1688542BC</td>
+                <td>D出口第一块</td>
+                <td>12封</td>
+                <td><a class="btn btn-success" onclick="addToOrder(this)" >加入订单</a></td>
+            </tr>
+            <tr>               
+                <td>AAA级</td>
+                <td>SCD1544542BC</td>
+                <td>自动扶梯E2梯眉</td>
+                <td>12封</td>
+                <td><a class="btn btn-success" onclick="addToOrder(this)">加入订单</a></td>
+            </tr>
+            <tr>                
+                <td>S级</td>
+                <td>SEC1688542BC</td>
+                <td>站厅</td>
+                <td>12封</td>
+                <td><a class="btn btn-success" onclick="addToOrder(this)">加入订单</a></td>
+            </tr>
+            <tr>                
+                <td>S级</td>
+                <td>SAD1688542BC</td>
+                <td>二号线龙泉驿方向轨行区第二块</td>
+                <td>12封</td>
+                <td><a class="btn btn-success" onclick="addToOrder(this)">加入订单</a></td>
+            </tr>
+            <tr>                
+                <td>AA级</td>
+                <td>SCD1688542BC</td>
+                <td>D出口第一块</td>
+                <td>4封</td>
+                <td><a class="btn btn-success" onclick="addToOrder(this)">加入订单</a></td>
+            </tr>
+            <tr>                
+                <td>S级</td>
+                <td>SCD1688542BC</td>
+                <td>站厅</td>
+                <td>12封</td>
+                <td><a class="btn btn-success" onclick="addToOrder(this)">加入订单</a></td>
+            </tr>
+          
+        </tbody>
+    </table>
+</div>
+<div  id="layer-combo" style="display:none">
+   
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>套餐名称</th>
+                    <th>套餐配置</th>
+                    <th>备注</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>12封三连20组</td>
+                    <td>3S+6AAA+4AA+7A</td>
+                    <td>春熙路、天府广场总数不能超过2组</td>
+                    <td><a href="javascript:;"><span class="btn btn-success">就它了</span></a></td>
+
+                </tr>
+                <tr>
+                    <td>12封三连30组</td>
+                    <td>7S+6AAA+7AA+10A</td>
+                    <td>不能再春熙路、天府广场选位</td>
+                    <td><a href="javascript:;"><span class="btn btn-success">就它了</span></a></td>
+
+                </tr>
+                <tr>
+                    <td>12封三连10组</td>
+                    <td>3S+2AAA+4AA+1A</td>
+                    <td>春熙路、天府广场总数不能超过2组</td>
+                    <td><a href="javascript:;"><span class="btn btn-success">就它了</span></a></td>
+
+                </tr>
+                <tr>
+                    <td>12封三连20组</td>
+                    <td>3S+6AAA+4AA+7A</td>
+                    <td>春熙路、天府广场总数不能超过2组</td>
+                    <td><a href="javascript:;"><span class="btn btn-success">就它了</span></a></td>
+
+                </tr>
+            </tbody>
+        </table>
+    
+</div>
+

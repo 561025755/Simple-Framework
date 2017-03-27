@@ -1,0 +1,17 @@
+﻿@model MSP.Core.Domain.Df_Order
+
+@Html.ActionLink("订单详情", "Details", "DF_OwnOrder", new { OrderId = Model.Id }, new { data_toggle = "tooltip", data_placement = "top", data_original_title = "查看订单", @class = "btn btn-xs  btn-success" })
+@if (Model.OrderStatus <= 2 && Model.OrderStatus >= 0)
+{
+    <a class="btn btn-xs  btn-warning" data-original-title="修改订单" data-placement="top" data-toggle="tooltip" href="/DF_OwnOrder/SelectEquipment/@Model.Id "><i class="fa fa-edit"></i></a>
+
+}
+@*<a class="btn btn-xs  btn-default" data-original-title="复制订单" data-placement="top" data-toggle="tooltip" href="javascript:;" onclick="copyOrder(this)" tag="@Model.Id"><i class="fa fa-copy"></i></a>*@
+@if (Model.OrderStatus == 2) 
+{
+    <a class="btn btn-xs  btn-danger" data-original-title="撤销订单" data-placement="top" data-toggle="tooltip" href="javascript:;" onclick="cancelOrder(this)" tag="@Model.Id"><i class="fa fa-repeat"></i></a>
+    @*if (!Model.LockOrder)
+    {
+        <a class="btn btn-xs  btn-inverse" data-original-title="锁定点位" data-placement="top" data-toggle="tooltip" href="javascript:;" onclick="lockOrder(this)" tag="@Model.Id"><i class="fa fa-unlock-alt"></i></a>
+    }*@
+}

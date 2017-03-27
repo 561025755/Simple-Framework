@@ -1,0 +1,12 @@
+﻿@model bool?
+
+@using System
+
+@if (Model != null && Model.HasValue && Model.Value == true)
+{
+    <i class="fa fa-check-square text-success" data-toggle="tooltip" data-placement="right" data-original-title="有效"></i>
+}
+else
+{
+    <i class="fa fa-square" data-toggle="tooltip" data-placement="right" data-original-title="无效"></i>
+}

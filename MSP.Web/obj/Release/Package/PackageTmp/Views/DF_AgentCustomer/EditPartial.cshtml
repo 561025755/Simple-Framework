@@ -1,0 +1,21 @@
+﻿
+@model MSP.Models.Domain.CustomerModel
+<div class="form-group">
+    <label>
+        @Html.LabelFor(model => model.IndustryId)
+    </label>
+    <div>
+        @Html.DropDownListFor(model => model.IndustryId, (ViewData["IndustryId"] as SelectList), "选择一个选项", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IndustryId)
+    </div>
+</div>
+
+<div class="form-group">
+    <label>
+        负责人（所属销售人员）
+    </label>
+    <div>
+        @Html.DropDownListFor(model => model.UserId, (ViewData["UserId"] as SelectList), "选择一个销售人员", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.UserId)
+    </div>
+</div>

@@ -1,0 +1,10 @@
+﻿
+@using (Html.BeginForm("Index", "User", FormMethod.Get, new { id = "SearchUser" }))
+{
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.TextBox("UserName","", new { @class = "form-control", placeholder = "关键字" })
+        </div>
+        <div class="col-sm-2"><input type="submit" class="btn btn-search btn-block btn-success" value="搜索" /></div>
+    </div>
+}

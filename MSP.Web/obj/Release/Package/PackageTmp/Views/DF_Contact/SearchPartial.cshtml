@@ -1,0 +1,22 @@
+﻿@model MSP.Core.Domain.Cus_Contact
+
+@using (Html.BeginForm("Index", "DF_Contact", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-sm-4">
+            @Html.DropDownListFor(model => model.CustomerId, (ViewData["CustomerId"] as SelectList), "选择一个选项", new { @class = "form-control" })
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "关键字" })
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-inverse" value="搜索" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+    

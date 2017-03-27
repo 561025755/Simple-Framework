@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "demo";
+}
+
+<div class="invoice">
+    <div class="invoice-company text-inverse">
+        <span class="pull-right label label-primary">标准确认单</span>
+        <span class="pull-right label label-warning">直签确认单</span>
+        东方天呈订单确认单
+    </div>
+    <div class="invoice-header">
+        <div class="invoice-from">
+            <small>甲方</small>
+            <address class="m-t-5 m-b-5">
+                <strong>东方天呈文化传媒有限公司</strong><br>
+                高新区交子大道177号1栋1单元15层1505-1510号<br>
+                成都, 610000<br>
+                电话: 028-61511999
+            </address>
+        </div>
+        <div class="invoice-to">
+            <small>乙方</small>
+            <address class="m-t-5 m-b-5">
+                <strong>成都网泰文化传媒有限公司  </strong><br>
+                天府新区兴隆街道办事处场镇社区正街57号2幢1单元3号<br>
+                成都, 610000<br>
+                电话: 028-85327970
+            </address>
+        </div>
+        <div class="invoice-date">
+            <small>广告发布内容</small>
+            <div class="date m-t-5">铜雀台</div>
+            <div class="invoice-detail">
+                成都铜雀台整形美容医院有限公司<br>
+                2016-12-15 到 2017-01-15
+            </div>
+        </div>
+    </div>
+    <div class="invoice-content">
+        <div class="table-responsive">
+            <table class="table table-invoice">
+                <thead>
+                    <tr>
+                        <th>投放城市</th>
+                        <th>投放单位（秒）</th>
+                        <th>投放规格</th>
+                        <th>数量</th>
+                        <th>投放时长（小时）</th>
+                        <th>单价（元）</th>
+                        <th>单项总价（元）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            一线城市<br>
+                            <small>北京，上海</small>
+                        </td>
+                        <td>5</td>
+                        <td>360次/天 * 14</td>
+                        <td>380</td>
+                        <td>291666.67</td>
+                        <td>￥ 50.00</td>
+                        <td>￥ 2,500.00</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            其他城市<br>
+                            <small>成都，重庆，杭州</small>
+                        </td>
+                        <td>5</td>
+                        <td>240次/天 * 14</td>
+                        <td>380</td>
+                        <td>291666.67</td>
+                        <td>￥ 50.00</td>
+                        <td>￥ 2,500.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+
+        </div>
+        <div class="invoice-price">
+            <div class="invoice-price-left">
+                <div class="invoice-price-row">
+                    <div class="sub-price">
+                        <small>总价</small>
+                        $4,500.00
+                    </div>
+                    <div class="sub-price">
+                        <i class="fa fa-minus"></i>
+                    </div>
+                    <div class="sub-price">
+                        <small>其他 (刊钱全款优惠 5.4% ) <a href="javascript:openPaymentType();">选择其他支付方式</a> </small>
+                        $108.00
+                    </div>
+                </div>
+            </div>
+            <div class="invoice-price-right">
+                <small>合计</small> $4508.00
+            </div>
+        </div>
+        <div class="row pull-right m-t-20">
+            <p class="m-r-20">
+                <a href="javascript:;" class="btn btn-grey btn-sm m-r-5">&nbsp;&nbsp; 取消 &nbsp;&nbsp;</a>
+                <a href="javascript:;" class="btn btn-pink btn-sm">&nbsp;&nbsp; 保存 &nbsp;&nbsp;</a>
+            </p>
+        </div>
+    </div>
+    <div class="invoice-note">
+        * 本确认单作为合同款结算的依据，属于原合同不可分割的附件；若甲方为集团公司 则甲方需保证每次确认单签字盖章公司与之后付款主体保持一致.<br>
+        * 本确认单一式俩份，甲乙方各执一份；与原合同具有同等法律效力。本确认单签字或盖章均生效，在本确认单上签字人即视为该方授权代表。（若签字需提供公司出具授权书）<br>
+        * 发布工作完成后提供工作成果样报、样刊.附带户外广告位置附表.
+    </div>
+</div>
+
+<!--Add modal begin-->
+<div class="modal fade" id="modal-payment-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">选择其他支付方式</h4>
+            </div>
+            <div class="modal-body">
+                <h5>现金转账</h5>
+                <div class="form-group">
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" value="option1" checked="">
+                        刊前全款
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" value="option2">
+                        刊前50%， 刊后一个月内支付剩余50%
+                    </label>
+                </div>
+                <h5>承兑汇票</h5>
+                <div class="form-group">
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" value="option1" checked="">
+                        银行承兑
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" value="option2">
+                        商业承兑
+                    </label>
+                </div>
+                <div class="alert alert-danger m-b-0">
+                    <p>选择此项时，请提前与媒介主沟通，是否承认有关承兑和承兑时间</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openPaymentType() {
+            $("#modal-payment-list").modal('show');
+        }
+    </script>
+}

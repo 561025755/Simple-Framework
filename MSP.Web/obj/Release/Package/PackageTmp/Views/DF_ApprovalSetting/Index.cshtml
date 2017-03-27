@@ -1,0 +1,323 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@using MSP.Core.Domain;
+
+@model ApprovalManager
+
+@{
+    ViewBag.Title = "审批权限管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    <style type="text/css">
+        .modal-dialog {
+            min-height: 400px;
+            min-width: 800px;
+        }
+    </style>
+}
+
+
+@section PageTitle{
+    <div class="p-b-10">审批权限管理</div>
+    <div class="f-s-18">东方天呈审批权限配置</div>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">审批部门列表视图</h4><small>@Html.ActionLink("创建审批部门", "DepartmentCreate")</small>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-email">
+                        <thead>
+                            <tr>
+                                <td>编号</td>
+                                <td>部门名称</td>
+                                <td>操作</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model.DepartmentList)
+                            {
+                                <tr class="gridrow">
+                                    <td>@m.Id</td>
+                                    <td>@m.Name</td>
+                                    <td>
+                                        <a class="email-btn" href="javascript:void(0);" onclick="examinersView(@m.Id,'@m.Name')"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="查看审批员"></i></a>
+                                        <a class="email-btn" href="@Url.Action("DepartmentEdit", new { id = m.Id })"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a>
+                                        <a class="email-btn" href="@Url.Action("DepartmentDelete", new { id = m.Id })"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">审批类型列表视图</h4>
+            </div>
+            <div class="panel-body">
+
+                <div class="table-responsive">
+                    <table class="table table-email">
+                        <thead>
+                            <tr>
+                                <td>编号</td>
+                                <td>类型名称</td>
+                                <td>操作</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model.TypeList)
+                        {
+                                <tr class="gridrow">
+                                    <td>@m.Id</td>
+                                    <td>@m.TypeName</td>
+                                    <td>
+                                        <a class="email-btn" href="javascript:void(0);" onclick="departmentView(@m.Id,'@m.TypeName')"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="查看审批部门"></i></a>
+                                        <a class="email-btn" href="@Url.Action("EditType", new { id = m.Id })"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a>
+                                    </td>
+                                </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">用户列表视图</h4><small>@Html.ActionLink("添加用户权限", "CreateUser")</small>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        @Html.Grid(Model.UserList).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
+                   {
+                       columns.For(c => c.UserName).Named("用户名称").Sortable(false);
+                       columns.For(c => c.Email).Named("用户账号").Sortable(false);
+                       columns.For(c => c.DepartmentName).Named("所属部门").Sortable(false);
+                       columns.For(c=>Html.Raw("<a class=\"email-btn\" href=\"javascript:deleteUser(" + c.Id+");\"><i class=\"fa fa-trash-o\" data-toggle=\"tooltip\" data-original-title=\"删除\"></i></a>")).Sortable(false);
+                   }).Attributes(@class => "table table-email")
+                    </div>
+                    @Html.Raw(@Html.Pager(Model.UserList))
+                </div>
+            </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+    <!-- modal begin-->
+    <div class="modal fade" data-backdrop="static" id="modal-table-department">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="typeName"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="data-table-department" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>部门名称</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+    <!-- modal begin-->
+    <div class="modal fade" data-backdrop="static" id="modal-table-list">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="departmentName"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="data-table-list" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>用户名</th>
+                                    <th>账号</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+
+    <script type="text/javascript">
+        function deleteType(obj) {
+            if (confirm("确定要删除该类型")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/ApprovalSetting/DeleteType',
+                    data: { typeId: obj },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+
+        }
+
+        function deleteUser(Id) {
+            if (confirm("确定要删除该用户权限")) {
+                $.ajax({
+                    type: 'POST',
+                    url:'@Url.Action("DeleteUser")',
+                    data: { Id: Id },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        }
+
+        function departmentView(id, typeName) {
+            $('#modal-table-department').modal('show');
+            $('#data-table-department').dataTable().fnDestroy();
+            $('#typeName').html(typeName);
+
+            $('#data-table-department').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 8,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '@Url.Action("DepartmentView")',
+                    "data": function (d) {
+                        d.id = id
+                    }
+                },
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "Name" }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+        }
+
+        function examinersView(id, departmentName) {
+            $('#modal-table-list').modal('show');
+            $('#data-table-list').dataTable().fnDestroy();
+            $('#departmentName').html(departmentName);
+
+            $('#data-table-list').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 8,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '@Url.Action("Examiners")',
+                    "data": function (d) {
+                        d.id = id
+                    }
+                },
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "UserName" },
+                    { "data": "Email" }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+        }
+    </script>
+}

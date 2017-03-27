@@ -1,0 +1,322 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Domain;
+@using MSP.Core.Pagination;
+@using MSP.Core.Sorting;
+
+@model IPagination<Sys_User>
+
+@{
+    ViewBag.Title = "用户列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section header{
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    <style type="text/css">
+        .modal-dialog {
+            min-height: 400px;
+            min-width: 800px;
+        }
+    </style>
+}
+
+@section PageTitle{
+    用户列表 <small>点击 @Html.ActionLink("这里", "Create") 创建一个用户 &nbsp;&nbsp;<i class="fa fa-cogs"></i>@Html.ActionLink("查看异常操作", "LoginExtre", "", new { @class = "btn btn-xs btn-inverse" })</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                @Html.Partial("SearchPartial")
+                <div class="table-responsive">
+                    @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+               {
+                   column.For(c => c.Id).Named("#");
+                   column.For(c => c.UserName).Named("用户名称");
+                   column.For(c => c.Email).Named("邮箱地址");
+                   column.For(c => Html.Partial("CompetencePartial", c)).Named("用户权限");
+                   column.For(c => Html.Partial("BoolPartial", c.Active)).Named("状态").Sortable(false);
+                   column.For(c => Html.RowActionLink(c.Id, "", "Edit", "Delete"));
+                   column.For(c => Html.Partial("IndexPartial", c.Id));
+               }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model))
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+    <div class="modal fade" data-backdrop="static" id="modal-table-competence">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="userName"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="data-table-competence" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>权限组别</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-backdrop="static" id="modal-table-record">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">用户操作记录</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="data-table-record" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>用户名</th>
+                                    <th>操作名称</th>
+                                    <th>操作说明</th>
+                                    <th>操作时间</th>
+                                    <th>操作地址</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-alert">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="alert alert-danger m-b-0">
+                        <h4 id="alertDeleteTitle"><i class="fa fa-info-circle"></i> <span>初始化密码</span> </h4>
+                        <p>确定要为该用户初始化密码？</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                    <a href="javascript:;" class="btn btn-sm btn-danger" data-dismiss="modal" onclick="submitInitPassword()">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-cities">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="alert alert-info m-b-0">
+                        <h4 id="alertDeleteTitle"><i class="fa fa-info-circle"></i> <span>允许处理的城市列表</span> </h4>
+                        @foreach (var locality in ViewData["cities"] as List<Sys_Locality>)
+                        {
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="SelectdLocalities" id="SelectdLocalities_@locality.Id" value="@locality.Id">
+                                @locality.LocalityName
+                            </label>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                    <a href="javascript:;" class="btn btn-sm btn-danger" data-dismiss="modal" onclick="changecities()">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    <script type="text/javascript">
+        var userId;
+        function initPassword(id) {
+            $("#modal-alert").modal('show');
+            userId = id;
+        }
+
+        function selectCities(id) {
+            $('input[name="SelectdLocalities"]').each(function (m, n) {
+                $(this).removeAttr("checked");
+            })
+            userId = id;
+            $.ajax({
+                type: 'POST',
+                url: '/User/GetSelectdCitites',
+                data: { id: userId },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success) {
+                        var res = data.msg.split(",");
+                        for (var i = 0; i < res.length ; i++) {
+                            $('input[value="' + res[i] + '"][name="SelectdLocalities"]').attr("checked", "checked");
+                        }
+                    }
+                    else {
+                        var error = data.msg || "获取可操作城市出错！";
+                        gritter("我们真的很抱歉！", error);
+                    }
+                }
+            })
+            $("#modal-cities").modal('show');
+        }
+
+        function changecities() {
+            var cityIds = [];
+            $('input[name="SelectdLocalities"]').each(function (m, n) {
+                if ($(this).attr("checked") == "checked")
+                    cityIds.push($(this).val());
+            })
+
+            $.ajax({
+                type: 'POST',
+                url: '/User/ChangeCities',
+                data: { id: userId, cities: cityIds },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success) {
+                        gritter("操作成功！", "设置允许处理的城市列表成功！");
+                    }
+                    else {
+                        var error = data.msg || "设置允许处理的城市列表出错！";
+                        gritter("我们真的很抱歉！", error);
+                    }
+                }
+            })
+        }
+
+        function submitInitPassword() {
+            $.ajax({
+                type: 'POST',
+                url: '/User/InitPassword',
+                data: { id: userId },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success) {
+                        gritter("恭喜你！", data.msg);
+                        //location.reload();
+                    }
+                    else {
+                        var error = data.msg || "初始化密码出错！";
+                        gritter("我们真的很抱歉！", error);
+                    }
+                }
+            })
+        }
+        function ViewCompetence(id, name) {
+            $('#modal-table-competence').modal('show');
+            $('#data-table-competence').dataTable().fnDestroy();
+            $('#userName').html(name);
+
+            $('#data-table-competence').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 8,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/User/ViewCompetence',
+                    "data": function (d) {
+                        d.id = id
+                    }
+                },
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "Name" }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+        }
+
+        function ViewRecord(id) {
+            $('#modal-table-record').modal('show');
+            $('#data-table-record').dataTable().fnDestroy();
+
+            $('#data-table-record').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 8,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/User/OperationRecords',
+                    "data": function (d) {
+                        d.id = id
+                    }
+                },
+                "columns": [
+                    { "data": "UserName" },
+                    { "data": "Operation" },
+                     { "data": "Caption" },
+                    { "data": "OperTime" },
+                    { "data": "OperAddress" }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+        }
+    </script>
+}

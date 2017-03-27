@@ -1,0 +1,167 @@
+﻿@model MSP.Models.StationModel
+@{
+    ViewBag.Title = "创建地铁站台";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+
+    @*@Styles.Render("~/Content/jstree-3.0.9/themes/default/style.css")*@
+    @*@Styles.Render("~/Content/tagsinput-0.5.0/bootstrap-tagsinput.css")*@    
+    @*@Styles.Render("~/Content/magicsuggest/magicsuggest.css")*@
+
+
+    <style type="text/css">
+      .popup{
+          position:absolute;
+          visibility:hidden;
+          overflow:auto;          
+          background-color:wheat;
+          opacity: 1;
+      }
+
+      
+    </style>
+  
+
+}
+
+@section PageTitle{
+    创建地铁站台 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">创建</h4>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("create","MetroStation"))
+            {
+            
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Name)
+                            </label>
+                            <div>
+                             
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" } )
+                                @Html.ValidationMessageFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.GradeId)
+                            </label>
+                            <div>
+                                @Html.DropDownListFor(model => model.GradeId, (new SelectListItem[] {
+                               new SelectListItem { Text="S",Value="1"},
+                               new SelectListItem { Text = "A", Value = "2" },
+                               new SelectListItem { Text = "B", Value = "3" },
+                               new SelectListItem { Text = "C", Value = "4" }}), "选择一个选项", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.GradeId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Line)
+                            </label>
+                            <div>
+                                @Html.DropDownListFor(model => model.Line, (new SelectListItem[] {
+                               new SelectListItem { Text="1号线",Value="1"},
+                               new SelectListItem { Text = "2号线", Value = "2" },
+                               new SelectListItem { Text = "3号线", Value = "3" },
+                               new SelectListItem { Text = "4号线", Value = "4" }}), "选择一个选项", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Line)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.BusinessArea)
+                            </label>
+                            <div>
+                                @Html.TextBoxFor(model => model.BusinessArea, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BusinessArea)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            
+                            <div>
+                                @Html.CheckBoxFor(model => model.Available)<label>
+                                    @Html.LabelFor(x => x.Available)
+                                </label>
+                                @Html.ValidationMessageFor(model => model.Available)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                           
+                            <div>
+                                @Html.CheckBoxFor(model => model.Customerizable) <label>
+                                    @Html.LabelFor(x => x.Customerizable)
+                                </label>
+                                @Html.ValidationMessageFor(model => model.Customerizable)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <input type="submit" class="btn btn-success" />
+                <input type="reset" class="btn btn-default" />
+                <input type="button" class="btn btn-success" onclick="popup()" value="添加灯箱" />
+              
+           
+           }
+        </div>
+    </div>
+    <!-- end panel -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+   
+    @*@Scripts.Render("~/Content/tagsinput-0.5.0/bootstrap-tagsinput.js")
+    @Scripts.Render("~/Content/magicsuggest/magicsuggest.js")*@
+
+    <script type="text/javascript">
+        function popup() {
+            $.post("/metrostation/CreateThenReturn", $("form").serialize(), function (data) {
+                if(data.success)
+                {
+                    var id = data.station.Id;
+                    window.location.href = '/Diagraming/CreateNewDiagram?stationId=' + id;
+                    
+                }
+                else {
+
+                }
+            })
+            
+           
+        }
+      
+        
+    </script>
+}

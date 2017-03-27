@@ -1,0 +1,409 @@
+﻿
+@{
+    ViewBag.Title = "创建地铁灯箱订单";
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/css/bwizard.min.css")
+@Styles.Render("~/Content/tagsinput-0.5.0/bootstrap-tagsinput.css")
+}
+
+@section PageTitle{
+    创建地铁灯箱订单 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <form action="/" method="POST">
+                    <div id="wizard">
+                        <ol>
+                            <li>
+                                选择订单档期
+                                <small>配置订单内容、选择档期、播放频次.</small>
+                            </li>
+                            <li>
+                                配置订单点位明细
+                                <small>设置订单生成方式、配置点位筛选条件</small>
+                            </li>
+                            <li>
+                                完成订单
+                                <small>确认订单详情、点位明细.</small>
+                            </li>
+                        </ol>
+                        <!-- begin wizard step-1 -->
+                        <div>
+                            <fieldset>
+                                <legend class="pull-left width-full">选择订单档期</legend>
+
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-blue-grey">1号线</button>
+                                        <button type="button" class="btn btn-blue-grey">2号线</button>
+                                        <button type="button" class="btn btn-blue-grey">3号线</button>
+                                        <button type="button" class="btn btn-blue-grey">4号线</button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-blue-grey">S</button>
+                                        <button type="button" class="btn btn-blue-grey">AAA</button>
+                                        <button type="button" class="btn btn-blue-grey">AA</button>
+                                        <button type="button" class="btn btn-blue-grey">A</button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-blue-grey">梯眉</button>
+                                        <button type="button" class="btn btn-blue-grey">梯牌</button>
+                                        <button type="button" class="btn btn-blue-grey">十二封</button>
+                                        <button type="button" class="btn btn-blue-grey">包柱</button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="javascript:;" onclick="comboOrder()" class="btn btn-inverse">
+                                            <i class="fa fa-map-marker fa-2x pull-left"></i>自动生成套餐包
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <ul class="timeline">
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <i class="fa fa-star text-danger fa-fw"></i>
+                                                    <i class="fa fa-star text-defalut fa-fw"></i>
+                                                    <i class="fa fa-star text-defalut fa-fw"></i>
+                                                    <i class="fa fa-star text-defalut fa-fw"></i>
+                                                    <a href="javascript:;" class="pull-right"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                                    <a href="javascript:;" class="pull-right m-r-15"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <ul id="email-to" class="inverse tagit ui-widget ui-widget-content ui-corner-all">
+                                                        <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"><span class="tagit-label">bootstrap@gmail.com</span><a class="tagit-close"><span class="text-icon">×</span><span class="ui-icon ui-icon-close"></span></a><input type="hidden" value="bootstrap@gmail.com" name="tags" class="tagit-hidden-field"></li>
+                                                        <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"><span class="tagit-label">google@gmail.com</span><a class="tagit-close"><span class="text-icon">×</span><span class="ui-icon ui-icon-close"></span></a><input type="hidden" value="google@gmail.com" name="tags" class="tagit-hidden-field"></li>
+                                                        <li class="tagit-new"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" class="ui-widget-content ui-autocomplete-input" autocomplete="off"></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;"><i class="fa fa-2x fa-refresh"></i></a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">火车北站</span>
+                                                    <i class="fa fa-star text-danger fa-fw"></i>
+                                                    <i class="fa fa-star text-danger fa-fw"></i>
+                                                    <i class="fa fa-star text-danger fa-fw"></i>
+                                                    <i class="fa fa-star text-danger fa-fw"></i>
+                                                    <a href="javascript:;" class="pull-right"><i class="fa fa-thumbs-up fa-fw"></i> 列表</a>
+                                                    <a href="javascript:;" class="pull-right m-r-15"><i class="fa fa-comments fa-fw"></i> 平面图</a>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                
+                                                <a href="javascript:;">3</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">人民北路</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;">1</a>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="username">升仙湖</span>
+                                                    <span class="pull-right text-muted">18 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus turpis quis tincidunt luctus.
+                                                        Nam sagittis dui in nunc consequat, in imperdiet nunc sagittis.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <!-- begin timeline-time -->
+                                            <div class="timeline-time">
+                                                <span class="date">yesterday</span>
+                                                <span class="time">20:17</span>
+                                            </div>
+                                            <!-- end timeline-time -->
+                                            <!-- begin timeline-icon -->
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;"><i class="material-icons">place</i></a>
+                                            </div>
+                                            <!-- end timeline-icon -->
+                                            <!-- begin timeline-body -->
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="userimage"><img src="assets/img/user-2.jpg" alt="" /></span>
+                                                    <span class="username">Darren Parrase</span>
+                                                    <span class="pull-right text-muted">82 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p>Location: United Sate</p>
+                                                    <div id="google-map" class="height-sm m-b-10"></div>
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a href="javascript:;" class="m-r-15"><i class="fa fa-thumbs-up fa-fw"></i> Like</a>
+                                                    <a href="javascript:;"><i class="fa fa-comments fa-fw"></i> Comment</a>
+                                                </div>
+                                            </div>
+                                            <!-- end timeline-body -->
+                                        </li>
+                                        <li>
+                                            <!-- begin timeline-time -->
+                                            <div class="timeline-time">
+                                                <span class="date">24 February 2014</span>
+                                                <span class="time">08:17</span>
+                                            </div>
+                                            <!-- end timeline-time -->
+                                            <!-- begin timeline-icon -->
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;"><i class="material-icons">edit</i></a>
+                                            </div>
+                                            <!-- end timeline-icon -->
+                                            <!-- begin timeline-body -->
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="userimage"><img src="assets/img/user-6.jpg" alt="" /></span>
+                                                    <span class="username">Richard Leong</span>
+                                                    <span class="pull-right text-muted">1,282 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <p class="lead">
+                                                        <i class="fa fa-quote-left fa-fw pull-left"></i>
+                                                        Quisque sed varius nisl. Nulla facilisi. Phasellus consequat sapien sit amet nibh molestie placerat. Donec nulla quam, ullamcorper ut velit vitae, lobortis condimentum magna. Suspendisse mollis in sem vel mollis.
+                                                        <i class="fa fa-quote-right fa-fw pull-right"></i>
+                                                    </p>
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a href="javascript:;" class="m-r-15"><i class="fa fa-thumbs-up fa-fw"></i> Like</a>
+                                                    <a href="javascript:;"><i class="fa fa-comments fa-fw"></i> Comment</a>
+                                                </div>
+                                            </div>
+                                            <!-- end timeline-body -->
+                                        </li>
+                                        <li>
+                                            <!-- begin timeline-time -->
+                                            <div class="timeline-time">
+                                                <span class="date">10 January 2014</span>
+                                                <span class="time">20:43</span>
+                                            </div>
+                                            <!-- end timeline-time -->
+                                            <!-- begin timeline-icon -->
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;"><i class="material-icons">camera</i></a>
+                                            </div>
+                                            <!-- end timeline-icon -->
+                                            <!-- begin timeline-body -->
+                                            <div class="timeline-body">
+                                                <div class="timeline-header">
+                                                    <span class="userimage"><img src="assets/img/user-7.jpg" alt="" /></span>
+                                                    <span class="username">Lelouch Wong</span>
+                                                    <span class="pull-right text-muted">1,021,282 Views</span>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <h4 class="template-title">
+                                                        <i class="fa fa-map-marker text-danger fa-fw"></i>
+                                                        795 Folsom Ave, Suite 600 San Francisco, CA 94107
+                                                    </h4>
+                                                    <p>In hac habitasse platea dictumst. Pellentesque bibendum id sem nec faucibus. Maecenas molestie, augue vel accumsan rutrum, massa mi rutrum odio, id luctus mauris nibh ut leo.</p>
+                                                    <p class="m-t-20">
+                                                        <img src="assets/img/gallery/gallery-4.jpg" alt="" />
+                                                    </p>
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a href="javascript:;" class="m-r-15"><i class="fa fa-thumbs-up fa-fw"></i> Like</a>
+                                                    <a href="javascript:;"><i class="fa fa-comments fa-fw"></i> Comment</a>
+                                                </div>
+                                            </div>
+                                            <!-- end timeline-body -->
+                                        </li>
+                                        <li>
+                                            <!-- begin timeline-icon -->
+                                            <div class="timeline-icon">
+                                                <a href="javascript:;"><i class="fa fa-spinner"></i></a>
+                                            </div>
+                                            <!-- end timeline-icon -->
+                                            <!-- begin timeline-body -->
+                                            <div class="timeline-body">
+                                                Loading...
+                                            </div>
+                                            <!-- begin timeline-body -->
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <!-- end wizard step-1 -->
+                        <!-- begin wizard step-2 -->
+                        <div>
+                            <fieldset>
+                                <legend class="pull-left width-full">配置订单点位明细</legend>
+                            </fieldset>
+                        </div>
+                        <!-- end wizard step-2 -->
+                        <!-- begin wizard step-3 -->
+                        <div>
+                            <fieldset>
+                                <legend class="pull-left width-full">完成订单</legend>
+                            </fieldset>
+                        </div>
+                        <!-- end wizard step-3 -->
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/Content/themes/sean/bwizard.js")
+    @Scripts.Render("~/Content/themes/sean/form-wizards.min.js")
+    <script>
+	    $(document).ready(function() {
+	        FormWizard.init();
+	    });
+    </script>
+}

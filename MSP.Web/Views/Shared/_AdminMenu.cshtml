@@ -1,0 +1,106 @@
+﻿@using SD.Web;
+@using SD.FrameWork.UI.Menu;
+@using SD.FrameWork.Engine;
+
+@{
+    //load sitemap
+    var siteMap = new XmlSiteMap();
+    siteMap.LoadFrom("~/AdminSiteMap.config");
+}
+
+@helper RenderMenuItem(SD.FrameWork.UI.Menu.SiteMapNode item, string activeNodeTitle = "")
+{
+string url = null;
+//var agent = this.WorkContext.CurrentUser.Agent;
+
+bool hasChilds = item.ChildNodes.Any(x => x.Visible);
+
+if (!string.IsNullOrEmpty(item.ControllerName) && !string.IsNullOrEmpty(item.ActionName))
+{
+    url = Url.Action(item.ActionName, item.ControllerName, item.RouteValues, null, null);
+}
+else if (!string.IsNullOrEmpty(item.Url))
+{
+    url = item.Url.StartsWith("~/", StringComparison.Ordinal) ? Url.Content(item.Url) : item.Url;
+}
+
+//获取当前请求的URL， 设置菜单栏的默认选中
+var currentControll = ViewContext.RouteData.Values["controller"].ToString();
+//var currentAction = ViewContext.RouteData.Values["action"].ToString();
+var isActive = (currentControll == item.ControllerName) ? true : false;
+
+    <li class="@if (hasChilds) { <text>has-sub</text>} @if (isActive){ <text>active</text>}">
+     
+        @if (!String.IsNullOrEmpty(url))
+        {
+            if (item.New)
+            {
+                <a href="@url" target="_blank">@item.Title <i class="fa fa-paper-plane text-theme m-l-5"></i></a>
+            }
+            else
+            {
+                <a href="@url">@item.Title</a>
+            }
+        }
+        else
+        {
+            <a href="javascript:;">
+                @if (!String.IsNullOrEmpty(item.Icon))
+                {
+
+                    <b class="caret pull-right"></b><i class="fa @item.Icon"></i>
+                }
+
+                @if (item.New)
+                {
+                    <span>@item.Title <span class="label label-theme m-l-5">NEW</span></span>
+                }
+                else
+                {
+                    <span>@item.Title</span>
+                }                
+            </a>
+        }
+        @if (hasChilds)
+        {
+            <ul class="sub-menu">
+                @foreach (var childItem in item.ChildNodes.Where(x => x.Visible))
+                {
+                    @RenderMenuItem(childItem)
+                }
+            </ul>
+        }
+    </li>
+
+}
+
+
+
+@foreach (var item in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
+{
+    @RenderMenuItem(item)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

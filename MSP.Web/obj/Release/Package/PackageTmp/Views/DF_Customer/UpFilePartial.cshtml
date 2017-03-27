@@ -1,0 +1,43 @@
+﻿@model MSP.Models.Domain.CustomerModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+        </div>
+        <h4 class="panel-title">附件信息</h4>
+    </div>
+
+    <div class="panel-body">
+        <h4 class="m-b-15 m-t-0 p-b-10">最新上传</h4>
+        <ul class="attached-document clearfix" id="gallery">
+            @foreach (var item in Model.ScreenList)
+            {
+                <li>
+                    <div class="document-name"><a href="@Url.Action("Preview", new { id=item.Id })">@item.FileName</a></div>
+                    <div class="document-file">
+                        @if (item.MimeType.IndexOf("image") < 0)
+                        {
+                            <a href="#">
+                                <i class="fa fa-file-o"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Preview", new { id=item.Id })" data-lightbox="attach">
+                                <img src="@Url.Action("Preview", new { id=item.Id })" alt="">
+                            </a>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+
+        <p>您可以点击图片查看大图或者点击证件档案标题在浏览器中查看。</p>
+      
+    </div>
+</div>
+

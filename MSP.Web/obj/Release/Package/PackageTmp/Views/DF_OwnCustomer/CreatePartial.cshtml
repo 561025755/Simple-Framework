@@ -1,0 +1,43 @@
+﻿@using MSP.Core.Domain;
+
+@model MSP.Models.Domain.CustomerModel
+
+<div class="form-group">
+    <label>
+        @Html.LabelFor(model => model.IndustryId)
+    </label>
+    <div>
+        @Html.DropDownListFor(model => model.IndustryId, (ViewData["IndustryId"] as SelectList), "选择一个选项", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IndustryId)
+    </div>
+    <div id="country" class="hidden p-t-10">
+        <div>
+            可选城市： <button type="button" class="btn btn-xs btn-grey">全国</button>&nbsp;<span class="text-danger">（4A代理全国城市）</span>
+        </div>
+        <div class="p-t-10">
+            （本地：@Model.AgentCity.Name）
+        </div>
+    </div>
+
+    @if (ViewData["Citys"] != null)
+    {
+        var cityList = ViewData["Citys"] as List<Df_Citysetting>;
+        <div id="city" class="hidden p-t-10">
+            <div>
+                可选城市：
+                @foreach (var city in cityList)
+                {
+                    if (Model.AgentCity.Code != city.CityCode)
+                    {
+                        <button type="button" class="btn btn-xs btn-grey m-b-5" value="@city.CityCode">@city.CityName</button>
+                    }
+
+                }
+            </div>
+            <div class="p-t-10">
+                （本地：@Model.AgentCity.Name | 异地：<span id="remote"></span>）
+            </div>
+            @Html.HiddenFor(m => m.AgentCity.Code)
+        </div>
+    }
+</div>

@@ -1,0 +1,85 @@
+﻿
+<script type="text/javascript">
+        (function ($) {
+            $.fn.cloneAndIncrement = function () {
+                var newItem = this.clone();
+                newItem.find("[name]").each(function () {
+                    $(this).attr("name", $(this).attr("name").replace(/\[(\d+)\]/, function ($0, $1) { return ("[" + (Number($1) + 1) + "]"); }));
+                });
+
+                newItem.find("[id]").each(function () {
+                    $(this).attr("id", $(this).attr("id").replace(/_(\d+)_/, function ($0, $1) { return ("_" + (Number($1) + 1) + "_"); }));
+                });
+                return newItem;
+            };
+        })($);
+
+        $(document).ready(function () {
+            var companyName = $('#Name').val();
+            var orgCode = $('#OrgCode').val();
+            var remark = $('#Remark').val();
+
+            $('#submitCustomer').click(function () {
+                var newCompanyName = $('#Name').val();
+                var newOrgCode = $('#OrgCode').val();
+                var filingStatus = $('#FilingStatus').val();
+                var newRemark = $('#Remark').val();
+
+                if (parseInt(filingStatus) == 4 || parseInt(filingStatus) == 5 || parseInt(filingStatus) == 3) {
+                    if (newCompanyName != companyName || newOrgCode != orgCode || newRemark != remark) {
+                        $('#modal-alert').modal('show');
+                    } else {
+                        $('#form1').submit();
+                    }
+                } else {
+                    $('#form1').submit();
+                }
+            })
+        })
+
+        function submitEidtCustomer() {
+            $('#form1').submit();
+        }
+
+        function ap() {
+            //add a contact table row
+            var templeteRow = $("#tblContacts tbody tr:last");
+            var newRow = templeteRow.cloneAndIncrement();
+            newRow.find("input").val('');
+            newRow.find('input[type=hidden]').val($('#Id').val());
+            templeteRow.after(newRow);
+        }
+
+        function rp(obj) {
+            //remove a contact table row
+            if ($("#tblContacts tbody tr").length > 1) {
+                $(obj).closest('tr').remove();
+            }
+        }
+
+        function check() {
+            var company = $('#Name').val();
+            var orgcode = $('#OrgCode').val();
+            if (company == '') {
+                alert('请填写客户名称');
+                return;
+            }
+            if (orgcode == '') {
+                alert('请填写组织机构代码');
+                return
+            }
+
+            if (!orgcode.match(/^([a-zA-Z0-9]{8}-[a-zA-Z0-9])|([a-zA-Z0-9]{2}[0-9]{6}[a-zA-Z0-9]{10})$/)) {
+                alert('请正确填写组织机构代码');
+                return;
+            }
+            var data = { company: company, orgcode: orgcode };
+            $.post('/DF_AgentCustomer/CheckOrgCode', data, function (r) {
+                if (r.count >= 0) {
+                    alert('您前面还有' + r.count + '个排队用户');
+                } else {
+                    alert(r.msg);
+                }
+            }, 'JSON');
+        }
+</script>

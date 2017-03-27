@@ -1,0 +1,16 @@
+﻿@model int?
+
+@using System
+
+@if (Model>=40)
+{
+    <i class="fa fa-exclamation-circle text-danger" data-toggle="tooltip" data-placement="right" data-original-title="@Model"></i>
+}
+else if (Model>=20)
+{
+    <i class=" fa fa-exclamation-triangle text-warning" data-toggle="tooltip" data-placement="right" data-original-title="@Model"></i>
+}
+else
+{
+    <i class=" fa fa-exclamation-circle text-default" data-toggle="tooltip" data-placement="right" data-original-title="@Model"></i>
+}

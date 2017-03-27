@@ -1,0 +1,56 @@
+﻿@using MSP.Models.Domain;
+@using MSP.Core.Domain;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Models;
+
+
+@model  AttachModel<StationModel,MetroStationSearch>
+
+@section header{
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    @Styles.Render("~/Content/select2-4.0.3/css/select2.min.css")
+}
+
+@{
+    ViewBag.Title = "地铁站台列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    站台列表 <small>点击 @Html.ActionLink("这里","create")创建站台</small>
+}
+
+<!-- begin col-12 -->
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">列表视图</h4>
+        </div>
+        <div class="panel-body">
+            @Html.Partial("_SearchPartial", Model.Model)
+            <div class="table-responsive">
+                @Html.Grid(Model.ListModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+           {
+               column.For(c => c.Id).Named("#").Sortable(false);
+               column.For(c => c.Name).Named("站台名称").Sortable(false);
+               column.For(c => c.Line).Named("线路").Sortable(false);
+               column.For(c => c.BusinessArea).Named("商圈社区").Sortable(false);
+               column.For(c => c.Box.Count).Named("灯箱总数").Sortable(false);
+               column.For(c => c.GradeId).Named("站台等级").Sortable(false);
+               column.For(c => Html.Partial("_SVGPartial", c.Svg));
+               column.For(c => Html.Partial("_actionPartial", c.Id));
+           }).Attributes(@class => "table table-email")
+            </div>
+            
+        </div>
+    </div>
+  
+</div>

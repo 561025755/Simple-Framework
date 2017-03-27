@@ -1,0 +1,17 @@
+﻿@model MSP.Models.Domain.AgentModel
+
+<div class="hidden-sm hidden-xs">
+
+    <ul class="nav nav-pills nav-stacked nav-inbox">
+        <li class="active">
+            <a href="#modal-billorder-creation" data-toggle="modal">
+                <i class="fa fa-retweet fa-fw m-r-5"></i> 代理商编辑
+            </a>
+        </li>
+        <li><a href="@Url.Action("Edit", new { id=Model.Id})"><i class="fa fa-pencil-square fa-fw m-r-5"></i> 编辑基本信息</a></li>
+        <li><a href="@Url.Action("Credentials", new { id=Model.Id})"><i class="fa fa-upload fa-fw m-r-5"></i> 上传证件档案</a></li>
+        <li><a href="@Url.Action("AddAccount", new { id=Model.Id})"><i class="fa fa-user fa-fw m-r-5"></i> 新增用户账号</a></li>
+        <li><a href="@Url.Action("Delete", new { id=Model.Id})"><i class="fa fa-trash-o fa-fw m-r-5"></i> 删除该代理商</a></li>
+        <li><a href="@Url.Action("MediaType", new { id=Model.Id})"><i class="fa fa-video-camera fa-fw m-r-5"></i> 报备客户媒介类型</a></li>
+    </ul>
+</div>

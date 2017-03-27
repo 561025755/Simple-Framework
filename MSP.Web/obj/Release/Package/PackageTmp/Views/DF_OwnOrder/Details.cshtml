@@ -1,0 +1,316 @@
+﻿@using System.Web.Optimization;
+@using System.Web.Mvc.Html;
+@using MSP.Core.Domain;
+
+@model Df_Order
+
+@{
+    ViewBag.Title = "订单详情";
+    var cityList = ViewData["orderCities"] as List<CityBean>;
+}
+
+@section header{
+    @Scripts.Render(ViewData["mapAddress"].ToString())
+
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    @Styles.Render("~/Content/mapDefault.css")
+
+    <style type="text/css">
+        .anchorBL {
+            display: none;
+        }
+
+        div#map {
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+
+        .panel-expand #map {
+            height: 100%;
+        }
+
+        .panel-body {
+            padding: 0;
+        }
+
+        .cityActive {
+            color: #fff !important;
+            background: #009688 !important;
+            border-color: #009688 !important;
+        }
+    </style>
+}
+
+@section PageTitle {
+    订单详情 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<!-- begin col-12 -->
+<div class="col-md-12 ui-sortable">
+
+
+
+
+    <ul class="nav nav-tabs nav-tabs-inverse">
+        <li class="active"><a href="#Equipmentlist" data-toggle="tab"><i class="fa fa-windows"></i> 订单设备列表</a></li>
+        <li class=""><a href="#EquipmentMap" data-toggle="tab"><i class="fa fa-map-marker"></i> 订单设备视图</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade " id="EquipmentMap">
+            <!--打印和导出列表-->
+            <div class="invoice-company">
+                <span class="pull-right hidden-print">
+                    @*<a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success m-b-10"><i class="fa fa-print m-r-5"></i> 打印</a>*@
+
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-heading-btn">
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                            </div>
+                            <h4 class="panel-title">设备视图</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>
+                        订单客户
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.CustomerName)
+                    </div>
+                    <label>
+                        订单品牌
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.Brand)
+                    </div>
+                    <label class="m-t-5">
+                        订单备注
+                    </label>
+                    <div>
+                        @if (string.IsNullOrWhiteSpace(Model.Description))
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Description</span>
+                        }
+                    </div>
+                    <label>
+                        每次播放秒数
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.PlayTime)
+                    </div>
+                    <label>
+                        每日播放次数
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.PlayCount)
+                    </div>
+                    <label class="m-t-5">
+                        站牌档期
+                    </label>
+                    <div id="schedule">
+                        <label class="btn btn-default btn-block">
+                            <i class="fa fa-list pull-right"></i> @Html.CalendarDisplayFor(m => Model.StartDate) - @Html.CalendarDisplayFor(m => Model.EndDate)
+                        </label>
+                        @Html.HiddenFor(model => model.Id)
+                    </div>
+
+                    <label class="m-t-5">
+                        投放城市
+                    </label>
+                    <div id="divOrderCities">
+                        @for (int i = 0; i < cityList.Count(); i++)
+                        {
+                            if (i == 0)
+                            {
+                                <label class="btn btn-default" cityCode="@cityList[i].Code">
+                                    @cityList[i].Name
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="btn btn-default" cityCode="@cityList[i].Code">
+                                    @cityList[i].Name
+                                </label>
+                            }
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade panel active in" id="Equipmentlist">
+            <div class="panel-heading p-0">
+                <div class="panel-heading-btn m-r-10 m-t-10">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                </div>
+                <!-- begin nav-tabs -->
+                <div class="tab-overflow overflow-right">
+                    <ul class="nav nav-tabs" id="ulCurrentCity">
+                        <li class="prev-button"><a href="javascript:;" data-click="prev-tab" class="text-inverse"><i class="fa fa-arrow-left"></i></a></li>
+                        @for (int i = 0; i < cityList.Count(); i++)
+                        {
+                            if (i == 0)
+                            {
+
+                                <li class="active" cityCode="@cityList[i].Code"><a data-toggle="tab">@cityList[i].Name</a></li>
+                            }
+                            else
+                            {
+                                <li class="" cityCode="@cityList[i].Code"><a data-toggle="tab">@cityList[i].Name</a></li>
+                            }
+                        }
+                        <li class="next-button"><a href="javascript:;" data-click="next-tab" class="text-inverse"><i class="fa fa-arrow-right"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table" id="tabEquipments">
+                    <thead>
+                        <tr>
+                            <th>商家名称</th>
+                            <th>经营面积</th>
+                            <th>人均消费程度（元）</th>
+                            <th>商圈名称</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="bord"></div>
+<div id="showstate" style="display:none">
+</div>
+
+
+<div class="modal fade" id="modal-Equipment-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>经营面积</th>
+                                <th>人均消费程度（元）</th>
+                                <th>商圈名称</th>
+                                <th>摄像头数量</th>
+                                <th>是否联网</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end col-12 -->
+@section Scripts {
+
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/themes/" + ViewData["fileAddress"].ToString() + "/ds.map.orderEquipment.js")
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ulCurrentCity li[cityCode!='']").click(function(){
+                if($(this).attr("cityCode")!=$("#ulCurrentCity").find("li[class=active]").attr("cityCode"))
+                {
+                    $("#ulCurrentCity li").removeClass('active');
+                    $(this).addClass('active');
+                    equipmentListChange();
+                }
+            });
+            equipmentListChange();
+            $("#divOrderCities label").click(function(){
+                if($(this).attr("cityCode")!=$("#divOrderCities").find("label[class*=cityActive]").attr("cityCode"))
+                {
+                    $("#divOrderCities label").removeClass('cityActive');
+                    $(this).addClass('cityActive');
+                    clearAndReload(@Model.Id,$(this).attr("cityCode"));
+                }
+            });
+            $("#divOrderCities label").first().click()
+        });
+
+
+        function equipmentListChange() {
+            var cityCode = $("#ulCurrentCity").find("li[class=active]").attr("cityCode");
+            var orderId =@Model.Id;
+
+            $("#selCities").val(cityCode);
+            $('#tabEquipments').dataTable().fnDestroy();
+            $('#tabEquipments').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 15,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/DF_OwnOrder/GetOrderEquipment',
+                    "data": function (d) {
+                        d.orderId=orderId;
+                        d.cityCode = cityCode;
+                    }
+                },
+                "columns": [
+                    { "data": "BusinessName" },
+                    { "data": "Area" },
+                    { "data":'Charge'},
+                     { "data": "TradingAreaName" }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+
+        }
+    </script>
+}

@@ -1,0 +1,478 @@
+﻿@using MSP.Core.Domain;
+
+@{
+    ViewBag.Title = "投放价格测算";
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/css/datepicker3.css")
+    @Styles.Render("~/Content/datatables/css")
+    <style type="text/css">
+        .modal-dialog {
+            min-height: 400px;
+            min-width: 800px;
+        }
+    </style>
+}
+
+<div class="invoice">
+    <div class="invoice-company text-inverse">
+        投放价格测算
+    </div>
+    <div class="invoice-content">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="CustomerId">客户名称</label>
+                    <div>
+                        @Html.DropDownList("CustomerId", (ViewData["CustomerId"] as SelectList), "选择一个客户", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="ContactId">投放时长</label>
+                    <div>
+                        @Html.DropDownList("DeliverySeconds", (ViewData["DeliverySeconds"] as SelectList), "选择投放时长", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="BaseDate">发布开始日期</label>
+                    <div class="input-group date" id="startDate" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" type="text" id="BaseDate">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="playweek">
+                        <label for="PublishWeeks">发布周数</label>
+                        <input class="form-control" placeholder="发布周数（只能输入数字）" type="number" min="1" id="PublishWeeks">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-pills" id="tab">
+            <li class="active" id="1"><a href="#nav-pills-tab-1" data-toggle="tab">统一标准投放</a></li>
+            <li id="2"><a href="#nav-pills-tab-2" data-toggle="tab">自定义数量投放</a></li>
+        </ul>
+        <div class="panel">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="nav-pills-tab-1">
+                    <div>
+                        投放数量：<input id="DeliveryCount" placeholder="（只能输入数字）" type="number" min="1">
+                        <label class="checkbox-inline m-l-10">
+                            <input type="checkbox" value="" id="ckAllCity" />
+                            全部选中
+                        </label>
+                    </div>
+                    <div class="m-t-20 row">
+                        @if (ViewData["Citys"] != null)
+                        {
+                            var citys = ViewData["Citys"] as List<Df_Citysetting>;
+                            foreach (var city in citys)
+                            {
+                                <button class="btn btn-grey btn-xs m-r-5 m-b-5" name="btnCheckCity" value="@city.CityGrade">@city.CityName</button>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-pills-tab-2">
+                    <a href="javascript:openSelectCity();" class="btn btn-success btn-sm m-r-5" id="btnOpenCityList"><i class="fa fa-plus"></i> 添加城市投放</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="invoice-content">
+        <div class="table-responsive">
+            <table class="table table-invoice">
+                <thead>
+                    <tr>
+                        <th>投放城市</th>
+                        <th>单价</th>
+                        <th>总时长(小时)</th>
+                        <th>统计金额</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            一线城市<br />
+                            <small id="first_tier"></small>
+                        </td>
+                        <td id="firstUnitPrice">0</td>
+                        <td id="firstTotalHours">0</td>
+                        <td id="firstTotalPrice">0</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            其他<br />
+                            <small id="othercities"></small>
+                        </td>
+                        <td id="otherUnitPrice">0</td>
+                        <td id="otherTotalHours">0</td>
+                        <td id="otherTotalPrice">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="invoice-price">
+            <div class="invoice-price-left">
+                <div class="invoice-price-row">
+                    <div class="sub-price">
+                        <small>成本价格</small>
+                        <span id="policyPrice">0</span>
+                    </div>
+                    <div class="sub-price">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                    <div class="sub-price">
+                        <small>销售最低售卖 (10.0%)</small>
+                        <span id="salerDiscountPrice">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice-price-right">
+                <small>总计</small> <span id="totalPrice">0</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add modal begin-->
+<div class="modal fade" id="modal-city-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">添加城市</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="data-table-add" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>城市名称</th>
+                                <th>最大可售数量(台)</th>
+                                <th>预计投放数量</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+    @Scripts.Render("~/bundles/datatables/js")
+
+    <script type="text/javascript">
+
+        //自定义投放记录已选城市
+        var cityIds = [];
+
+        var first_titerCount = 0;
+        var otherCitiesCount = 0;
+
+        var isDefault = true;
+
+        $(document).ready(function () {
+            $("#BaseDate").datepicker({ autoclose: true, todayHighlight: true, format: "yyyy-mm-dd" });
+
+            $("#BaseDate").datepicker("setDate", '@DateTime.Now.AddDays(3).ToShortDateString()');
+
+            //投放方式切换
+            $('#tab li').click(function () {
+                var tabId = $(this).attr('id');
+                if (parseInt(tabId) == 1) {
+
+                    first_titerCount = 0;
+                    otherCitiesCount = 0;
+                    isDefault = true;
+
+                    $('#DeliveryCount').val(0);
+                    $('#btnOpenCityList').prevAll().remove();
+                } else {
+                    cityIds = [];
+                    isDefault = false;
+
+                    $('*[name="btnCheckCity"]').removeClass('btn-pink').addClass('btn-grey');
+                }
+
+                $('#firstUnitPrice').text('0');
+                $('#firstTotalHours').text('0');
+                $('#firstTotalPrice').text('0');
+                $('#first_tier').text('');
+
+                $('#otherUnitPrice').text('0');
+                $('#otherTotalHours').text('0');
+                $('#otherTotalPrice').text('0');
+                $('#othercities').text('');
+
+                $('#policyPrice').text('0');
+                $('#salerDiscountPrice').text('0');
+                $('#totalPrice').text('0');
+            })
+
+            $("*[name='btnCheckCity']").click(function (e) {
+
+                var cityGrade = parseInt($(this).val());
+                var cityName = (this).innerText;
+
+                if ($(this).hasClass('btn-grey')) {
+                    $(this).removeClass('btn-grey').addClass('btn-pink');
+
+                    if (cityGrade == 0) {
+                        //其他城市数量递加
+                        otherCitiesCount++;
+
+                        $('#othercities').append(cityName + '，');
+                    } else {
+                        //一线城市数量递加
+                        first_titerCount++;
+
+                        $('#first_tier').append(cityName + '，');
+                    }
+                } else {
+                    $(this).removeClass('btn-pink').addClass('btn-grey');
+                    if (cityGrade == 0) {
+                        //其他城市数量递减
+                        otherCitiesCount--;
+
+                        $('#othercities').text($('#othercities').text().replace('' + cityName + '，', ''));
+                    } else {
+                        //一线城市数量递加
+                        first_titerCount--;
+
+                        $('#first_tier').text($('#first_tier').text().replace('' + cityName + '，', ''));
+                    }
+                }
+
+                getPrice(isDefault);
+            });
+
+            //$("*[name='btnAddSelectCity']").click(function (e) {
+            //    $('#btnOpenCityList').before('<a href="javascript:;" onclick="deleteSelectCity(this);" class="btn btn-pink btn-xs p-r-10 p-l-10 m-r-5">测试 | 1000台 <i class="fa fa-times m-l-5"></i> </a>');
+            //    $("#modal-city-list").modal('hide');
+            //});
+
+            $('#ckAllCity').click(function (e) {
+                first_titerCount = 0;
+                otherCitiesCount = 0;
+                $('#othercities').text('');
+                $('#first_tier').text('');
+
+                if ($(this).attr("checked") == 'checked') {
+
+
+                    $('*[name="btnCheckCity"]').each(function (index, obj) {
+                        first_titerCount++;
+                        otherCitiesCount++;
+                        if (parseInt(obj.value) == 0) {
+                            $('#othercities').append(obj.innerText + '，');
+                        } else {
+                            $('#first_tier').append(obj.innerText + '，');
+                        }
+                    })
+
+                    $('*[name="btnCheckCity"]').removeClass('btn-grey').addClass('btn-pink');
+                } else {
+
+                    $('*[name="btnCheckCity"]').removeClass('btn-pink').addClass('btn-grey');
+                }
+
+                getPrice(isDefault);
+            });
+
+            //发布时长事件
+            $('#DeliverySeconds').change(function () {
+                getPrice(isDefault);
+            });
+
+            //发布周数，投放数量事件
+            $('#PublishWeeks,#DeliveryCount').blur(function () {
+                getPrice(isDefault);
+            })
+
+        });
+
+        //获取价格
+        function getPrice(isDefault) {
+            var datas = [];
+            var deliverySecond = $('#DeliverySeconds').val();
+            var publishWeek = $('#PublishWeeks').val();
+            var deliveryCount = 1;
+            if (isDefault == true) {
+                deliveryCount = $('#DeliveryCount').val();
+            }
+
+            if (deliverySecond != '' && publishWeek != '' && deliveryCount != '' && (first_titerCount > 0 || otherCitiesCount > 0)) {
+                if (first_titerCount > 0) {
+                    datas.push({ 'CityGrade': 1, 'DeliverySeconds': parseInt(deliverySecond), 'PublishWeeks': parseInt(publishWeek), 'DeliveryCount': parseInt(deliveryCount), 'CityCount': first_titerCount });
+                } else {
+                    $('#firstUnitPrice').text('0');
+                    $('#firstTotalHours').text('0');
+                    $('#firstTotalPrice').text('0');
+                }
+
+                if (otherCitiesCount > 0) {
+                    datas.push({ 'CityGrade': 0, 'DeliverySeconds': parseInt(deliverySecond), 'PublishWeeks': parseInt(publishWeek), 'DeliveryCount': parseInt(deliveryCount), 'CityCount': otherCitiesCount });
+                } else {
+                    $('#otherUnitPrice').text('0');
+                    $('#otherTotalHours').text('0');
+                    $('#otherTotalPrice').text('0');
+                }
+
+                //向服务器请求
+                $.post('/DF_Source/GetPrice', { dataArray: datas }, function (data) {
+                    if (data.Success) {
+
+                        var policyPrice = 0;
+                        var salerDiscountPrice = 0;
+                        var totalPrice = 0;
+
+                        $(data.Price).each(function (index, obj) {
+                            if (obj.CityGrade == 1) {
+                                $('#firstUnitPrice').text('￥' + obj.UnitPrice);
+                                $('#firstTotalHours').text(obj.TotalHours);
+                                $('#firstTotalPrice').text('￥' + obj.TotalPrice);
+                            } else {
+                                $('#otherUnitPrice').text('￥' + obj.UnitPrice);
+                                $('#otherTotalHours').text(obj.TotalHours);
+                                $('#otherTotalPrice').text('￥' + obj.TotalPrice);
+                            }
+
+                            policyPrice += obj.PolicyPrice;
+                            totalPrice += obj.TotalPrice;
+                        })
+
+                        salerDiscountPrice = totalPrice - policyPrice;
+
+                        $('#policyPrice').text('￥' + policyPrice);
+                        $('#salerDiscountPrice').text('￥' + salerDiscountPrice);
+                        $('#totalPrice').text('￥' + totalPrice);
+                    }
+                }, 'JSON');
+            } else {
+                if ((first_titerCount <= 0 && otherCitiesCount <= 0) || deliveryCount == '' || publishWeek == '' || deliverySecond == '') {
+                    $('#firstUnitPrice').text('0');
+                    $('#firstTotalHours').text('0');
+                    $('#firstTotalPrice').text('0');
+
+                    $('#otherUnitPrice').text('0');
+                    $('#otherTotalHours').text('0');
+                    $('#otherTotalPrice').text('0');
+
+                    $('#policyPrice').text('0');
+                    $('#salerDiscountPrice').text('0');
+                    $('#totalPrice').text('0');
+                }
+            }
+        }
+
+        //自定义弹出层
+        function openSelectCity() {
+            $('#data-table-add').dataTable().fnDestroy();
+            $("#modal-city-list").modal('show');
+
+            $('#data-table-add').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 15,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+
+                "ajax": {
+                    "type": "POST",
+                    "url": '/DF_Source/GetAllCityEquipmentCount'
+                },
+                "columns": [
+                    { "data": "CityName" },
+                    { "data": "Count" },
+                    {
+                        "data": function (e) {
+                            return '<input placeholder="（只能输入数字）" type="number" min="1" maxLength="8">'
+                        }
+                    },
+                    {
+                        "data": function (e) {
+                            return '<a href="javascript:;" class="btn btn-success btn-xs m-r-5" name="btnAddSelectCity" onclick="btnAddSelectCity(this,\'' + e["CityName"] + '\',' + e["CityGrade"] + ',' + e["Id"] + ')"><i class="fa fa-plus"></i> 添加</a>';
+                        }
+                    }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="15">15</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+
+            })
+        }
+
+        //自定义添加城市
+        function btnAddSelectCity(obj, name, grade, id) {
+            var count = $(obj).parent().prev().find('input').val();
+
+            if (count != '' && cityIds.indexOf(id) < 0) {
+                //向城市编号数组中添加当前城市Id
+                cityIds.push(id);
+
+                //不同级别城市叠加数量
+                if (grade == 1) {
+                    first_titerCount += parseInt(count);
+
+                    $('#first_tier').append(name + '，');
+                } else {
+                    otherCitiesCount += parseInt(count);
+
+                    $('#othercities').append(name + '，');
+                }
+
+                $('#btnOpenCityList').before('<a href="javascript:;" onclick="deleteSelectCity(this,' + id + ',' + parseInt(count) + ',' + grade + ',\'' + name + '\');" class="btn btn-pink btn-xs p-r-10 p-l-10 m-r-5">' + name + ' | ' + count + ' <i class="fa fa-times m-l-5"></i> </a>');
+
+                $("#modal-city-list").modal('hide');
+
+                getPrice(false);
+            }
+
+        }
+
+        function deleteSelectCity(e, id, count, grade, name) {
+            cityIds.splice($.inArray(id, cityIds), 1);
+
+            if (grade == 1) {
+                first_titerCount -= count;
+
+                $('#first_tier').text($('#first_tier').text().replace('' + name + '，', ''));
+            } else {
+                otherCitiesCount -= count;
+
+                $('#othercities').text($('#othercities').text().replace('' + name + '，', ''));
+            }
+
+            $(e).remove();
+
+            getPrice(false);
+        }
+    </script>
+}

@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewBag.Title = "我的上刊需求说明";
+}
+
+@section PageTitle {
+    我的上刊需求说明 <small>点击 <a href="javascript:openOrderList();">这里</a> 创建一个新的上刊需求</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+
+            <div class="panel-body">
+                <form action="/User" id="SearchUser" method="get">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input class="form-control" id="UserName" name="UserName" placeholder="关键字" type="text" value="">
+                        </div>
+                        <div class="col-sm-2"><input type="submit" class="btn btn-search btn-block btn-success" value="搜索"></div>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-email">
+                        <thead><tr><th>客户名称</th><th>订单备注</th><th>档期</th><th>播放频次</th><th>点位数量</th><th></th></tr></thead>
+                        <tbody>
+                            <tr class="gridrow">
+                                <td>测试客户</td>
+                                <td>demo1219</td>
+                                <td>2016/12/15-2016/12/21</td>
+                                <td>15秒/20次</td>
+                                <td>500</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/16"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Edit/16"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Delete/16"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a></td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>测试客户</td>
+                                <td>HEN2</td>
+                                <td>2016/12/15-2017/1/11</td>
+                                <td>15秒/50次</td>
+                                <td>500</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/15"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Edit/15"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Delete/15"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a></td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>测试客户</td>
+                                <td>测试</td>
+                                <td>2016/12/15-2017/1/11</td>
+                                <td>15秒/50次</td>
+                                <td>360</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/14"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Edit/14"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Delete/14"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a></td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>测试客户</td>
+                                <td>HEN3</td>
+                                <td>2016/12/15-2016/12/21</td>
+                                <td>15秒/100次</td>
+                                <td>200</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/13"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Edit/13"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Delete/13"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a></td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>测试客户</td>
+                                <td>test2</td>
+                                <td>2016/12/15-2016/12/21</td>
+                                <td>15秒/50次</td>
+                                <td>100</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/12"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Edit/12"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a> <a class="email-btn" href="/DF_OwnAgreement/Delete/12"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a></td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>测试客户</td>
+                                <td>t2</td>
+                                <td>2016/12/15-2016/12/21</td>
+                                <td>15秒/50次</td>
+                                <td>50</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/11"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a></td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>测试客户</td>
+                                <td>画面测试2</td>
+                                <td>2016/12/16-2016/12/29</td>
+                                <td>15秒/40次</td>
+                                <td>89</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/10"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a></td>
+                            </tr>
+                            <tr class="gridrow_alternate">
+                                <td>测试客户</td>
+                                <td>画面测试1</td>
+                                <td>2016/12/15-2016/12/21</td>
+                                <td>15秒/30次</td>
+                                <td>66</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/9"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a></td>
+                            </tr>
+                            <tr class="gridrow">
+                                <td>测试客户</td>
+                                <td>ceshi</td>
+                                <td>2016/12/15-2016/12/28</td>
+                                <td>15秒/500次</td>
+                                <td>99</td>
+                                <td><a class="email-btn" href="/DF_OwnAgreement/Details/7"><i class="fa fa-folder-open" data-toggle="tooltip" data-original-title="详情"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="email-footer clearfix"><span class="hidden-sm hidden-xs">当前 1项 - 9项， 共 9 项</span><ul class="pagination m-t-0 m-b-0 pull-right"></ul></div>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+<!--Add modal begin-->
+<div class="modal fade" id="modal-order-list">
+    <div class="modal-dialog" style="min-width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">选择需要设置上刊需求的订单</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-email">
+                    <thead><tr><th>客户名称</th><th>订单备注</th><th>档期</th><th>播放频次</th><th>点位数量</th><th></th></tr></thead>
+                    <tbody>
+                        <tr class="gridrow">
+                            <td>测试客户</td>
+                            <td>demo1219</td>
+                            <td>2016/12/15-2016/12/21</td>
+                            <td>15秒/20次</td>
+                            <td>500</td>
+                            <td><a href="javascript:CreateDemand();" class="btn btn-primary btn-xs m-r-5">创建该订单上刊需求</a></td>
+                        </tr>
+                        <tr class="gridrow_alternate">
+                            <td>测试客户</td>
+                            <td>HEN2</td>
+                            <td>2016/12/15-2017/1/11</td>
+                            <td>15秒/50次</td>
+                            <td>500</td>
+                            <td><a href="javascript:CreateDemand();" class="btn btn-primary btn-xs m-r-5">创建该订单上刊需求</a></td>
+                        </tr>
+                        <tr class="gridrow">
+                            <td>测试客户</td>
+                            <td>测试</td>
+                            <td>2016/12/15-2017/1/11</td>
+                            <td>15秒/50次</td>
+                            <td>360</td>
+                            <td><a href="javascript:CreateDemand();" class="btn btn-primary btn-xs m-r-5">创建该订单上刊需求</a></td>
+                        </tr>
+                        <tr class="gridrow_alternate">
+                            <td>测试客户</td>
+                            <td>HEN3</td>
+                            <td>2016/12/15-2016/12/21</td>
+                            <td>15秒/100次</td>
+                            <td>200</td>
+                            <td><a href="javascript:CreateDemand();" class="btn btn-primary btn-xs m-r-5">创建该订单上刊需求</a></td>
+                        </tr>
+                        <tr class="gridrow">
+                            <td>测试客户</td>
+                            <td>ceshi</td>
+                            <td>2016/12/15-2016/12/28</td>
+                            <td>15秒/500次</td>
+                            <td>99</td>
+                            <td><a href="javascript:CreateDemand();" class="btn btn-primary btn-xs m-r-5">创建该订单上刊需求</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openOrderList() {
+            $("#modal-order-list").modal('show');
+        }
+
+        function CreateDemand() {
+            location.href = "/DF_OwnDemand/Create";
+        }
+    </script>
+}

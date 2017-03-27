@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "创建上刊需求";
+}
+
+@section PageTitle{
+    创建上刊需求 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<div class="vertical-box">
+    <!-- begin vertical-box-column -->
+    <div class="vertical-box-column width-250">
+        <!-- begin wrapper -->
+        <div class="wrapper bg-silver text-center">
+            <a href="javascript:showAllPoint();" class="btn btn-primary p-l-40 p-r-40 btn-sm">
+                显示全部点位
+            </a>
+        </div>
+        <!-- end wrapper -->
+        <!-- begin wrapper -->
+        <div class="wrapper" id="divContent">
+            <p><b>订单广告视频</b></p>
+            <ul class="nav nav-pills nav-stacked nav-sm">
+                <li><a href="javascript:;"><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 17485ee4.mp4 (10)</a></li>
+                <li><a href="javascript:;"><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 34534dfs.mp4 (0)</a></li>
+                <li><a href="javascript:;"><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 战斗鸡.mp4 (0)</a></li>
+            </ul>
+            <p><b>订单广告图片</b></p>
+            <ul class="nav nav-pills nav-stacked nav-sm m-b-0">
+                <li><a href="javascript:;"><i class="fa fa-file-picture-o text-danger pull-left f-s-18 m-r-10"></i> 美宝莲.jpg (0)</a></li>
+                <li><a href="javascript:;"><i class="fa fa-file-picture-o text-primary pull-left f-s-18 m-r-10"></i> 雅思兰黛.jpg (0)</a></li>
+                <li><a href="javascript:;"><i class="fa fa-file-picture-o text-success pull-left f-s-18 m-r-10"></i> 苏附加.jpg (0)</a></li>
+            </ul>
+        </div>
+        <!-- end wrapper -->
+    </div>
+    <!-- end vertical-box-column -->
+    <!-- begin vertical-box-column -->
+    <div class="vertical-box-column">
+        <!-- begin wrapper -->
+        <div class="wrapper bg-silver-lighter">
+            <!-- begin btn-toolbar -->
+            <div class="btn-toolbar">
+                <div class="btn-group pull-right">
+                    <a href="javascript:;" class="btn btn-success p-l-40 p-r-40 btn-sm">
+                        导出excel列表
+                    </a>
+                </div>
+                <!-- begin btn-group -->
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-white" data-email-action="archive" onclick="openContentList();"><i class="fa fa-plus-square m-r-3"></i> <span class="hidden-xs">设置上刊内容</span></button>
+                </div>
+                <!-- end btn-group -->
+                <!-- begin btn-group -->
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-white" data-toggle="tooltip" data-placement="top" data-title="刷新表格" data-original-title="" title=""><i class="fa fa-refresh"></i></button>
+                </div>
+                <!-- end btn-group -->
+                <!-- begin btn-group -->
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-white" data-email-action="delete" onclick="openDeleteContent();"><i class="fa fa-trash m-r-3"></i> <span class="hidden-xs">删除内容</span></button>
+                </div>
+                <!-- end btn-group -->
+            </div>
+            <!-- end btn-toolbar -->
+        </div>
+        <!-- end wrapper -->
+
+        <div class="panel-heading p-0">
+            <!-- begin nav-tabs -->
+            <div class="tab-overflow">
+                <ul class="nav nav-tabs" id="ulCurrentCity">
+                    <li class="prev-button"><a href="javascript:;" data-click="prev-tab" class="text-inverse"><i class="fa fa-arrow-left"></i></a></li>
+                    <li class="active" citycode="500300"><a data-toggle="tab">重庆市</a></li>
+                    <li class="" citycode="510100"><a data-toggle="tab">成都市</a></li>
+                    <li class="next-button"><a href="javascript:;" data-click="next-tab" class="text-inverse"><i class="fa fa-arrow-right"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <div id="tabEquipments_wrapper" class="dataTables_wrapper no-footer">
+                <div id="tabEquipments_processing" class="dataTables_processing" style="display: none;">载入中</div><table class="table no-footer dataTable" id="tabEquipments" role="grid" aria-describedby="tabEquipments_info" style="">
+                    <thead>
+                        <tr role="row">
+                            <th><input type="checkbox" value=""></th>
+                            <th class="sorting_asc" aria-sort="ascending">商家名称</th>
+                            <th class="sorting" >经营面积</th>
+                            <th class="sorting">人均消费程度（元）</th>
+                            <th class="sorting" >商圈名称</th>
+                            <th class="sorting">上刊内容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">龙凤香食府</td><td>100.0</td><td>100.0</td><td>无</td>
+                            <td><span><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 战斗鸡.mp4)</span></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">龙凤香食府</td><td>100.0</td><td>100.0</td><td>无</td>
+                            <td><span><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 战斗鸡.mp4)</span></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">五斗米大酒楼</td><td>500.0</td><td>46.0</td><td></td>
+                            <td><span><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 战斗鸡.mp4)</span></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">五斗米大酒楼</td><td>500.0</td><td>46.0</td><td></td>
+                            <td><span><i class="fa fa-file-picture-o text-danger pull-left f-s-18 m-r-10"></i> 美宝莲.jpg</span></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">大牌当</td><td>350.0</td><td>48.0</td><td>观音桥大融城</td>
+                            <td></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">大牌当</td><td>350.0</td><td>48.0</td><td>观音桥大融城</td><td></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">来自韩国的炸鸡</td><td>160.0</td><td>48.0</td><td>观音桥大融城</td><td></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">来自韩国的炸鸡</td><td>160.0</td><td>48.0</td><td>观音桥大融城</td><td></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">那地方知青火锅</td><td>400.0</td><td>70.0</td><td>观音桥</td><td></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">那地方知青火锅</td><td>400.0</td><td>70.0</td><td>观音桥</td><td></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">茶港轩茶餐厅</td><td>150.0</td><td>36.0</td><td>巴南万达</td><td></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">茶港轩茶餐厅</td><td>150.0</td><td>36.0</td><td>巴南万达</td><td></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">灶得住老火锅</td><td>300.0</td><td>60.0</td><td></td><td></td></tr>
+                        <tr role="row" class="even"><td><input type="checkbox" value=""></td><td class="sorting_1">灶得住老火锅</td><td>300.0</td><td>60.0</td><td></td><td></td></tr>
+                        <tr role="row" class="odd"><td><input type="checkbox" value=""></td><td class="sorting_1">八戒老火锅</td><td>180.0</td><td>20.0</td><td>观音桥步行街</td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="email-footer clearfix"><span class="hidden-sm hidden-xs">当前 1项 - 15项， 共 38 项</span><ul class="pagination m-t-0 m-b-0 pull-right"><li class="disabled"><a>首页</a></li><li class="disabled"><a>上一页</a></li><li class="active hidden-sm hidden-xs"><a>1</a></li><li class="hidden-sm hidden-xs"><a href="/DF_OwnOrder?page=2">2</a></li><li class="hidden-sm hidden-xs"><a href="/DF_OwnOrder?page=3">3</a></li><li><a href="/DF_OwnOrder?page=2">下一页</a></li><li><a href="/DF_OwnOrder?page=3">末页</a></li></ul></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- end vertical-box-column -->
+</div>
+
+<div class="modal fade" id="modal-content-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">选择需要设置上刊需求的订单</h4>
+            </div>
+            <div class="modal-body">
+                <p><b>订单广告视频</b></p>
+                <ul class="nav nav-pills nav-stacked nav-sm">
+                    <li><a href="javascript:;"><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 17485ee4.mp4 (10)</a></li>
+                    <li><a href="javascript:;"><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 34534dfs.mp4 (0)</a></li>
+                    <li><a href="javascript:;"><i class="fa fa-youtube-play pull-left f-s-18 m-r-10"></i> 战斗鸡.mp4 (0)</a></li>
+                </ul>
+                <p><b>订单广告图片</b></p>
+                <ul class="nav nav-pills nav-stacked nav-sm m-b-0">
+                    <li><a href="javascript:;"><i class="fa fa-file-picture-o text-danger pull-left f-s-18 m-r-10"></i> 美宝莲.jpg (0)</a></li>
+                    <li><a href="javascript:;"><i class="fa fa-file-picture-o text-primary pull-left f-s-18 m-r-10"></i> 雅思兰黛.jpg (0)</a></li>
+                    <li><a href="javascript:;"><i class="fa fa-file-picture-o text-success pull-left f-s-18 m-r-10"></i> 苏附加.jpg (0)</a></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                <a href="javascript:;" class="btn btn-sm btn-primary" data-dismiss="modal">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-alert">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Alert Header</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger m-b-0">
+                    <h4><i class="fa fa-info-circle"></i> 清空点位上刊内容</h4>
+                    <p>您确定要删除当前选定点位的上刊内容吗？ 清空后若未设置内容，将由系统随机设定上刊内容</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                <a href="javascript:;" class="btn btn-sm btn-danger" data-dismiss="modal">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#divContent li').click(function () {
+                $('#divContent li').removeClass('active');
+                $(this).addClass('active');
+                $('#tabEquipments tr.odd').hide();
+            });
+        });
+
+        function showAllPoint() {
+            $('#divContent li').removeClass('active');
+            $('#tabEquipments tr.odd').show();
+        }
+
+        function openContentList() {
+            $("#modal-content-list").modal('show');
+        }
+
+        function openDeleteContent() {
+            $("#modal-alert").modal('show');
+        }
+    </script>
+}

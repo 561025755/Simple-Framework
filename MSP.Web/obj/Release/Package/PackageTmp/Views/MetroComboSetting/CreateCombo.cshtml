@@ -1,0 +1,288 @@
+﻿@using MSP.Models.Domain.Metro;
+@model MetroOrderTypeModel
+@{
+    ViewBag.Title = "地铁灯箱套餐产品配置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var combos = Model.Combo;
+}
+@section header{
+
+}
+
+@section PageTitle{
+    地铁灯箱套餐产品配置 <small>点击 @Html.ActionLink("这里", "Index") 回到列表,点击 <a class="btn btn-success" onclick="addNewCombo(@Model.Id)">这里</a> 添加新的套餐类型</small>
+}
+
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">订单类型 @Model.Name 的产品配置</h4>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("CreateCombo", "MetroComboSetting"))
+            {
+               
+                if (Model.Combo == null)
+                {
+                    Model.Combo = new List<MotroComboModel>();
+                }
+                Model.Combo.Add(new MotroComboModel());
+
+                for (int i = 0; i < Model.Combo.Count; i++)
+                {
+                    <div class="model-combo" id="combo-@i">
+                        <div class="form-group">
+                           @Html.HiddenFor(x=>x.Id)
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label>
+                                        @Html.LabelFor(x => x.Combo[i].Name)
+                                    </label>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.Combo[i].Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Name)
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>
+                                        @Html.LabelFor(x => x.Combo[i].Size)
+                                    </label>
+                                    <div>
+                                        @Html.DropDownListFor(x => x.Combo[i].Size, ViewData["size"] as IEnumerable<SelectListItem>, "请选择一个选项", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Size)
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>
+                                        @Html.LabelFor(x => x.Combo[i].Continiuty)
+                                    </label>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.Combo[i].Continiuty, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Continiuty)
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>
+                                        @Html.LabelFor(x => x.Combo[i].Count)
+                                    </label>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.Combo[i].Count, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Count)
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>
+                                        @Html.LabelFor(x => x.Combo[i].Price)
+                                    </label>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.Combo[i].Price, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Price)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        @{
+                            if (Model.Combo[i].Setting == null)
+                            {
+                                Model.Combo[i].Setting = new List<MetroComboSettingModel>
+                                    ();
+                            }
+
+                            Model.Combo[i].Setting.Add(new MetroComboSettingModel());
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td>定义限定条件类型</td>
+                                            <td>限制条件</td>
+                                            <td>限制方法</td>
+                                            <td>数量</td>
+                                            <td></td>                                            
+                                        </tr>
+                                    </thead>
+                               
+                                @for (int j = 0; j < Model.Combo[i].Setting.Count; j++)
+                                {
+                                    <tr>
+                                        <td>@Html.DropDownListFor(x => x.Combo[i].Setting[j].Type, ViewData["type"] as IEnumerable<SelectListItem>, "请选择一个选项", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Setting[j].Type)</td>
+                                        <td>
+                                            @Html.TextBoxFor(x => x.Combo[i].Setting[j].LeftBody, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Setting[j].LeftBody)
+                                    </td>
+                                        <td>
+                                            @Html.DropDownListFor(x => x.Combo[i].Setting[j].Method, ViewData["method"] as IEnumerable<SelectListItem>, "请选择一个选项", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Setting[j].Method)
+                                    </td>
+                                        <td>
+                                           @Html.TextBoxFor(x => x.Combo[i].Setting[j].Right, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.Combo[i].Setting[j].Right)
+                                    </td>
+                                        <td>
+                                            <a class="email-btn" href="javascript:;" onclick="rp(this);">
+                                                <i class="fa fa-trash-o" data-original-title="删除" data-toggle="tooltip"></i>
+                                            </a>
+                                    </td>
+
+                                    </tr>
+                                
+                                }
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"><a onclick="addNewSetting(this)"><i class="fa fa-plus-circle"></i> 添加更多配置</a></td>
+                                        </tr>
+                                    </tfoot>                                    
+                                    </table>
+                               
+                                </div>
+                                }
+                            </div>
+                        }
+
+
+                <input type="submit" class="btn btn-success" />
+                <input type="reset" class="btn btn-default" />
+
+
+            }
+
+
+        </div>
+
+   
+          
+    </div>
+    <!-- end panel -->
+</div>
+
+<div class="modal fade" data-backdrop="static" id="add-new-combo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">添加新的套餐类型</h4>
+            </div>
+            <div class="modal-body">              
+               
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label> 名称:</label>
+                                <div>
+                                    <input type="text" class="form-control" name="NewComboName" id="NewComboName" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <label> 价格:</label>
+                                <div></div>
+                                <input type="text" class="form-control" name="NewComboPrice" id="NewComboPrice" />
+
+                            </div>
+
+
+                            <div class="col-sm-2">
+                                规格尺寸:
+                                @Html.DropDownList("NewComboSize", ViewData["size"] as IEnumerable<SelectListItem>,new{ @class="form-control"})
+
+                            </div>
+                            <div class="col-sm-2">
+                                连封数:
+                                <input type="number" class="form-control" name="NewComboContiniuty" id="NewComboContiniuty" min="1" max="4" />
+                            </div>
+                            <div class="col-sm-3">
+                                数量：
+                                <input type="text" class="form-control" name="NewComboCount" id="NewComboCount"  />
+
+                            </div>
+
+                        </div>
+                     
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="add-submit" value="确认添加" />
+                @*<input type="button" class="btn btn-default"/>*@
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    var comboCount=@Model.Combo.Count;
+   
+    function addNewCombo(typeId) {
+        $("#add-new-combo").css("width","auto");
+        $("#add-new-combo").modal("show");
+        $("#add-submit").click(function () {
+            $.post("/MetroComboSetting/CreateNewCombo",{
+                typeId:@Model.Id,
+                name:$("#NewComboName").val(),
+                size:$("#NewComboSize").val(), 
+                continiuty:$("#NewComboContiniuty").val(),
+                price:$("#NewComboPrice").val(),
+                count:$("#NewComboCount").val()
+            },function (d) {
+                if (d.success) {
+                    window.location.href="/MetroComboSetting/CreateCombo?typeId="+@Model.Id;    
+                }    
+            })
+    
+        })
+    };
+    function rp(element) {
+        var table=element.parentElement.parentElement.parentElement.parentElement;
+        if ($(table).find("tbody tr").length>1) {
+            $(element).closest('tr').remove();
+    
+        }
+    }
+    function addNewSetting(element) {       
+        var table=element.parentElement.parentElement.parentElement.parentElement;
+        var last=$(table).find("tbody tr:last");        
+        var newrow=last.cloneAndIncrement();
+        last.after(newrow); 
+    }
+    $(document).ready(function () {
+        var combo=document.getElementsByClassName("model-combo");
+        for (var i = 0; i < combo.length; i++) {
+            var lastsetting=$(combo[i]).find(".model-combo-setting ").children().last();
+            lastsetting.css("display","none");    
+        }        
+       $(combo[comboCount-1]).css("display","none")       
+        //addCombo.appendTo( $(".model-combo")).addClass("col-lg-offset-10");
+       
+    });
+
+    
+    (function ($) {
+        $.fn.cloneAndIncrement = function (p) {
+            var newItem = this.clone();
+            newItem.find("[name]").each(function () {
+                $(this).attr("name", $(this).attr("name").replace(/Setting\[(\d+)\]/, function ($0, $1) { return ("Setting[" + (Number($1) + 1) + "]"); }));
+            });
+
+            newItem.find("[id]").each(function () {
+                $(this).attr("id", $(this).attr("id").replace(/Setting_(\d+)_/, function ($0, $1) { return ("Setting_" + (Number($1) + 1) + "_"); }));
+            });
+            newItem.find("[data-valmsg-for]").each(function () {                
+                $(this).attr("data-valmsg-for", $(this).attr("data-valmsg-for").replace(/Setting\[(\d+)\]/, function ($0, $1) { return ("Setting[" + (Number($1) + 1) + "]"); }));               
+    
+            })
+            return newItem;
+        };
+    })($);
+
+</script>
+}
+
+

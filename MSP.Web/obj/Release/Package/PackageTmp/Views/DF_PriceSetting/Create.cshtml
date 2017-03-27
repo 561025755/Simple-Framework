@@ -1,0 +1,117 @@
+﻿@using MSP.Models.Domain
+
+@model List<DF_PriceSettingModel>
+@{
+    ViewBag.Title = "创建东方天呈刊例价";
+}
+
+@section Pagetitle{
+    创建刊例价 <small>点击 @Html.ActionLink("这里", "Index") 返回列表</small>
+}
+
+<div class="row col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">编辑表单</h4>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <table id="dfPriceSetting" class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>城市级别</th>
+                            <th>投放时长</th>
+                            <th>播放频次</th>
+                            <th>刊例价</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <tbody>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                @Html.HiddenFor(m => m[i].Id)
+                                <tr>
+                                    <td>
+                                        @Html.DropDownListFor(m => m[i].CityGrade, new SelectList((IEnumerable<SelectListItem>)ViewData["CityGrade"], "Value", "Text"), "请选择城市级别", new { @class = "form-control" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m[i].DeliverySeconds, new SelectList((IEnumerable<SelectListItem>)ViewData["DeliverySeconds"], "Value", "Text"), "请选择投放时长", new { @class = "form-control" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m[i].Frequency, new SelectList((IEnumerable<SelectListItem>)ViewData["Frequency"], "Value", "Text"), "请选择播放频次", new { @class = "form-control" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m[i].PublishPrice, new { @class = "form-control", @placeholder = "刊例价" })
+                                    </td>
+                                    <td>
+                                        <a class="email-btn" href="javascript:;" onclick="rp(this);">
+                                            <i class="fa fa-trash-o" data-original-title="删除" data-toggle="tooltip"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5"><a href="javascript:ap();"><i class="fa fa-plus-circle"></i> 添加更多价格配置</a></td>
+                            </tr>
+                        </tfoot>
+                    }
+
+                </table>
+
+                <input type="submit" class="btn btn-sm btn-success" value="保存" />
+                <input type="reset" class="btn btn-sm btn-default" value="重置" />
+            }
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        (function ($) {
+            $.fn.cloneAndIncrement = function () {
+                var newItem = this.clone();
+                newItem.find("[name]").each(function () {
+                    $(this).attr("name", $(this).attr("name").replace(/\[(\d+)\]/, function ($0, $1) { return ("[" + (Number($1) + 1) + "]"); }));
+                });
+
+                newItem.find("[id]").each(function () {
+                    $(this).attr("id", $(this).attr("id").replace(/_(\d+)_/, function ($0, $1) { return ("_" + (Number($1) + 1) + "_"); }));
+                });
+                return newItem;
+            };
+        })($);
+
+        function ap() {
+            //add a contact table row
+            var templeteRow = $("#dfPriceSetting tbody tr:last");
+            var newRow = templeteRow.cloneAndIncrement();
+            newRow.find("input").val('');
+            newRow.find('input[type=hidden]').val('-1');
+            templeteRow.after(newRow);
+        }
+
+        function rp(obj) {
+            //remove a contact table row
+            if ($("#dfPriceSetting tbody tr").length > 1) {
+                $(obj).closest('tr').remove();
+            }
+        }
+    </script>
+}

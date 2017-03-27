@@ -1,0 +1,99 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@using MSP.Core.Sorting;
+@using MSP.Core.Domain;
+@using MSP.Core.Enum;
+@using MSP.Models.Domain;
+
+@model AttachModel<Sys_User, AgentModel>
+
+@{
+    ViewBag.Title = "代理商账号";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    代理商账号 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+
+    <div class="col-md-2">
+        @Html.Partial("OperatePartial", Model.Model)
+    </div>
+
+    <!-- begin col-12 -->
+    <div class="col-md-10 ui-sortable">
+
+        @Html.Partial("MenuPartial", Model.Model)
+
+        <!-- begin panel -->
+        <div class="panel panel-info">
+
+            <div class="panel-body ">
+                <div class="table-responsive">
+                    @Html.Grid(Model.PageModel).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+                    {
+                        column.For(c => c.UserName).Named("用户名称");
+                        column.For(c => c.Email).Named("邮箱地址");
+                        column.For(c => Html.Partial("BoolPartial", c.Active)).Named("状态").Sortable(false);
+                        column.For(c => Html.IconLink("fa-floppy-o", "EditAccount", new { id = c.Id, agentId = Model.Model.Id })).Sortable(false);
+                        column.For(c => Html.Partial("AccountActionPartial", c)).Sortable(false);
+                    }).Attributes(@class => "table table-email")
+                </div>
+                @Html.Raw(@Html.Pager(Model.PageModel))
+            </div>
+
+        </div>
+        @*<p><i class="fa fa-info-circle"></i> 当前系统设定代理商最大新增绑定用户账号数为 <b>1</b> 个。</p>*@
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+
+    <div class="modal fade" id="modal-alert" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">系统警告</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger m-b-0">
+                        <h4><i class="fa fa-info-circle"></i> 删除确认</h4>
+                        <p>您将删除该用户账号，提交确认后不可恢复，继续执行该操作吗？</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                    <a href="javascript:;" class="btn btn-sm btn-danger" id="delete-account-btn">确认</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("DeleteAccount", "Agent", FormMethod.Post, new { id = "remove-account-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.Hidden("Id")
+        @Html.Hidden("AgentId", Model.Model.Id)
+    }
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+            function removeItem(itemId) {
+                $("#modal-alert").modal('show');
+
+                $("#delete-account-btn").live("click", function (event) {
+                    $("#remove-account-form #Id").val(itemId || 0);
+                    $("#remove-account-form").submit();
+                });
+            }
+    </script>
+}

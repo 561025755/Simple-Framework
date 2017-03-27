@@ -1,0 +1,14 @@
+﻿@model MSP.Models.MetroStationSearch
+@using (Html.BeginForm("index","metrostation",FormMethod.Get)) { 
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-3">
+                @Html.DropDownListFor(x=>x.Line,ViewData["line"] as IEnumerable<SelectListItem>,"选择线路",new { @class="form-control"})
+            </div>
+            <div class="col-sm-3">
+                @Html.DropDownListFor(x => x.GradeId, ViewData["grade"] as IEnumerable<SelectListItem>, "选择等级", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+}

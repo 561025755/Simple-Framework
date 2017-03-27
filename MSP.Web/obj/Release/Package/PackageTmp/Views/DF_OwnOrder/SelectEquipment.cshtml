@@ -1,0 +1,749 @@
+﻿@using MSP.Models.Domain;
+@using MSP.Core.Domain;
+@model OrderCreateModel
+@{
+    ViewBag.Title = "创建东方天呈订单";
+    var cityList = ViewData["citylist"] as List<CityBean>;
+    var Businesstypes = ViewData["Businesstypes"] as List<BusinesstypeBean>;
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/css/datepicker3.css")
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    <style>
+        .m-r-5 {
+            margin: 3px !important;
+        }
+    </style>
+}
+
+@section PageTitle{
+    创建东方天呈订单 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <form action="/" method="POST">
+                    <div id="wizard">
+                        <ol class="bwizard-steps clearfix clickable" role="tablist">
+                            <li role="tab" aria-selected="true" style="z-index: 3;" class="">
+                                <a href="/DF_OwnOrder/Create/@Model.Id"><span class="label badge-inverse">1</span>  </a><a href="/DF_OwnOrder/Create/@Model.Id">
+                                    选择订单档期
+                                </a><a href="/DF_OwnOrder/Create/@Model.Id"> <small>配置订单内容、选择档期、播放频次.</small></a>
+                            </li>
+                            <li class="active" role="tab" aria-selected="false" style="z-index: 2;">
+                                <span class="label">2</span>
+                                配置订单点位明细
+                                <small>设置订单生成方式、配置点位筛选条件</small>
+                            </li>
+                            <li role="tab" aria-selected="false" style="z-index: 1;" class="">
+                                <a href="/DF_OwnOrder/ConfirmOrder/@Model.Id"><span class="label badge-inverse">3</span>  </a><a href="/DF_OwnOrder/ConfirmOrder/@Model.Id">
+                                    完成订单
+                                </a><a href="/DF_OwnOrder/ConfirmOrder/@Model.Id"> <small>确认订单详情、点位明细.</small></a>
+                            </li>
+                        </ol>
+                        <!-- begin wizard step-2 -->
+                        <div>
+                            <fieldset>
+                                <legend class="pull-left width-full">配置订单点位明细</legend>
+                                <!-- begin row -->
+                                <div class="row text-center">
+                                    <div class="col-md-4">
+                                        <a href="javascript:;" onclick="openModal(null)" class="btn btn-lg btn-inverse">
+                                            <i class="fa fa-search fa-2x pull-left"></i>
+                                            自定义编辑点位
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                         <a href="javascript:$('#formGotoMap').submit();" class="btn btn-lg btn-inverse">
+                                            <i class="fa fa-map-marker fa-2x pull-left"></i>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地图筛选&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a href="javascript:openAutoGenerate();" class="btn btn-lg btn-inverse">
+                                            <i class="fa fa-smile-o fa-2x pull-left"></i>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自动生成&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+
+                                    <br />
+                                    <div class="tab-overflow overflow-right">
+                                        <ul class="nav nav-tabs" id="ulCurrentCity">
+                                            <li class="prev-button"><a href="javascript:;" data-click="prev-tab" class="text-inverse"><i class="fa fa-arrow-left"></i></a></li>
+                                            <li class="next-button"><a href="javascript:;" data-click="next-tab" class="text-inverse"><i class="fa fa-arrow-right"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <table class="table" id="tabEquipments">
+                                        <thead>
+                                            <tr>
+                                                <th>商家名称</th>
+                                                <th>经营面积</th>
+                                                <th>人均消费程度（元）</th>
+                                                <th>商圈名称</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <!-- end row -->
+                            </fieldset>
+                        </div>
+                        <!-- end wizard step-2 -->
+                        <ul class="pager bwizard-buttons">
+                            <li class="previous" role="button" aria-disabled="true">
+                                <a href="/DF_OwnOrder/Create/@Model.Id">← Previous</a>
+                            </li>
+                            <li class="next" role="button" aria-disabled="false">
+                                <a href="/DF_OwnOrder/ConfirmOrder/@Model.Id">Next →</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@using (Html.BeginForm("EquipmentOnMap", "DF_OwnOrder", FormMethod.Get, new { id = "formGotoMap" }))
+{
+    <input type="hidden" value="@Model.Id" name="orderId" />
+    <input type="hidden" value="" name="cityCode" id="CurrentCityCode" />
+}
+
+<!--Add modal begin-->
+<div class="modal fade" data-backdrop="static" id="modal-billboard-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">×</button>
+                <h4 class="modal-title">添加点位</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <select class="form-control" id="selCities">
+                            @foreach (var item in cityList)
+                            {
+                                <option value="@item.Code">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="searchName" name="searchName" placeholder="关键字" type="text" value="">
+                    </div>
+                    <div class="col-sm-2"><input type="button" class="btn btn-inverse" value="搜索" onclick="showEquipList()"></div>
+                </div>
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>商家名称</th>
+                              
+                                <th>经营面积</th>
+                                <th>人均消费(元)</th>
+                                <th>主营类型</th>
+                                <th>商圈名称</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--Add modal end-->
+<!--Add modal begin-->
+<div class="modal fade" id="modal-auto-generate">
+    <div class="modal-dialog" style="min-width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">自动生成订单点位</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-pills" id="ulGeneratedType">
+                    <li class="active" generatedType="1"><a href="#nav-pills-tab-1" data-toggle="tab">统一标准投放</a></li>
+                    <li generatedType="2"><a href="#nav-pills-tab-2" data-toggle="tab">自定义数量投放</a></li>
+                </ul>
+                <div class="panel">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="nav-pills-tab-1">
+                            <div class="row">
+                                <label class="col-md-2 control-label">人均消费：</label>
+                                <div class="col-md-10">
+                                    <div class="input-group input-daterange">
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="unifiedChargeBegin">
+                                        <span class="input-group-addon"> - </span>
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="unifiedChargeEnd">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label">餐厅经营面积：</label>
+                                <div class="col-md-10">
+                                    <div class="input-group input-daterange">
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="unifiedAreaBegin">
+                                        <span class="input-group-addon"> - </span>
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="unifiedAreaEnd">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label">餐厅主营类型：</label>
+                                <div class="col-md-7">
+                                    <select multiple="multiple" class="form-control" id="unifiedBusinessType">
+                                        @foreach (var item in Businesstypes)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label text-danger">(可多选，请按住 Ctrl键选中)</label>
+                            </div>
+
+                            <div class="row m-t-20">
+                                <label class="col-md-2 control-label">投放数量：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" style="display:inline; width:150px;" placeholder="（只能输入数字）" type="number" min="1" id="unifiedDeliveryNumber">
+                                    <label class="checkbox-inline m-l-10">
+                                        <input type="checkbox" value="" id="ckAllCity" />
+                                        全部选中
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-20 m-l-1" id="divunifiedCityList">
+                                @foreach (var item in cityList)
+                                {
+                                    <a href="javascript:;" class="btn btn-grey btn-xs p-r-10 p-l-10 m-r-5" name="btnCheckCity" cityCode="@item.Code">@item.Name</a>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="nav-pills-tab-2">
+                            <table class="table" id="tbCityGeneratedList">
+                                <thead>
+                                    <tr>
+                                        <th>投放城市</th>
+                                        <th>投放数量</th>
+                                        <th>人均消费</th>
+                                        <th>经营面积</th>
+                                        <th>主营类型</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                            <div class="row m-l-5" id="divcustomCityList">
+                                @foreach (var item in cityList)
+                                {
+                                    <a href="javascript:;" class="btn btn-grey btn-xs p-r-10 p-l-10 m-r-5" name="btnRadioCity" cityCode="@item.Code">@item.Name</a>
+                                }
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label">人均消费：</label>
+                                <div class="col-md-10">
+                                    <div class="input-group input-daterange">
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="customChargeBegin">
+                                        <span class="input-group-addon"> - </span>
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="customChargeEnd">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label">餐厅经营面积：</label>
+                                <div class="col-md-10">
+                                    <div class="input-group input-daterange">
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="customAreaBegin">
+                                        <span class="input-group-addon"> - </span>
+                                        <input class="form-control" placeholder="（只能输入数字）" type="number" min="1" id="customAreaEnd">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label">餐厅主营类型：</label>
+                                <div class="col-md-7">
+                                    <select multiple="multiple" class="form-control" id="customBusinessType">
+                                        @foreach (var item in Businesstypes)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label text-danger">(可多选，请按住 Ctrl键选中)</label>
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label">投放数量：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" style="display:inline; width:150px;" placeholder="（只能输入数字）" type="number" min="1" id="customDeliveryNumber">
+                                    <label class="control-label text-danger">(最大可投放数量：<span id="spanEquipmentCount">0</span>)</label>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-10">
+                                <label class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <a href="javascript:;" class="btn btn-sm btn-light-blue" onclick="AddGeneratedDemand('custom')"><i class="fa fa-plus"></i> 保存并添加其他城市</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">关闭</a>
+                <a href="javascript:;" class="btn btn-sm btn-light-blue" onclick="AutoGenerated()">一键生成</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Add modal end-->
+<div class="loading-overlay fade in">   
+    <span class="spinner"></span>
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    <script>
+
+        var targetPropertyNumber;
+        var searchType=1;
+        $(document).ready(function () {
+            $('#tbCityGeneratedList').hide();
+            loadorderCity();
+            equipmentListChange();
+            $("*[name='btnCheckCity']").click(function (e) {
+                if ($(this).hasClass('btn-grey')) {
+                    $(this).removeClass('btn-grey').addClass('btn-pink');
+                } else {
+                    $(this).removeClass('btn-pink').addClass('btn-grey');
+                }
+            });
+
+            $("*[name='btnRadioCity']").click(function (e) {
+                $("*[name='btnRadioCity']").removeClass('btn-pink').addClass('btn-grey');
+                $(this).removeClass('btn-grey').addClass('btn-pink');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/DF_OwnOrder/GetEquipmentCount',
+                    data: { orderId: @Model.Id,cityCode:$(this).attr("cityCode")},
+                    dataType: 'JSON',
+                    success: function (datas) {
+                        $("#spanEquipmentCount").text(datas.data);
+                    }
+                });
+            });
+
+
+
+            $('#ckAllCity').click(function (e) {
+                if($(this).attr("checked") == 'checked'){
+                    $('*[name="btnCheckCity"]').removeClass('btn-grey').addClass('btn-pink');
+                } else {
+                    $('*[name="btnCheckCity"]').removeClass('btn-pink').addClass('btn-grey');
+                }
+            });
+
+        });
+
+        function loadorderCity()
+        {
+            $("#ulCurrentCity li[litype=city]").each(function(){
+                $(this).remove();
+            });
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/GetOrderCities',
+                data: { orderId: @Model.Id},
+                async:false,
+                dataType: 'JSON',
+                success: function (datas) {
+                    $(datas.data).each(function (index, obj) {
+                        $("#ulCurrentCity").append('<li class="" litype="city" cityCode="'+obj.Code+'"><a data-toggle="tab">'+obj.Name+'</a></li>')
+                    });
+
+                }
+            });
+            $("#ulCurrentCity li[litype=city]").first().addClass('active');
+            $("#selCities").val($("#ulCurrentCity li[litype=city]").first().attr("cityCode"));
+            $("#CurrentCityCode").val($("#ulCurrentCity li[litype=city]").first().attr("cityCode"));
+
+            $("#ulCurrentCity li[litype=city]").click(function(){
+                if($(this).attr("cityCode")!=$("#ulCurrentCity").find("li[class=active]").attr("cityCode"))
+                {
+                    $("#ulCurrentCity li").removeClass('active');
+                    $(this).addClass('active');
+                    $("#CurrentCityCode").val($(this).attr("cityCode"));
+                    equipmentListChange();
+                }
+            });
+        }
+
+        function openModal(obj) {
+            if(obj==null)
+            {
+                searchType=1;
+                showEquipList();
+            }
+            else
+            {
+                searchType=2;
+                targetPropertyNumber = obj;
+                showEquipList();
+            }
+
+        }
+
+        function addToOrder(PropertyNumber,cityCode) {
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/AddScope',
+                data: { orderId: @Model.Id, PropertyNumber: PropertyNumber,cityCode:cityCode},
+                dataType: 'JSON',
+                success: function (datas) {
+                    if (datas.success) {
+                        $("#modal-billboard-list").modal('hide');
+                        gritter("友情提示！", "添加成功");
+                        loadorderCity();
+                        $("#ulCurrentCity").find("li").removeClass("active").each(function(){
+                            if($(this).attr("cityCode")==cityCode)
+                            {
+                                $(this).addClass('active');
+                            }
+                        });
+                        equipmentListChange();
+                    }
+                    else {
+                        var error = datas.error || "添加设备过程中发生错误，请稍后重试。";
+                        gritter("我们真的很抱歉！", error);
+                    }
+
+                }
+            });
+
+        }
+
+        function equipmentListChange() {
+            var cityCode = $("#ulCurrentCity").find("li[class=active]").attr("cityCode");
+            var orderId =@Model.Id;
+
+            $("#selCities").val(cityCode);
+            $('#tabEquipments').dataTable().fnDestroy();
+            $('#tabEquipments').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 20,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/DF_OwnOrder/GetOrderEquipment',
+                    "data": function (d) {
+                        d.orderId=orderId;
+                        d.cityCode = cityCode;
+                    }
+                },
+                "columns": [
+                    { "data": "BusinessName" },
+                    { "data": "Area" },
+                    { "data":'Charge'},
+                     { "data": "TradingAreaName" },
+                    {
+                        "data": function (e) {//这里给最后一列返回一个操作列表
+                            return '<a href="javascript:;"  onclick="openModal(\''+e['PropertyNumber']+'\')" class="btn show-detail-json  btn-primary btn-xs">变更</a><a href="javascript:;" onclick="DeleteEquipment(\''+e['PropertyNumber']+'\')" class="btn show-detail-json  btn-white btn-xs">删除</a>';
+
+
+                        }
+                    }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+
+        }
+
+        function DeleteEquipment(PropertyNumber)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/DeleteEquipment',
+                data: { PropertyNumber: PropertyNumber,orderId: @Model.Id },
+                dataType: 'JSON',
+                success: function (datas) {
+                    if(datas.success)
+                        equipmentListChange();
+                }
+            });
+        }
+
+        function openAutoGenerate(){
+            loadGeneratedDemand();
+            $("#modal-auto-generate").modal('show');
+        }
+
+        function ChangeEquipToOrder(PropertyNumber)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/ChangeEquipmentForOrder',
+                data: { PropertyNumber: PropertyNumber,targetPropertyNumber: targetPropertyNumber ,orderId: @Model.Id},
+                dataType: 'JSON',
+                success: function (datas) {
+                    if(datas.success)
+                    {
+                        $("#modal-billboard-list").modal('hide');
+                        targetPropertyNumber=0;
+                        gritter("友情提示！", "变更设备成功");
+                        //loadorderCity()
+                        equipmentListChange();
+                    }
+                }
+            });
+        }
+
+        function AddGeneratedDemand(GenratedType){
+            var IsDeleteOld=false;
+            var CityCode="";
+            if(GenratedType=="unified")
+            {
+                IsDeleteOld=true;
+            }
+            $("#div"+GenratedType+"CityList").find("a[class*='btn-pink']").each(function(){
+                debugger;
+                if(CityCode=="")
+                    CityCode=$(this).attr("cityCode");
+                else
+                    CityCode+=","+$(this).attr("cityCode");
+            });
+
+            if(CityCode!="")
+            {
+                var BusinessType = $("#"+GenratedType+"BusinessType").val();
+                if(BusinessType!=""&&BusinessType!=null)
+                {
+                    BusinessType.join();
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/DF_OwnOrder/AddGeneratedDemand',
+                    async:false,
+                    data: { orderId: @Model.Id,ChargeBegin:$("#"+GenratedType+"ChargeBegin").val(),ChargeEnd:$("#"+GenratedType+"ChargeEnd").val(),
+                        AreaBegin:$("#"+GenratedType+"AreaBegin").val(),AreaEnd:$("#"+GenratedType+"AreaEnd").val(),
+                        DeliveryNumber:$("#"+GenratedType+"DeliveryNumber").val(),BusinessType:BusinessType,CityCode:CityCode,IsDeletedOld:IsDeleteOld},
+                    dataType: 'JSON',  
+                    error: function (XMLHttpRequest, textStatus, errorThrown) { $(".loading-overlay").hide(); },
+                    beforeSend: function () {
+                        $(".loading-overlay").show();
+                    },
+                    success: function (datas) {
+                        if(datas.success)
+                        {
+                            $("input[id*='"+GenratedType+"']").each(function(){
+                                $(this).val("");
+                            });
+                            $("select[id*='"+GenratedType+"']").each(function(){
+                                $(this).val("");
+                            });
+                            $("*[name='btnRadioCity']").removeClass('btn-pink').addClass('btn-grey');
+                            $("*[name='btnCheckCity']").removeClass('btn-pink').addClass('btn-grey');
+                            loadGeneratedDemand();
+                        }
+                        $(".loading-overlay").hide(); 
+                    }
+                });
+            }
+
+        }
+
+        function AutoGenerated()
+        {
+            var generatedType = $("#ulGeneratedType").find("li[class=active]").attr("generatedType");
+            if(generatedType=="1")
+            {
+                AddGeneratedDemand("unified");
+
+            }
+            $("#modal-auto-generate").modal('hide');
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/GenerateEquipment',
+                async:false,
+                data: { orderId: @Model.Id},
+                dataType: 'JSON',
+                error: function (XMLHttpRequest, textStatus, errorThrown) { $(".loading-overlay").hide(); },
+                beforeSend: function () {
+                    $(".loading-overlay").show();
+                },
+                success: function (datas) {
+                    if(datas.success)
+                    {
+                        loadorderCity()
+                        equipmentListChange();
+                    }
+                    else
+                        $("#modal-auto-generate").modal('show');
+                    $(".loading-overlay").hide();
+                }
+            });
+
+        }
+
+        function loadGeneratedDemand()
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/GetGeneratedDemand',
+                data: { orderId: @Model.Id },
+                dataType: 'JSON',
+                success: function (datas) {
+                    $("#tbCityGeneratedList").find("tbody").html("");
+                    if( datas.data.length==0)
+                    {
+                        $('#tbCityGeneratedList').hide();
+                    }
+                    else
+                    {
+                        $(datas.data).each(function (index, obj) {
+                            $("#tbCityGeneratedList").find("tbody").append('<tr><td>'+obj.CityName+'</td><td>'+obj.DeliveryNumber+'</td><td>'+obj.ChargeRange+'</td><td>'+obj.AreaRange+'</td><td>'+(obj.BusinessTypeName==null?"-":obj.BusinessTypeName)+'</td><td><a href="javascript:;" class="btn btn-link p-0" onclick="DeleteGeneratedDemand('+obj.Id+')"><i class="fa fa-trash-o"></i></a></td></tr>');
+                        });
+                        $('#tbCityGeneratedList').show();
+                    }
+                }
+            });
+
+        }
+
+        function DeleteGeneratedDemand(Id)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/DF_OwnOrder/DeleteGeneratedDemand',
+                data: { Id:Id },
+                dataType: 'JSON',
+                success: function (datas) {
+                    loadGeneratedDemand();
+                }
+            });
+        }
+
+
+        function showEquipList()
+        {
+            if(searchType==1)
+            {
+                $("#modal-billboard-list .modal-title").text("添加点位");
+            }
+            else
+            {
+                $("#modal-billboard-list .modal-title").text("变更点位");
+            }
+            $('#data-table').dataTable().fnDestroy();
+            $('#data-table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "pageLength": 10,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "bAutoWidth": false,
+                "pagingType": "full",
+                "searching": false,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/DF_OwnOrder/ListBussinessEquipment',
+                    "data": function (d) {
+                        d.orderId=@Model.Id,
+                        d.searchName = $("#searchName").val(),
+                        d.cityCode = $("#selCities").val()
+                    }
+                },
+                "columns": [
+                    { "data": "BusinessName" },
+                    { "data": "Area" },
+                    { "data":'Charge'},
+                     { "data": "Businesstype" },
+                       { "data": "TradingAreaName" },
+                    {
+                        "data": function (e) {//这里给最后一列返回一个操作列表
+                            if(searchType==1)
+                            {
+                                return '<a class="btn btn-default btn-xs show-detail-json" href="javascript:;" onclick="addToOrder(\'' + e['PropertyNumber']  +'\',\''+e['City']+'\')">备选</a>';
+                            }
+                            else
+                            {
+                                return '<a class="btn btn-primary btn-xs show-detail-json" href="javascript:;" onclick="ChangeEquipToOrder(\'' + e['PropertyNumber'] + '\')">变更</a>';
+                            }
+
+                        }
+                    }
+                ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                    processing: "载入中",//处理页面数据的时候的显示
+                    paginate: {//分页的样式文本内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后一页"
+                    },
+
+                    zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                }
+            });
+            $("#modal-billboard-list").modal('show');
+        }
+
+    </script>
+}

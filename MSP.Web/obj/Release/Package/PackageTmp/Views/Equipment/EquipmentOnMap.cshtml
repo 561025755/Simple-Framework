@@ -1,0 +1,126 @@
+﻿@using System.Web.Optimization;
+
+@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+
+@using SelectListItem = System.Web.Mvc.SelectListItem;
+
+
+
+@model MSP.Core.Domain.BusinessQueryBean
+
+@{
+    ViewBag.Title = "站牌地图列表";
+}
+
+@section header{
+    @Scripts.Render(ViewData["mapAddress"].ToString())
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+    @Styles.Render("~/Content/select2-4.0.3/css/select2.min.css")
+    @Styles.Render("~/Content/mapDefault.css")
+    <style type="text/css">
+        .orderstatus-0 td {
+            background: rgba(21, 20, 20, 0.84); /*black*/
+        }
+
+        .orderstatus-1 td {
+            background: #ffc4c4; /*red*/
+        }
+
+        .orderstatus-2 td {
+            background: #c4ffc4; /*green*/
+        }
+
+        .anchorBL {
+            display: none;
+        }
+
+        .theme-panel {
+            bottom: 0;
+            top: 212px;
+        }
+
+        .tangram-suggestion-main {
+            z-index: 999999;
+            height: 250px;
+            overflow-y: scroll;
+        }
+    </style>
+}
+
+
+
+<div class="map" id="map"></div>
+@*<div class="panel" style="position:relative;top:-40px; padding:15px;">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.DropDownListFor(model => model.province, (ViewData["province"] as SelectList), "省", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownListFor(model => model.city, new List<SelectListItem> { }, "市", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownListFor(model => model.region, new List<SelectListItem> { }, "区", new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                @Html.DropDownListFor(model => model.available, new List<SelectListItem> { new SelectListItem { Value = "1", Text = "是" }, new SelectListItem { Value = "0", Text = "否" } }, "站牌是否亮灯", new { @class = "form-control" })
+
+
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-success btn-block" href="javascript:;" onclick="drawMarkersInBounds(true)">查询</a>
+            </div>
+        </div>
+    </div>*@
+
+<!-- #modal-without-animation -->
+<div class="modal fade" id="modal-Equipment-list">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>经营面积</th>
+                                <th>人均消费程度（元）</th>
+                                <th>商圈名称</th>
+                                <th>摄像头数量</th>
+                                <th>是否联网</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal-message -->
+
+<div class="loading-overlay fade in">
+    <span class="spinner"></span>
+</div>
+<input id="pointVS" type="hidden" />
+<input type="hidden" id="pointX" value="@ViewData["PointX"]" />
+<input type="hidden" id="pointY" value="@ViewData["PointY"]" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/themes/" + ViewData["fileAddress"].ToString() + "/ds.map.equipment.js")
+    @Scripts.Render("~/Content/select2-4.0.3/js/select2.min.js")
+    @Scripts.Render("~/Content/themes/sean/getCityRegion.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            clearAndReload();
+        });
+    </script>
+
+}

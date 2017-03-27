@@ -1,0 +1,106 @@
+﻿@model SD.Models.Domain.LogModel
+
+@{@model SD
+    ViewBag.Title = "系统日志详情";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    系统日志详情 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">详细信息</h4>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.CreateTime)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.CreateTime)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.LogLevel)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.LogLevel)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.User)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.User)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.IpAddress)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.IpAddress)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.PageUrl)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.PageUrl)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.ReferrerUrl)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.ReferrerUrl)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.ShortMessage)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.ShortMessage)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.DisplayNameFor(model => model.FullMessage)
+                    </label>
+                    <div>
+                        @Html.DisplayFor(model => model.FullMessage)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>

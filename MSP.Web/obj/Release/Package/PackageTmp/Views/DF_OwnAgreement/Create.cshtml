@@ -1,0 +1,100 @@
+﻿@using MSP.Core.Enum;
+@{
+    ViewBag.Title = "创建东方天呈确认单";
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/css/bwizard.min.css")
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+}
+
+@section PageTitle{
+    创建东方天呈确认单 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">列表视图</h4>
+            </div>
+            <div class="panel-body">
+                <form action="/" method="POST">
+                    <div class="bwizard clearfix">
+                        <ol class="bwizard-steps clearfix clickable" role="tablist">
+                            <li role="tab" aria-selected="true" class="active" style="z-index: 3;">
+                                <span class="label badge-inverse">1</span><a href="#step1" class="hidden-phone">
+                                    选择确认单类型
+                                </a><a href="#step1" class="hidden-phone"><small>详情见类型描述和代理商合同</small></a><a href="#step1" class="hidden-phone">
+                                </a>
+                            </li>
+                            <li role="tab" aria-selected="false" style="z-index: 2;">
+                                <span class="label">2</span><a href="#step2" class="hidden-phone">
+                                    配置确认单关联的订单
+                                </a><a href="#step2" class="hidden-phone"><small>选择未创建过确认单的订单，用于关联生成交易信息</small></a><a href="#step2" class="hidden-phone">
+                                </a>
+                            </li>
+                            <li role="tab" aria-selected="false" style="z-index: 1;">
+                                <span class="label">3</span><a href="#step3" class="hidden-phone">
+                                    提交确认单
+                                </a><a href="#step3" class="hidden-phone"><small>提交确认单审批或保存为草稿下次提交.</small></a><a href="#step3" class="hidden-phone">
+                                </a>
+                            </li>
+                        </ol>
+                        <!-- begin wizard step-1 -->
+                        <!-- end wizard step-1 -->
+                        <!-- begin wizard step-2 -->
+                        <!-- end wizard step-2 -->
+                        <!-- begin wizard step-3 -->
+                        <!-- end wizard step-3 -->
+                        <div class="well">
+                            <div id="step1" role="tabpanel" class="bwizard-activated" aria-hidden="false">
+                                <fieldset>
+                                    <legend class="pull-left width-full">选择确认单类型</legend>
+                                    <div class="row m-40 text-center">
+                                        <div class="col-md-6">
+                                            <a href="@Url.Action("SelectOrder", new { agreementType=(int)AgreementType.Normal })" class="btn btn-lg btn-inverse">
+                                                <i class="fa fa-tasks fa-2x pull-left"></i>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标准确认单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                                <small>代理商签约媒介主</small>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a href="javascript:$.alertMsg('暂未启用')" class="btn btn-lg btn-inverse">
+                                                <i class="fa fa-book fa-2x pull-left"></i>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;直签确认单&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                                <small>广告主直签媒介主</small>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div>&nbsp;</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/themes/sean/bwizard.js")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/themes/sean/form-wizards.min.js")
+    <script>
+	    $(document).ready(function() {
+	        
+	    });
+    </script>
+}

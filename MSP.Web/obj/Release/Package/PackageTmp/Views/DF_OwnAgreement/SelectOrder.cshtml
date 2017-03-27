@@ -1,0 +1,152 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@using MSP.Core.Domain;
+@using MSP.Core.Enum;
+@using MSP.Models.Domain;
+
+@model MSP.Core.Pagination.IPagination<Df_Order>
+
+@{
+    ViewBag.Title = "创建东方天呈确认单";
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/css/bwizard.min.css")
+    @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+
+<style>
+    .btn-default.active {
+        background:#b0afaf;
+    }
+</style>
+}
+
+@section PageTitle{
+    选择订单 <small>点击 @Html.ActionLink("这里", "Index") 返回列表 </small>
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">选择确认单类型</h4>
+            </div>
+            <div class="panel-body">
+                <form action="/" method="POST">
+                    <div id="" class="bwizard clearfix">
+                        @*<ol class="bwizard-steps clearfix clickable" role="tablist">
+                            <li role="tab" aria-selected="false" style="z-index: 3;">
+                                <span class="label badge-inverse">1</span><a href="#step1" class="hidden-phone">
+                                    选择确认单类型
+                                </a><a href="#step1" class="hidden-phone"><small>详情见类型描述和代理商合同</small></a><a href="#step1" class="hidden-phone">
+                                </a>
+                            </li>
+                            <li role="tab" aria-selected="true" class="active"  style="z-index: 2;">
+                                <span class="label">2</span><a href="#step2" class="hidden-phone">
+                                    配置确认单关联的订单
+                                </a><a href="#step2" class="hidden-phone"><small>选择未创建过确认单的订单，用于关联生成交易信息</small></a><a href="#step2" class="hidden-phone">
+                                </a>
+                            </li>
+                            <li role="tab" aria-selected="false" style="z-index: 1;">
+                                <span class="label">3</span><a href="#step3" class="hidden-phone">
+                                    提交确认单
+                                </a><a href="#step3" class="hidden-phone"><small>提交确认单审批或保存为草稿下次提交.</small></a><a href="#step3" class="hidden-phone">
+                                </a>
+                            </li>
+                        </ol>*@
+                        <!-- begin wizard step-1 -->
+                        <!-- end wizard step-2 -->
+
+                        <div class="well">
+                            <div id="agreementType" class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default btn-lg active">
+                                    <input type="radio" name="options" id="option1" value="@((int)AgreementType.Normal)"> 标准确认单
+                                </label>
+                                <label class="btn btn-default btn-lg">
+                                    <input type="radio" name="options" id="option2" value="@((int)AgreementType.Direct)"> 直签确认单
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="orderdiv" class="well">
+                            <div id="step2" role="tabpanel" class="bwizard-activated" aria-hidden="false">
+                                <fieldset>
+                                    <legend class="pull-left width-full">选择一个订单</legend>
+                                    <!-- begin row -->
+
+                                    <div class="row">
+                                        @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+                                   {
+                                       column.For(c => c.CustomerName).Named("客户名称").SortColumnName("CustomerName");
+                                       column.For(c => c.Description).Named("订单备注").SortColumnName("Description");
+                                       column.For(c => c.Schedule).Named("订单档期").Sortable(false);
+                                       column.For(c => string.Format("{0}秒/{1}次",c.PlayTime,c.PlayCount)).Named("频次").Sortable(false);
+                                       //column.For(c => Html.Raw(
+                                       //    Convert.ToInt16(Request["agreementType"]) == (int)AgreementType.Normal ?
+                                       //    "<a href="+Url.Action("CreateNormal", new { orderid = c.Id })+" class=\"btn btn-primary btn-xs m-r-5\">创建该订单确认单</a>" :
+                                       //    "<a href="+Url.Action("CreateDirect", new { orderid = c.Id })+" class=\"btn btn-primary btn-xs m-r-5\">创建该订单确认单</a>"
+                                       //    )).Sortable(false);
+
+                                       column.For(c=>Html.Raw("<a href=\"javascript:CreateAgreement("+c.Id+");\" class=\"btn btn-primary btn-xs m-r-5\">创建该订单确认单</a>"));
+                                   }).Attributes(@class => "table table-email")
+                                    </div>
+                                    @Html.Raw(@Html.Pager(Model))
+
+                                    <!-- end row -->
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/Content/themes/sean/bwizard.js")
+    @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/themes/sean/form-wizards.min.js")
+    <script>
+	    $(document).ready(function() {
+	        $("input[type='radio']").click(function () {
+	            $("#orderdiv").removeClass("hidden");
+	        });
+	    });
+
+	    function CreateAgreement(orderid) {
+	        var agreementType = $('input[name="options"]:checked ').val();
+	        var actionName=GetActionName(agreementType);
+	        if(actionName!=""){
+	            location.href="/DF_OwnAgreement/"+actionName+"?orderid="+orderid;
+	        }
+
+	        
+	    }
+
+	    function GetActionName(agreementType){
+	        if(
+                agreementType == $("#option2").val()
+                ){
+	            alert("暂未开通");
+	        return "";
+
+	        }
+	        return "CreateNormal";
+	    }
+
+    </script>
+}

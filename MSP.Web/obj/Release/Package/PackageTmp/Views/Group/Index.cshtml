@@ -1,0 +1,148 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.UI.Grid;
+@using MSP.FrameWork.UI.Pager;
+@using MSP.Core.Pagination;
+@using MSP.Core.Sorting;
+@using MSP.Core.Domain;
+@using MSP.Core.Enum;
+
+@model IPagination<Sys_Group>
+
+    @{
+        ViewBag.Title = "用户组别";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    @section header{
+        @Styles.Render("~/Content/datatables/css/jquery.dataTables.css")
+        <style type="text/css">
+            .modal-dialog {
+                min-height: 400px;
+                min-width: 800px;
+            }
+        </style>
+    }
+
+    @section PageTitle{
+        用户组别列表 <small>点击 @Html.ActionLink("这里", "Create") 创建一个用户组别</small>
+    }
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <div class="m-b-5">
+            <a href="@Url.Action("Index")" class="btn btn-sm btn-primary"><i class="fa fa-file-text-o m-r-5"></i> 系统管理组别</a>
+            <a href="@Url.Action("Index",new { type=(int)MediaType.DF})" class="btn btn-sm btn-primary"><i class="fa fa-file-text-o m-r-5"></i> 东方天呈组别</a>
+        </div>
+        <div class="email-btn-row hidden-xs">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">列表视图</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(column =>
+           {
+               column.For(c => c.Id).Named("#");
+               column.For(c => c.Name).Named("名称");
+               column.For(c => c.SystemName).Named("系统标识");
+               column.For(c => c.IsSystemGroup).Named("预置组别");
+               column.For(c => c.Active).Named("有效与否");
+               column.For(c => Html.Partial("ViewUserPartial", c));
+               column.For(c => Html.RowActionLink(c.Id));
+           }).Attributes(@class => "table table-email")
+                    </div>
+                    @Html.Raw(@Html.Pager(Model))
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-12 -->
+        <!-- modal begin-->
+        <div class="modal fade" data-backdrop="static" id="modal-table-list">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="groupName"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table id="data-table-list" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>用户名</th>
+                                        <th>账号</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal end -->
+    </div>
+</div>  
+        @section Scripts {
+            @Scripts.Render("~/Content/datatables/js/jquery.dataTables.js")
+
+            <script type="text/javascript">
+                function viewUserList(id, name) {
+                    $('#modal-table-list').modal('show');
+                    $('#data-table-list').dataTable().fnDestroy();
+                    $('#groupName').html(name);
+
+                    $('#data-table-list').dataTable({
+                        "processing": true,
+                        "serverSide": true,
+                        "pageLength": 8,
+                        "lengthChange": false,
+                        "ordering": true,
+                        "info": true,
+                        "bAutoWidth": false,
+                        "pagingType": "full",
+                        "searching": false,
+                        "ajax": {
+                            "type": "POST",
+                            "url": '/Group/ViewUser',
+                            "data": function (d) {
+                                d.id = id
+                            }
+                        },
+                        "columns": [
+                            { "data": "Id" },
+                            { "data": "UserName" },
+                            { "data": "Email" }
+                        ],
+                        language: {
+                            lengthMenu: '<select class="form-control input-xsmall">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+                            processing: "载入中",//处理页面数据的时候的显示
+                            paginate: {//分页的样式文本内容。
+                                previous: "上一页",
+                                next: "下一页",
+                                first: "第一页",
+                                last: "最后一页"
+                            },
+                            zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
+                            //下面三者构成了总体的左下角的内容。
+                            info: "共_PAGES_ 页，显示第_START_ 到第 _END_ ，_TOTAL_ 项 ",//左下角的信息显示，大写的词为关键字。
+                            infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                            infoFiltered: ""//筛选之后的左下角筛选提示(另一个是分页信息显示，在上面的info中已经设置，所以可以不显示)，
+                        }
+                    });
+                }
+            </script>
+        }
+
+
+
+

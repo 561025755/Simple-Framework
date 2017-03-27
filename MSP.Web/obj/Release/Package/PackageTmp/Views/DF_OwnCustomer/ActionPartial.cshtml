@@ -1,0 +1,11 @@
+﻿@model MSP.Core.Domain.Cus_Customer
+
+@if (Model.Status == 3||Model.Status == 4||Model.Status == 5)
+{
+    @Html.RowActionLink(Model.Id,"Details","","Delete")
+}
+else
+{
+    @Html.RowActionLink(Model.Id)
+}
+

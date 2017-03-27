@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "demo2";
+}
+
+@section PageTitle {
+    确认单详情 <small>点击 @Html.ActionLink("这里", "Index") 回到订单列表</small>
+}
+
+<div class="row">
+
+    <!-- begin col-12 -->
+    <div class="col-md-10 ui-sortable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#agreement" data-toggle="tab" aria-expanded="true"><i class="fa fa-file"></i> 确认单详情</a></li>
+            <li class=""><a href="#video" data-toggle="tab" aria-expanded="false"><i class="fa fa-files-o"></i> 广告发布内容</a></li>
+            <li class=""><a href="#img" data-toggle="tab" aria-expanded="false"><i class="fa fa-files-o"></i> 内容证明材料</a></li>
+            <li class=""><a href="#approvalrecord" data-toggle="tab" aria-expanded="false"><i class="fa fa-files-o"></i> 审批记录</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="agreement" class="tab-pane fade active in">
+                <div class="invoice-company text-center">
+                    <span class="pull-right label label-primary">标准确认单</span>
+                    <span class="pull-right label label-warning">直签确认单</span>
+                    东方天呈订单确认单
+                </div>
+
+                <div>
+                    <p><strong>甲方：</strong>东方天呈文化传媒有限公司</p>
+                    <p><strong>乙方(代理商)：</strong>测试代理商 </p><br>
+                    <p>按照双方签订的年度广告发布《合作协议》（以下简称“年度合同”），列表为本次乙方代理 <span class="underline text-success">画面测试2, 2016-12-10到2016-12-31 </span> 广告发布信息：</p>
+                </div>
+
+
+                <div class="invoice-content">
+                    <p><strong>一、发布项目</strong></p>
+                    <div class="table-responsive">
+                        <table class="table table-invoice">
+                            <thead>
+                                <tr>
+                                    <th>投放城市</th>
+                                    <th>投放单位（秒）</th>
+                                    <th>投放规格</th>
+                                    <th>数量</th>
+                                    <th>投放时长（小时）</th>
+                                    <th>单价（元）</th>
+                                    <th>单项总价（元）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        一线城市<br>
+                                        <small>北京，上海</small>
+                                    </td>
+                                    <td>5</td>
+                                    <td>360次/天 * 14</td>
+                                    <td>380</td>
+                                    <td>291666.67</td>
+                                    <td>￥ 50.00</td>
+                                    <td>￥ 2,500.00</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        其他城市<br>
+                                        <small>成都，重庆，杭州</small>
+                                    </td>
+                                    <td>5</td>
+                                    <td>240次/天 * 14</td>
+                                    <td>380</td>
+                                    <td>291666.67</td>
+                                    <td>￥ 50.00</td>
+                                    <td>￥ 2,500.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p><strong>二、付款方式及时间</strong></p>
+                    <div>
+                        合同总金额：<span class="underline text-success">24202.08 </span>元（大写：人民币   <span class="underline text-success">贰万肆仟贰佰零贰元零捌分 </span>
+                        元整）。
+                    </div><br/>
+                    <div>付款方式：乙方应于<span class="underline text-success">2017年02月14日</span> 前支付<span class="underline text-success"> 24202.08 </span> 元（大写：人民币 <span class="underline text-success"> 贰万肆仟贰佰零贰元零捌分 </span>  元整）</div>
+                </div>
+
+                <div class="invoice-note m-t-40">
+                    * 本确认单作为合同款结算的依据，属于原合同不可分割的附件；若甲方为集团公司 则甲方需保证每次确认单签字盖章公司与之后付款主体保持一致.<br>
+                    * 本确认单一式俩份，甲乙方各执一份；与原合同具有同等法律效力。本确认单签字或盖章均生效，在本确认单上签字人即视为该方授权代表。（若签字需提供公司出具授权书）<br>
+                    * 发布工作完成后提供工作成果样报、样刊.附带户外广告位置附表.
+                </div>
+                <br/>
+                <div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <address class="m-t-5 m-b-5">
+                                <strong>甲方：（盖章）</strong><br>
+                                甲方授权代表签字：<br>
+                                <br>
+                                <span class="m-l-40">年</span><span class="m-l-20">月</span><span class="m-l-20">日</span><br>
+                            </address>
+                        </div>
+                        <div class="col-xs-6">
+                            <address class="m-t-5 m-b-5">
+                                <strong>乙方：（盖章）</strong><br>
+                                乙方授权代表签字：<br>
+                                <br>
+                                <span class="m-l-40">年</span><span class="m-l-20">月</span><span class="m-l-20">日</span><br>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="video">
+
+                <div class="table-responsive">
+                    <table class="table table-email"><thead><tr><th>附件名称</th><th>媒体类型</th><th>附件大小</th><th>提交时间</th><th></th></tr></thead><tbody><tr class="gridrow"><td>17485ee4.mp4</td><td>video/mp4</td><td>17979 KB</td><td>2016/12/16 10:39:32</td><td><a class="email-btn" href="/DF_OwnAgreement/Download/53"><i class="fa fa-download"></i></a></td></tr></tbody></table>
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="img">
+                <h4 class="m-b-15 m-t-0 p-b-10 underline">代理商证件档案图册视图</h4>
+                <ul class="attached-document clearfix" id="gallery">
+                    <li>
+                        <div class="document-name"><a href="/DF_OwnAgreement/Preview/55">670b1b00.jpg</a></div>
+                        <div class="document-file">
+                            <a href="/DF_OwnAgreement/Preview/55" data-lightbox="attach">
+                                <img src="/DF_OwnAgreement/Preview/55" alt="">
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="document-name"><a href="/DF_OwnAgreement/Preview/54">6a3be413.jpg</a></div>
+                        <div class="document-file">
+                            <a href="/DF_OwnAgreement/Preview/54" data-lightbox="attach">
+                                <img src="/DF_OwnAgreement/Preview/54" alt="">
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                <p>您可以点击图片查看大图或者点击证件档案标题在浏览器中查看。</p>
+            </div>
+
+            <div id="approvalrecord" class="tab-pane fade">
+
+
+                <h4 class="m-b-15 m-t-0 p-b-10">审批记录</h4>
+
+                <table class="table table-email">
+                    <thead>
+                        <tr>
+                            <th><a href="javascript:;">审批部门</a></th>
+                            <th><a href="javascript:;">是否通过</a></th>
+                            <th class="col-md-6"><a href="javascript:;">说明</a></th>
+                            <th><a href="javascript:;">审批时间</a></th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        <tr class="gridrow">
+                            <td>测试</td>
+
+
+
+                            <td><span class="label label-success"> 通过 </span></td>
+                            <td></td>
+                            <td>2016/12/16 10:37:39</td>
+                        </tr>
+                        <tr class="gridrow">
+                            <td>测试2</td>
+
+
+
+                            <td><span class="label label-success"> 通过 </span></td>
+                            <td></td>
+                            <td>2016/12/16 10:42:34</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!-- end col-12 -->
+
+    <div class="col-md-2">
+        <div class="hidden-sm hidden-xs">
+            <ul class="nav nav-pills nav-stacked nav-inbox">
+                <li class="active">
+                    <a href="javascript:;" data-toggle="modal">
+                        <i class="fa fa-retweet fa-fw m-r-5"></i> 广告确认单
+                    </a>
+                </li>
+
+
+                <li><a href="javascript:CommitAlert();"><i class="fa fa-edit m-r-5"></i> 报部门审核</a></li>
+
+                <li><a href="/DF_OwnAgreement/VideoAdd/10"><i class="fa fa-edit m-r-5"></i> 上传广告视频</a></li>
+                <li><a href="/DF_OwnAgreement/ImgAdd/10"><i class="fa fa-edit m-r-5"></i> 上传广告图片</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+

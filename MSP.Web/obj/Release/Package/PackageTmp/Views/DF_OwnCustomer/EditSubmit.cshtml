@@ -1,0 +1,7 @@
+﻿@model MSP.Models.Domain.CustomerModel
+
+@if (Model.Status != 3 && Model.Status != 4 && Model.Status != 5)
+{
+    <input type="button" class="btn btn-sm btn-success" id="submitCustomer" value="保存" />
+}
+<input type="reset" class="btn btn-sm btn-default" value="重置" />

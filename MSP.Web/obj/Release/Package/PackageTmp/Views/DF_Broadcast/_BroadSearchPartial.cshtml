@@ -1,0 +1,29 @@
+﻿@model MSP.Core.Domain.Df_Order
+
+@using (Html.BeginForm("Index", "DF_Broadcast", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-sm-3">
+            <label>选择刊播城市</label>
+            <div>
+                @Html.DropDownListFor(x => x.CityCode, ViewData["cities"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <label>起始时间</label>
+            <div class="input-group date" id="ScheduleStart" data-date-format="yyyy-mm-dd">                
+                @Html.TextBoxFor(x => x.StartDate, new { @class = "form-control" })
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <label>&nbsp;</label>
+            <div>
+                <input type="submit" class="form-control btn btn-sm btn-success" value="点击查询" />
+            </div>
+        </div>
+
+    </div>
+}

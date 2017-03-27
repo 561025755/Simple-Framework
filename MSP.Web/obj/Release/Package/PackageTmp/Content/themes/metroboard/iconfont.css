@@ -1,0 +1,68 @@
+﻿@font-face {font-family:"iconfont";
+	src:url('iconfont.eot?t=1461213079'); /* IE9*/
+	src:url('iconfont.eot?t=1461213079#iefix') format('embedded-opentype'), /* IE6-IE8 */
+	url('iconfont.woff?t=1461213079') format('woff'), /* chrome, firefox */
+	url('iconfont.ttf?t=1461213079') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+	url('iconfont.svg?t=1461213079#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.if{
+	font-family:"iconfont";
+	font-size:16px;
+	font-style:normal;
+	color:#bebebe;
+	-webkit-font-smoothing:antialiased;
+	-webkit-text-stroke-width:0.2px;
+	-moz-osx-font-smoothing:grayscale;
+}
+.if-star-e:before {content:"\e604";}
+.if-star-f:before{content:"\e605";}
+.if-circle-up:before{content:"\e606";}
+.if-circle-down:before{content:"\e607";}
+.if-pencil:before{content:"\e608";}
+.if-cross:before{content:"\e609";}
+.if-cancel:before{content:"\e60a";}
+.if-newspaper:before{content:"\e60b";}
+.if-folder:before{content:"\e60c";}
+.if-folder-open-f:before{content:"\e60d";}
+.if-folder-plus-f:before{content:"\e60e";}
+.if-folder-minus-f:before{content:"\e60f";}
+.if-folder-download-f:before{content:"\e610";}
+.if-folder-upload:before{content:"\e611";}
+.if-briefcase:before{content:"\e612";}
+.if-users:before{content:"\e613";}
+.if-doc-plus:before{content:"\e615";}
+.if-file-plus:before{content:"\e617";}
+.if-doc-upload:before{content:"\e616";}
+.if-message:before{content:"\e61a";}
+.if-folder-plus-e:before{content:"\e618";}
+.if-set:before{content:"\e61b";}
+.if-history:before{content:"\e61d";}
+.if-th:before{content:"\e61f";}
+.if-checkbox-f:before{content:"\e620";}
+.if-checkbox-un:before{content:"\e621";}
+.if-checkbox:before{content:"\e622";}
+.if-check:before{content:"\e623";}
+.if-list:before{content:"\e624";}
+.if-up:before{content:"\e627";}
+.if-double-up:before{content:"\e626";}
+.if-double-down:before{content:"\e628";}
+.if-down:before{content:"\e629";}
+.if-export:before{content:"\e62b";}
+.if-import:before{content:"\e62a";}
+.if-link:before{content:"\e62c";}
+.if-remarks:before{content:"\e62d";}
+.if-twitter:before{content:"\e62e";}
+.if-facebook:before{content:"\e62f";}
+.if-googleplus:before{content:"\e630";}
+.if-linkedin:before{content:"\e631";}
+.if-face:before{content:"\e632";}
+.if-caret-up-down:before{content:"\e633";}
+.if-collaboration:before{content:"\e634";}
+.if-comment:before{content:"\e635";}
+.if-share:before{content:"\e638";}
+.if-like:before{content:"\e639";}
+.if-heart:before{content:"\e63a";}
+.if-send:before{content:"\e63b";}
+.if-play:before{content:"\e63c";}
+.if-pause:before{content:"\e63d";}

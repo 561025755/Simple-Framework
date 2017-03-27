@@ -1,0 +1,120 @@
+﻿@model MSP.Models.Domain.Metro.MetroOrderTypeModel
+@{
+    ViewBag.Title = "创建地铁灯箱订单类型";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+
+}
+
+@section PageTitle{
+    创建地铁灯箱订单类型 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">创建订单类型</h4>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("CreateNewType", "MetroComboSetting"))
+            {
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Name)
+                            </label>
+                            <div>
+
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Priority)
+                            </label>
+                            <div>
+                                @Html.DropDownListFor(model => model.Priority, (new SelectListItem[] {
+                               new SelectListItem { Text="一级",Value="1"},
+                               new SelectListItem { Text = "二级", Value = "2" },
+                               new SelectListItem { Text = "三级", Value = "3" },
+                               new SelectListItem { Text = "四级", Value = "4" }}), "选择一个选项", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Priority)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.MaxConflict)
+                            </label>
+                            <div>
+                                @Html.TextBoxFor(model => model.MaxConflict, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.MaxConflict)
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>
+                                @Html.LabelFor(x => x.Remark)
+                            </label>
+                            <div>
+                                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Remark)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div>
+                                @Html.CheckBoxFor(model => model.Customerable)<label>
+                                    @Html.LabelFor(x => x.Customerable)
+                                </label>
+                                @Html.ValidationMessageFor(model => model.Customerable)
+                            </div>
+                        </div>
+
+                      
+                    </div>
+                </div>
+
+
+                <input type="submit" class="btn btn-success" />
+                <input type="reset" class="btn btn-default" />
+                <input type="button" class="btn btn-primary" onclick="CreateNew()" value="添加套餐产品配置" />
+               
+
+
+            }
+        </div>
+    </div>
+    <!-- end panel -->
+</div>
+
+<script type="text/javascript">
+    function CreateNew()
+    {
+
+    }
+</script>
+
+

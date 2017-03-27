@@ -1,0 +1,6 @@
+﻿@model MSP.Core.Domain.Cus_Customer
+
+@if (Model.Status == 3)
+{
+    <a class="btn btn-danger btn-xs show-detail-json" href="javascript:;" name="OpenQueueDetails" tag="@Model.Id" onclick="openQueueDetails('@Model.Name','@Model.OrgCode',@Model.UserId)"><i class="fa fa-angle-double-down" data-toggle="tooltip"></i> @Model.Amount 人</a>
+}

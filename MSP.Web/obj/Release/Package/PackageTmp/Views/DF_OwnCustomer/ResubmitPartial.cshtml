@@ -1,0 +1,19 @@
+﻿@model MSP.Models.Domain.CustomerModel
+
+<div class="form-inline">
+    <div class="form-group">
+        @Html.ActionLink("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-sm btn-success" })
+    </div>
+
+    @if (Model.Status == -1 || Model.Status == 2)
+    {
+        <div class="form-group">
+
+            @using (Html.BeginForm("Examine", "DF_OwnCustomer", FormMethod.Post))
+            {
+                <input type="submit" class="btn btn-sm btn-primary" value="重新提交审核" />
+                <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.Id" />
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,213 @@
+﻿@using System.Web.Optimization;
+@using System.Web.WebPages;
+@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+
+@*@using DigitalSignage.Framework.UI.Grid;
+@using DigitalSignage.Framework.UI.Pager;
+@using DigitalSignage.Core.Pagination;
+@using DigitalSignage.Core.Sorting;
+@using DigitalSignage.Core.Domain;
+@using DigitalSignage.Models;*@
+
+
+@using MSP.Core.Enum;
+@using MSP.Core.Domain;
+@using MSP.Models.Domain;
+@model MSP.Models.Domain.ApprovalModel<AgreementModel>
+
+@{
+    ViewBag.Title = "确认单审批";
+}
+
+@section header{
+    
+
+    <style type="text/css">
+        .progress {
+            margin-bottom: 0;
+        }
+
+        .field {
+            width: 30%;
+        }
+    </style>
+}
+
+@section PageTitle {
+    确认单审批 <small>点击 <a href="#" onclick="goBack()">这里</a> 返回</small>
+}
+
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-10 ui-sortable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#agreement" data-toggle="tab"><i class="fa fa-list-alt"></i> 内容</a></li>
+            <li><a href="#auditDesc" data-toggle="tab"><i class="fa fa-list-alt"></i> 审批记录</a></li>
+        </ul>
+
+
+        <div class="wrapper bg-white">
+
+            <div class="tab-content">
+
+
+                <div class="tab-pane fade active in" id="agreement">
+                    @Html.Partial("_AgreementNomal", Model.ContentModel)
+                </div>
+
+
+                <div class="tab-pane fade" id="auditDesc">
+                    @Html.Partial("_ApprovalRecordPartial", Model.ApprovalRecord)
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <!-- end col-12 -->
+
+
+    <div class="col-md-2">
+        <div class="hidden-sm hidden-xs">
+            <ul class="nav nav-pills nav-stacked nav-inbox">
+                <li class="active">
+                    <a href="javascript:;" data-toggle="modal">
+                        <i class="fa fa-retweet fa-fw m-r-5"></i> 相关操作
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" onclick="Agree()" data-toggle="modal">
+                        <i class="fa fa-retweet fa-fw m-r-5"></i> 审核通过
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="notAgree()" data-toggle="modal">
+                        <i class="fa fa-retweet fa-fw m-r-5"></i> 审核不通过
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+@using (Html.BeginForm())
+{
+
+    <div class="modal fade" id="modal-alert">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    不通过类型：&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    @if (Model.ApprovalDepartmentList != null)
+                    {
+                        foreach (var item in Model.ApprovalDepartmentList)
+                        {
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="RefuseDepartments" id="RefuseDepartments_@item.Id" value="@item.Id" />
+                                @item.Name
+                            </label>
+                        }
+                    }
+
+
+
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" placeholder="不同意原因" rows="5" id="RefuseReason" name="RefuseReason"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                    <a href="javascript:;" class="btn btn-sm btn-danger" onclick="NoAgreeSubmit()">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.SubmitType)
+    @Html.HiddenFor(model => model.ApprovalType.Id)
+    @Html.HiddenFor(model => model.ApprovalType.TypeName)
+    @Html.HiddenFor(model => model.ContentModel.Id)
+    @Html.HiddenFor(model => model.ContentModel.OrderId)
+}
+
+
+<div class="modal fade" id="writedescview">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <textarea class="form-control" placeholder="批注" rows="5" id="WriteDesc" name="WriteDesc"></textarea>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">取消</a>
+                <a href="javascript:;" class="btn btn-sm btn-danger" onclick="WriteDescSubmit()">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    
+    <script type="text/javascript">
+            function commit() {
+                $("#modal-post").modal('show');
+
+                $("#commit-btn").live("click", function (event) {
+                    $("#commit-form").submit();
+                });
+            }
+
+
+            function notAgree() {
+                $("#modal-alert").modal('show');
+                $("#modal-alert").find("input[type='checkbox']").each(function () {
+                    $(this).attr("checked", "checked");
+                });
+            }
+            function NoAgreeSubmit() {
+                var reason = $("#RefuseReason").val();
+                if (reason == null || reason == "") {
+                    alert("请填写原因");
+                    return false;
+                }
+
+                var noAgreeType = $("input[name='RefuseDepartments']:checked").size();
+                if (noAgreeType ==0) {
+                    alert("请选择不通过类型");
+                    return;
+                }
+                $("#SubmitType").val(false);
+                $("form[action*='/Approval']").submit();
+            }
+
+            function Agree() {
+                $("#SubmitType").val(true);
+                $("form[action*='/Approval']").submit();
+            }
+
+            function goBack() {
+                var backAction = GetQueryString("sourceAction");
+                location.href = "/Approval/" + backAction;
+            }
+
+
+            function GetQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+
+            function WriteDesc() {
+                $("#writedescview").modal("show");
+            }
+
+    </script>
+}

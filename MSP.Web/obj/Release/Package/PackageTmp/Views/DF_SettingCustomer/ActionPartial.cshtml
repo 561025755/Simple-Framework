@@ -1,0 +1,4 @@
+﻿@model MSP.Core.Domain.Cus_Customerapprovaluser
+
+<a class="email-btn" href="@Url.Action("EidtApprovalUser", new { id = Model.UserId })"><i class="fa fa-floppy-o" data-toggle="tooltip" data-original-title="编辑"></i></a>
+<a class="email-btn" href="javascript:void(0);" onclick="deleteUser(@Model.UserId,@Model.LocalityId)"><i class="fa fa-trash-o" data-toggle="tooltip" data-original-title="删除"></i></a>

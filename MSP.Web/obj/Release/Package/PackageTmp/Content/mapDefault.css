@@ -1,0 +1,104 @@
+﻿
+.small_marker {
+    position: absolute;
+    display: none;
+    height: 20px;
+    padding: 0;
+    color: white;
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
+
+.marker {
+    position: absolute;
+    display: none;
+    height: 40px;
+    padding: 0;
+    color: white;
+    text-align: center;
+    background-image: url("/Images/label-marker.png");
+    background-repeat: no-repeat;
+}
+
+.marker {
+    _background: 0;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Images/label-marker.png',sizingMethod='crop');
+}
+
+    .marker .marker_bg {
+        margin-left: 10px;
+        white-space: nowrap;
+        height: 28px;
+        line-height: 28px;
+        padding: 0 8px 0 0;
+        font-size: 12px;
+        cursor: pointer;
+        background-image: url('/Images/marker_bg_170x28.gif');
+        background-repeat: no-repeat;
+        background-position: right 0;
+        _float: left;
+        _margin-left: 5px;
+    }
+
+.marker_hover {
+    z-index: 4;
+    background-image: url("/Images/marker-h.png");
+}
+
+.marker_hover {
+    _background: 0;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Images/marker-h.png',sizingMethod='crop');
+}
+
+    .marker_hover .marker_bg {
+        background-image: url("/Images/marker-h-l.gif");
+        background-repeat: no-repeat;
+        background-position: right 0;
+    }
+/*已选中的站台*/
+.marker_self {
+    position: absolute;
+    display: none;
+    height: 40px;
+    padding: 0;
+    color: white;
+    text-align: center;
+    background-image: url("/Images/marker-h_red.png");
+    background-repeat: no-repeat;
+}
+
+.marker_self {
+    _background: 0;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Images/marker-h_red.png',sizingMethod='crop');
+}
+
+    .marker_self .marker_self_bg {
+        margin-left: 10px;
+        white-space: nowrap;
+        height: 28px;
+        line-height: 28px;
+        padding: 0 8px 0 0;
+        font-size: 12px;
+        cursor: pointer;
+        background-image: url('/Images/marker-h-l-red.gif');
+        background-repeat: no-repeat;
+        background-position: right 0;
+        _float: left;
+        _margin-left: 5px;
+    }
+
+.marker_self_hover {
+    z-index: 4;
+    background-image: url("/Images/marker-h.png");
+}
+
+.marker_self_hover {
+    _background: 0;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Images/marker-h.png',sizingMethod='crop');
+}
+
+    .marker_self_hover .marker_self_bg {
+        background-image: url("/Images/marker-h-l.gif");
+        background-repeat: no-repeat;
+        background-position: right 0;
+    }

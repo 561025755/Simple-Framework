@@ -1,0 +1,57 @@
+﻿
+@{
+    Layout = null;
+
+    //continue URL
+    var qs = this.Context.Request.QueryString["returnUrl"];
+    var continueUrl = "";
+    if (!String.IsNullOrEmpty(qs) && Url.IsLocalUrl(qs))
+    {
+        continueUrl = qs;
+    }
+    else
+    {
+        continueUrl = Url.Action("Index", "Home", new { area = "public" });
+    }
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="zh" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh">
+<!--<![endif]-->
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>HTTP @ViewBag.Code - OOH Force平台</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    @Styles.Render("~/Content/themes/sean/css")
+</head>
+<body>
+    <!-- begin #page-container -->
+    <div class="fade in" id="page-container">
+
+        <div class="error">
+            <div class="error-code m-b-10">用户注册</div>
+            <div class="error-content">
+                <div class="error-message m-10">@ViewData["ResultText"]</div>
+                <div class="error-desc m-20">
+                    @ViewBag.Description
+                </div>
+                <div>
+                    <a href="@continueUrl" class="btn btn-success">返回平台首页</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- end page container -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/themes/sean/crossbrowserjs")
+        <![endif]-->
+    @Scripts.Render("~/bundles/themes/sean/login")
+</body>
+</html>

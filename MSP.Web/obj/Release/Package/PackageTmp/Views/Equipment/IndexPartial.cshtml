@@ -1,0 +1,4 @@
+﻿@model string
+
+@Html.ActionLink("站牌详情", "Details", "Equipment", new { PropertyNumber = Model}, new { data_toggle = "tooltip", data_placement = "top", data_original_title = "查看站牌", @class = "btn btn-xs  btn-success" })
+<a class="badge badge-warning" href="javascript:ShowOrderRecords('@Model')"><i class="fa fa-shopping-cart" data-toggle="tooltip" data-original-title="查看订购档期"></i> 查看订购档期</a>

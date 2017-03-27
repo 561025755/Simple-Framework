@@ -1,0 +1,207 @@
+﻿@using MSP.Core.Enum;
+@using MSP.Web;
+
+@model MSP.Models.Domain.AgentModel
+
+@{
+    ViewBag.Title = "编辑代理商";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    编辑代理商 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+@section header{
+    @Styles.Render("~/Content/themes/sean/datepicker3.css")
+}
+
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12 ui-sortable">
+        <!-- begin panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">编辑表单</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm())
+            {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Company) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Company, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Company)
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Address) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Address)
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.LegalPerson) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.LegalPerson, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.LegalPerson)
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.BusinessLicence) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.BusinessLicence, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.BusinessLicence)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Phone) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Phone)
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Fax)
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Fax, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Fax)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.PostCode)
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.PostCode, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.PostCode)
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.WebSite)
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.WebSite, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.WebSite)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.RegisterDate) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    <div class="input-group date">
+                                        @Html.CalendarFor(model => model.RegisterDate)
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.RegisterDate)
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.RegisterCapital) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.RegisterCapital, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RegisterCapital)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.DepositBank) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.DepositBank, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DepositBank)
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Account) <b class="text-warning">*</b>
+                                </label>
+                                <div>
+                                    @Html.TextBoxFor(model => model.Account, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Account)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="submit" class="btn btn-sm btn-success" value="保存" />
+                    <input type="reset" class="btn btn-sm btn-default" value="重置" />
+            }
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/themes/sean/bootstrap-datepicker.js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#RegisterDate").datepicker({ format: "yyyy-mm-dd", todayHighlight: true, autoclose: true });
+        });
+    </script>
+}

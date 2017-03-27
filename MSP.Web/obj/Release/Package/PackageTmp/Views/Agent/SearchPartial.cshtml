@@ -1,0 +1,19 @@
+﻿@model MSP.Core.Domain.Age_Agent
+
+@using (Html.BeginForm("Index", "Agent", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.Company, new { @class = "form-control", placeholder = "代理商名称关键字" })
+                <div class="input-group-btn">
+                    <input type="submit" class="btn btn-inverse" value="搜索" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+    

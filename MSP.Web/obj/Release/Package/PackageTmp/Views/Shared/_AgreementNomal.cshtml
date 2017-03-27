@@ -1,0 +1,93 @@
+﻿@model AgreementModel
+
+@using MSP.Core.Domain;
+@using MSP.Core.Enum;
+@using MSP.Models.Domain;
+
+
+<div class="invoice-company text-center">
+    @if (Model.AgreementType == (int)AgreementType.Normal) {
+    <span class="pull-right label label-primary">标准确认单</span>}
+    else {
+    <span class="pull-right label label-warning">直签确认单</span>}
+    东方天呈订单确认单
+</div>
+
+<div>
+    <p><strong>甲方：</strong>@Model.FirstParty</p>
+    <p><strong>乙方(代理商)：</strong>@Model.SecondParty </p><br>
+    <p>按照双方签订的年度广告发布《合作协议》（以下简称“年度合同”），列表为本次乙方代理 <span class="underline text-success">@Model.PublishName,@Model.Order.StartDate.Value.ToString("yyyy-MM-dd") 到 @Model.Order.EndDate.Value.ToString("yyyy-MM-dd") </span> 广告发布信息：</p>
+</div>
+
+<div class="invoice-content">
+    <p><strong>一、发布项目</strong></p>
+    <div class="table-responsive">
+        <table class="table table-invoice">
+            <thead>
+                <tr>
+                    <th>投放城市</th>
+                    <th>投放单位（秒）</th>
+                    <th>投放规格</th>
+                    <th>数量</th>
+                    <th>投放时长（小时）</th>
+                    <th>单价（元）</th>
+                    <th>单项总价（元）</th>
+                </tr>
+            </thead>
+            <tbody id="itemtbody">
+
+                @for (var i = 0; i < Model.AgreementItems.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.AgreementItems[i].CityLevel  @Html.HiddenFor(modelItem => Model.AgreementItems[i].CityLevelValue) @Html.HiddenFor(modelItem => Model.AgreementItems[i].CityLevel) <br />
+                            <small> @Model.AgreementItems[i].CityNames  @Html.HiddenFor(modelItem => Model.AgreementItems[i].CityNames)</small>
+                        </td>
+                        <td>@Model.AgreementItems[i].Second  @Html.HiddenFor(modelItem => Model.AgreementItems[i].Second)  </td>
+                        <td>@Model.AgreementItems[i].Spec  @Html.HiddenFor(modelItem => Model.AgreementItems[i].Spec)</td>
+                        <td>@Model.AgreementItems[i].Quantity @Html.HiddenFor(modelItem => Model.AgreementItems[i].Quantity)</td>
+                        <td>@Model.AgreementItems[i].Hours  @Html.HiddenFor(modelItem => Model.AgreementItems[i].Hours)</td>
+                        <td>￥<span id="@string.Format("itempriceTxt{0}",i)"> @Model.AgreementItems[i].Price </span>  @Html.HiddenFor(modelItem => Model.AgreementItems[i].Price)</td>
+                        <td>￥<span id="@string.Format("itemmoneyTxt{0}",i)"> @Model.AgreementItems[i].Money </span>  @Html.HiddenFor(modelItem => Model.AgreementItems[i].Money)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+    <p><strong>二、付款方式及时间</strong></p>
+    <div>
+        合同总金额：<span class="underline text-success"> @Html.DisplayFor(model => model.PayTotal) </span>元（大写：人民币   <span class="underline text-success">@Html.ConvertChineseUpper(Model.PayTotal) </span>
+        元整）。
+    </div><br />
+    <div>付款方式：乙方应于<span class="underline text-success">@Model.PayDate.ToString("yyyy年MM月dd日")</span> 前支付<span class="underline text-success"> @Html.DisplayFor(model => model.PayTotal) </span> 元（大写：人民币 <span class="underline text-success"> @Html.ConvertChineseUpper(Model.PayTotal) </span>  元整）</div>
+</div>
+
+<div class="invoice-note m-t-40">
+    * 本确认单作为合同款结算的依据，属于原合同不可分割的附件；若甲方为集团公司 则甲方需保证每次确认单签字盖章公司与之后付款主体保持一致.<br>
+    * 本确认单一式俩份，甲乙方各执一份；与原合同具有同等法律效力。本确认单签字或盖章均生效，在本确认单上签字人即视为该方授权代表。（若签字需提供公司出具授权书）<br>
+    * 发布工作完成后提供工作成果样报、样刊.附带户外广告位置附表.
+</div>
+<br />
+<div>
+    <div class="row">
+        <div class="col-xs-6">
+            <address class="m-t-5 m-b-5">
+                <strong>甲方：（盖章）</strong><br>
+                甲方授权代表签字：<br>
+                <br>
+                <span class="m-l-40">年</span><span class="m-l-20">月</span><span class="m-l-20">日</span><br>
+            </address>
+        </div>
+        <div class="col-xs-6">
+            <address class="m-t-5 m-b-5">
+                <strong>乙方：（盖章）</strong><br>
+                乙方授权代表签字：<br>
+                <br>
+                <span class="m-l-40">年</span><span class="m-l-20">月</span><span class="m-l-20">日</span><br>
+            </address>
+        </div>
+    </div>
+</div>
+

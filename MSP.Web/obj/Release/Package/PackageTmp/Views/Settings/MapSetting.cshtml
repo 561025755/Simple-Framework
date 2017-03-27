@@ -1,0 +1,99 @@
+﻿@using MSP.Web;
+@using MSP.FrameWork.Controllers;
+
+@model MSP.Models.Domain.MapSettingsModel
+
+@{
+    ViewBag.Title = "地图设置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageTitle{
+    地图设置 <small>点击 @Html.ActionLink("这里", "Index") 回到列表</small>
+}
+
+
+<!-- begin col-12 -->
+<div class="col-md-12 ui-sortable">
+    <!-- begin panel -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">编辑表单</h4>
+        </div>
+        <div class="panel-body">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    <label>
+                        @Html.CheckBoxFor(model => model.IsBaiduMap) @Html.LabelFor(model => model.IsBaiduMap)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        @Html.LabelFor(model => model.BaiduMapAddress)
+                    </label>
+                    <div>
+                        @Html.TextBoxFor(model => model.BaiduMapAddress, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.BaiduMapAddress)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        @Html.CheckBoxFor(model => model.IsGaodeMap) @Html.LabelFor(model => model.IsGaodeMap)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        @Html.LabelFor(model => model.GaodeMapAddress)
+                    </label>
+                    <div>
+                        @Html.TextBoxFor(model => model.GaodeMapAddress, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.GaodeMapAddress)
+                    </div>
+                </div>
+
+
+                <input type="submit" class="btn btn-sm btn-success" value="保存" />
+                <input type="reset" class="btn btn-sm btn-default" value="重置" />
+            }
+
+        </div>
+    </div>
+    <!-- end panel -->
+</div>
+<!-- end col-12 -->
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#IsBaiduMap").change(function () {
+                if ($(this).attr("checked") == "checked") {
+                    $("#IsGaodeMap").removeAttr("checked")
+                }
+                else if ($("input[type=checkbox]:checked").length==0)
+                {
+                    $(this).attr("checked", "checked");
+                }
+            });
+            $("#IsGaodeMap").change(function () {
+                if ($(this).attr("checked") == "checked") {
+                    $("#IsBaiduMap").removeAttr("checked")
+                } else if ($("input[type=checkbox]:checked").length == 0) {
+                    $(this).attr("checked", "checked");
+                }
+            });
+        });
+    </script>
+}
